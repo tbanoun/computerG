@@ -252,7 +252,8 @@
              border: 1pt solid green !important;
              border-radius: 5px !important;"
                                       class="ml-2 text-right alert alert-success w-40">
-                                    Delivery within 1-2 days
+                                    <span t-esc="product.qty_available"/>
+                                    in warehouse | Delivery within 1-2 days
                                 </span>
                             </b>
                         </div>
@@ -262,7 +263,8 @@
                             <b>
                                 <span style="border-radius: 5px !important; margin-left:5px !important; border: 1pt solid black !important;"
                                       class="ml-2 text-right alert alert-warning w-40">
-                                    Delivery within 4-8 days
+                                    <span t-esc="product.qty_available_wt"/>
+                                    in remote warehouse | Delivery within 4-8 days
                                 </span>
                             </b>
                         </div>
