@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_product_import_csv,product_import_csv,model_product_import_csv,,1,1,1,1
+access_product_import_history,product_import_history,model_product_import_history,,1,1,1,1
+access_history_updated_action,history_updated_action,model_history_updated_action,,1,1,1,1
+access_history_deleted_action,history_deleted_action,model_history_deleted_action,,1,1,1,1
+access_history_create_action,history_create_action,model_history_create_action,,1,1,1,1
+access_history_published_action,history_published_action,model_history_published_action,,1,1,1,1
+access_stock_warehouse_public_user,stock.warehouse,stock.model_stock_warehouse,,1,1,1,1
+access_stock_location_public_user,stock.location,stock.model_stock_location,,1,1,1,1
+access_stock_move_public_user,stock_move,stock.model_stock_move,,1,1,1,1
+access_stock_quant_public_user,stock.quant,stock.model_stock_quant,,1,1,1,1
+access_uom_uom_public_user,uom.uom,stock.model_uom_uom,,1,1,1,1

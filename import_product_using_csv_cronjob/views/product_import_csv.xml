@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="view_form_config_import_csv_file">
+            <field name="name">Import and update warehouse product using csv file</field>
+            <field name="model">product.import.csv</field>
+            <field name="arch" type="xml">
+                <form create="0" delete="0">
+                    <header>
+                        <field name="start_update" invisible="1"/>
+                        <button name="startScriptUsingButtonTest" type="object">Start CRONJOB (TEST)</button>
+                        <button name="resetIndex" type="object">Reset Index (TEST)</button>
+                        <button name="deleteHistoryFile" type="object">Delete History file (TEST)</button>
+                        <button name="downoladCsvFile" type="object">Download csv File (TEST)</button>
+                    </header>
+                    <sheet>
+                        <div name="button_box">
+                            <button name="openViewImportProductHistory" type="object" icon="fa-file-text-o"
+                                    class="oe_stat_button">
+                                History action
+                            </button>
+                        </div>
+                        <h3>
+                            Import and update warehouse products using a CSV file
+                        </h3>
+                        <div class="row">
+                            <div class="col-9"></div>
+                            <div class="col-3">
+                                <div class="o_address_format">
+                                    <field name="index" class="o_address_city text-end" readonly="1"/>
+                                    /
+                                    <field name="max_products" class="o_address_state" readonly="1"/>
+                                </div>
+                                <div class="row text-end">
+                                    <div class="col-6">
+                                        <field class="text-center" name="active" widget="boolean_toggle"/>
+                                    </div>
+                                    <div class="col-3 text-center">
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="csv_url"/>
+                                <field name="file_csv" reaquired="1" widget="binary" invisible="0"/>
+                                <field name="stock_id" reaquired="1"/>
+                                <field name="category_ids" reaquired="1" widget="many2many_tags"/>
+                            </group>
+                            <group>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"
+                               options="{'post_refresh': 'recipients'}"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="config_cron_action" model="ir.actions.act_window">
+            <field name="name">Import product config</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.import.csv</field>
+            <field name="view_mode">form</field>
+            <field name="res_id">1</field>
+        </record>
+
+        <menuitem
+                name="Config Update/Import product (csv file)"
+                parent="stock.menu_product_in_config_stock"
+                id="menu_import_update_product_csv_file"
+                action="import_product_using_csv_cronjob.config_cron_action"/>
+    </data>
+</odoo>

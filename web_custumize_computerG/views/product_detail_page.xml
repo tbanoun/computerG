@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="product" inherit_id="website_sale.product">
+            <xpath expr="//div[@id='product_option_block']" position="before">
+                <div class="row mt-4 mb-4" t-if="product.qty_available > 0">
+                    <div class="col-12">
+                        <b>
+                            <span style="margin-left:5px !important;
+             color: #067d38 !important;
+             background-color: #f3fff5 !important;
+             border: 1pt solid green !important;
+             border-radius: 5px !important;"
+                                  class="ml-2 text-right alert alert-success w-40">
+                                <span t-esc="product.qty_available"/>
+                                in warehouse | Delivery within 1-2 days
+                            </span>
+                        </b>
+                    </div>
+                </div>
+                <div class="row mt-4 mb-4" t-if="product.qty_available_wt > 0">
+                    <div class="col-12">
+                        <b>
+                            <span style="border-radius: 5px !important; margin-left:5px !important; border: 1pt solid black !important;"
+                                  class="ml-2 text-right alert alert-warning w-40">
+                                <span t-esc="product.qty_available_wt"/>
+                                in remote warehouse | Delivery within 4-8 days
+                            </span>
+                        </b>
+                    </div>
+                </div>
+            </xpath>
+        </template>
+    </data>
+</odoo>

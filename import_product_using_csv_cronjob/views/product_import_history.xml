@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="view_form_history_action">
+            <field name="name">History action</field>
+            <field name="model">product.import.history</field>
+            <field name="arch" type="xml">
+                <form create="0" delete="0" edit="0">
+                    <header>
+                        <field name="name" invisible="1"/>
+                        <field name="id" invisible="1"/>
+                    </header>
+                    <sheet>
+                        <h1>History of actions on running the cron job to import products from a CSV file</h1>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <notebook>
+                            <page string="History Updated product line" name="Updated">
+                                <field name="UpdatedActions_ids">
+                                    <tree string="History Update Action" editable="bottom" create="0" edit="0"
+                                          delete="0">
+                                        <field name="file" filename="file_name" widget="binary"/>
+                                        <field name="file_name" invisible="1"/>
+                                        <field name="date" widget="date"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="History Created Product line N/LW" name="Created">
+                                <field name="createdActions_ids">
+                                    <tree string="History Created Action" editable="bottom" create="0" edit="0"
+                                          delete="0">
+                                        <field name="file" filename="file_name" widget="binary"/>
+                                        <field name="file_name" invisible="1"/>
+                                        <field name="date" widget="date"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="History Unpublished product line" name="Deleted">
+                                <field name="DeletedActions_ids">
+                                    <tree string="History Deleted Action" editable="bottom" create="1" edit="1"
+                                          delete="1">
+                                        <field name="file" filename="file_name" widget="binary"/>
+                                        <field name="file_name" invisible="1"/>
+                                        <field name="date" widget="date"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="History published product line" name="published">
+                                <field name="publishedActions_ids">
+                                    <tree string="History published Action" editable="bottom" create="1" edit="1"
+                                          delete="1">
+                                        <field name="file" filename="file_name" widget="binary"/>
+                                        <field name="file_name" invisible="1"/>
+                                        <field name="date" widget="date"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"
+                               options="{'post_refresh': 'recipients'}"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_open_history_action" model="ir.actions.act_window">
+            <field name="name">History Actions</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.import.history</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="import_product_using_csv_cronjob.view_form_history_action"/>
+            <field name="res_id">1</field>
+        </record>
+    </data>
+</odoo>

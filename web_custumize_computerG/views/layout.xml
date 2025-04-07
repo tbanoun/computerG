@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <template id="cart_lines" inherit_id="website_sale.cart_lines" name="Shopping Cart Lines">
+            <xpath expr="//table[@id='cart_products']/tbody//td[hasclass('td-product_name')]" position="replace">
+                <td class='td-product_name'>
+                    <div>
+                        <a class="tp-link-dark" t-att-href="line.product_id.website_url">
+                            <span t-out="line.product_id.display_name"/>
+                        </a>
+                    </div>
+                    <ul class="list-inline mb-1">
+                        <div class="row mt-4 mb-4" t-if="line.product_id.qty_available > 0">
+                            <div class="col-12">
+                                <b>
+                                    <span style="margin-left:5px !important;
+             color: #067d38 !important;
+             background-color: #f3fff5 !important;
+             border: 1pt solid green !important;
+             border-radius: 5px !important;"
+                                          class="ml-2 text-right alert alert-success w-40">
+                                       Delivery within 1-2 days
+                                    </span>
+                                </b>
+                            </div>
+                        </div>
+                        <div class="row mt-4 mb-4" t-if="line.product_id.qty_available_wt > 0">
+                            <div class="col-12">
+                                <b>
+                                    <span style="border-radius: 5px !important; margin-left:5px !important; border: 1pt solid black !important;"
+                                          class="ml-2 text-right alert alert-warning w-40">
+                                        Delivery within 4-8 days
+                                    </span>
+                                </b>
+                            </div>
+                        </div>
+                    </ul>
+                </td>
+
+            </xpath>
+
+        </template>
+
+        <record id="address_custom" model="ir.ui.view">
+            <field name="name">address_custom</field>
+            <field name="inherit_id" search="[('key', '=', 'website_sale.cart_summary')]"/>
+            <field name="type">qweb</field>
+            <field name="key">web_custumize_computerG.address_custom</field>
+            <field name="arch" type="xml">
+                <xpath expr="//table[@id='cart_products']//tbody//td[@class='td-product_name']" position="replace">
+                    <td class='td-product_name'>
+                        <div>
+                            <strong t-field="line.name_short"/>
+                        </div>
+                        <div class="row mt-4 mb-4" t-if="line.product_id.qty_available > 0">
+                            <div class="col-12">
+                                <b>
+                                    <span style="margin-left:5px !important;
+             color: #067d38 !important;
+             background-color: #f3fff5 !important;
+             border: 1pt solid green !important;
+             border-radius: 5px !important;"
+                                          class="ml-2 text-right alert alert-success w-40">
+                                        <span t-esc="line.product_id.qty_available"/>
+                                        in warehouse | Delivery within 2-4 days
+                                    </span>
+                                </b>
+                            </div>
+                        </div>
+                        <div class="row mt-4 mb-4" t-if="line.product_id.qty_available_wt > 0">
+                            <div class="col-12">
+                                <b>
+                                    <span style="border-radius: 5px !important; margin-left:5px !important; border: 1pt solid black !important;"
+                                          class="ml-2 text-right alert alert-warning w-40">
+                                        <span t-esc="line.product_id.qty_available_wt"/>
+                                        in remote warehouse | Delivery within 4-8 days
+                                    </span>
+                                </b>
+                            </div>
+                        </div>
+                    </td>
+                </xpath>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>
