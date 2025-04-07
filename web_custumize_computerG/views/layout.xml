@@ -57,13 +57,13 @@
                             <div class="col-12">
                                 <b>
                                     <span style="margin-left:1px !important;
-                                    font-size: 9pt !important;
+                                    font-size: 8pt !important;
              color: #067d38 !important;
              background-color: #f3fff5 !important;
              border: 1pt solid green !important;
              border-radius: 5px !important;"
-                                          class="ml-2 text-right alert alert-success w-40">
-                                        Delivery within 2-4 days
+                                          class="ml-2 text-right alert alert-success w-50">
+                                        Delivery within 1-2 days
                                     </span>
                                 </b>
                             </div>
@@ -71,8 +71,8 @@
                         <div class="row mt-4 mb-4" t-if="line.product_id.qty_available_wt > 0">
                             <div class="col-12">
                                 <b>
-                                    <span style="font-size: 9pt !important; border-radius: 5px !important; margin-left:1px !important; border: 1pt solid black !important;"
-                                          class="ml-2 text-right alert alert-warning w-40">
+                                    <span style="font-size: 8pt !important; border-radius: 5px !important; margin-left:1px !important; border: 1pt solid black !important;"
+                                          class="ml-2 text-right alert alert-warning w-50">
                                         Delivery within 4-8 days
                                     </span>
                                 </b>
