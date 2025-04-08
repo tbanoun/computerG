@@ -6,14 +6,19 @@
                 <div class="row mt-4 mb-4" t-if="product.qty_available > 0">
                     <div class="col-12">
                         <b>
-                            <span style="margin-left:5px !important;
-             color: #067d38 !important;
-             background-color: #f3fff5 !important;
-             border: 1pt solid green !important;
-             border-radius: 5px !important;"
+                            <span style="
+                margin-left:5px !important;
+                font-weight: 500 !important;
+                background: #e5ffe978 !important;
+                padding: 0.4rem 0.6rem !important;
+                width: fit-content !important;
+                border-radius: 0.2rem !important;
+                color: #067d24 !important;
+                border: 1px solid #19a22f; !important
+"
                                   class="ml-2 text-right alert alert-success w-40">
-                                <span t-esc="product.qty_available"/>
-                                in warehouse | Delivery within 1-2 days
+                                <span t-esc="int(product.qty_available)"/>
+                                in Stock | Ship 1-2 days
                             </span>
                         </b>
                     </div>
@@ -21,15 +26,26 @@
                 <div class="row mt-4 mb-4" t-if="product.qty_available_wt > 0">
                     <div class="col-12">
                         <b>
-                            <span style="border-radius: 5px !important; margin-left:5px !important; border: 1pt solid black !important;"
+                            <span style="
+                            margin-left:5px !important;
+                font-weight: 500 !important;
+                background: #e5ffe978 !important;
+                padding: 0.4rem 0.6rem !important;
+                width: fit-content !important;
+                border-radius: 0.2rem !important;
+                color: #067d24 !important;
+                border: 1px solid #19a22f; !important
+                "
                                   class="ml-2 text-right alert alert-warning w-40">
-                                <span t-esc="product.qty_available_wt"/>
-                                in remote warehouse | Delivery within 4-8 days
+                                <span t-esc="int(product.qty_available_wt)"/>
+                                in remote Stock | Ship 4-8 days
                             </span>
                         </b>
                     </div>
                 </div>
             </xpath>
         </template>
+
+
     </data>
 </odoo>
