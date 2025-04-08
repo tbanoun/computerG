@@ -70,7 +70,7 @@
                                     </b>
                                 </div>
                             </div>
-                            <div class="row mt-4 mb-4" t-else="">
+                            <div class="row mt-4 mb-4" t-elif="check_qty_wt >= 0">
                                 <div class="col-12">
                                     <b>
                                         <span style="
@@ -134,9 +134,9 @@ font-weight: 500 !important;
                         <t t-set="check_qty" t-value="line.product_id.qty_available - line.product_uom_qty"/>
                         <t t-set="check_qty_wt" t-value="line.product_id.qty_available_wt - line.product_uom_qty"/>
                         <div t-if="line.product_id.showDelivryMessage">
-                            <div class="row mt-4 mb-4" t-if="check_qty > 0">
+                            <div class="row mt-4 mb-4">
                                 <!--1-->
-                                <div class="col-12">
+                                <div class="col-12" t-if="check_qty > 0">
                                     <b>
                                         <span style="margin-left:1px !important;
                                     font-size: 8pt !important;
@@ -185,10 +185,26 @@ font-weight: 500 !important;
                                         </b>
                                     </div>
                                 </div>
+                                <!--3-->
+                                <div class="row mt-4 mb-4" t-elif="check_qty_wt >= 0">
+                                    <div class="col-12">
+                                        <b>
+                                            <span style="margin-left:1px !important;
+                                    font-size: 8pt !important;
+             color: #067d38 !important;
+             background-color: #f3fff5 !important;
+             border: 1pt solid green !important;
+             border-radius: 5px !important;"
+                                                  class="ml-2 text-right alert alert-success w-50">
+                                                Ship In 4-8 Days
+                                            </span>
+                                        </b>
+                                    </div>
+                                </div>
 
                             </div>
                         </div>
-                        <!--3-->
+                        <!--4-->
                         <div t-if="0 >= (line.product_id.qty_available_wt + line.product_id.qty_available) and line.product_id.allow_out_of_stock_order">
                             <style>
                                 .cls-sahrane p{
@@ -220,7 +236,6 @@ font-weight: 500 !important;
                 </xpath>
             </field>
         </record>
-
 
     </data>
 </odoo>
