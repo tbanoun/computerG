@@ -10,19 +10,19 @@
                     <t t-set="check_qty_wt" t-value="line.product_id.qty_available_wt - line.quantity"/>
                     <t t-if="check_qty > 0">
                         <span class="text-success">
-                            Ship in 1-2 days
+                            Ship In 1-2 Days
                         </span>
                     </t>
                     <t t-elif="check_qty_wt + line.product_id.qty_available > 0 and line.product_id.qty_available > 0">
                         <t t-set="qtyDelivred1" t-value="line.quantity - line.product_id.qty_available"/>
                         <span class="text-success">
                             <span t-esc="int(line.product_id.qty_available)"/>
-                            pcs | Ship in 1-2 days
+                            Pcs | Ship In 1-2 Days
                         </span>
                         <span class="text-warning"
                               style='color: #ff4f0d !important; margin-top: -5px !important; display: block !important;'>
                             <span t-esc="int(qtyDelivred1)"/>
-                            pcs | Ship in 4-8 days
+                            Pcs | Ship In 4-8 Days
                         </span>
                     </t>
                     <t t-else="">

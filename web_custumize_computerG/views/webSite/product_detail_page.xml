@@ -6,7 +6,7 @@
             </xpath>
             <xpath expr="//div[@id='product_option_block']" position="before">
                 <div class="col-12">
-                    <div class="row mt-4 mb-4" t-if="product.qty_available > 0">
+                    <div class="row mt-4 mb-4" t-if="product.qty_available > 0 and product.showDelivryMessage">
                         <div class="col-12">
                             <b>
                                 <span style="
@@ -21,12 +21,14 @@
 "
                                       class="ml-2 text-right alert alert-success w-40">
                                     <span t-esc="int(product.qty_available)"/>
-                                    in Stock | Ship 1-2 days
+                                    <span>
+                                        In Stock | Ship 1-2 Days
+                                    </span>
                                 </span>
                             </b>
                         </div>
                     </div>
-                    <div class="row mt-4 mb-4" t-if="product.qty_available_wt > 0">
+                    <div class="row mt-4 mb-4" t-if="product.qty_available_wt > 0 and product.showDelivryMessage">
                         <div class="col-12">
                             <b>
                                 <span style="
@@ -41,11 +43,43 @@
                 "
                                       class="ml-2 text-right alert alert-warning w-40">
                                     <span t-esc="int(product.qty_available_wt)"/>
-                                    in remote Stock | Ship 4-8 days
+                                    <span>
+                                        In Remote Stock | Ship 4-8 Days
+                                    </span>
+
                                 </span>
                             </b>
                         </div>
                     </div>
+                    <style>
+                        .cls-sahrane p{
+                        display: contents !important;
+                        }
+                    </style>
+
+                    <div class="row mt-4 mb-4"
+                         t-if="0 >= (product.qty_available_wt + product.qty_available) and product.allow_out_of_stock_order">
+                        <div class="col-12">
+                            <b>
+                                <span style="
+                            margin-left:5px !important;
+                font-weight: 500 !important;
+                background: #e5ffe978 !important;
+                padding: 0.4rem 0.6rem !important;
+                width: fit-content !important;
+                border-radius: 0.2rem !important;
+                color: #067d24 !important;
+                border: 1px solid #19a22f; !important
+                "
+                                      class="ml-2 text-right alert alert-warning w-40">
+                                    <span class="cls-sahrane" t-esc="product.out_of_stock_message">
+                                    </span>
+
+                                </span>
+                            </b>
+                        </div>
+                    </div>
+
                 </div>
 
             </xpath>

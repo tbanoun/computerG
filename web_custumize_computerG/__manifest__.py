@@ -17,10 +17,14 @@
         'static/description/prime_cover.png',
     ],
     'data': [
-        'views/product_detail_page.xml',
-        'views/layout.xml',
-        'views/shop_layout.xml',
-        'views/button_payment.xml',
+        #website
+        'views/webSite/product_detail_page.xml',
+        'views/webSite/layout.xml',
+        'views/webSite/shop_layout.xml',
+        'views/webSite/button_payment.xml',
+
+        #backend
+        'views/product_template.xml',
 
         #reports
         'reports/update_invoice.xml',

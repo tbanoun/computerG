@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+        <record id="product_product_ext_form_view2" model="ir.ui.view">
+            <field name="name">product_extended.product.form.view</field>
+            <field name="model">product.template</field>
+            <field name="priority">3</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='out_of_stock_message']" position="after">
+                    <field string="Display/Hide Delivery Message" name="showDelivryMessage" widget="boolean_toggle"/>
+                </xpath>
+<!--                <xpath expr="//field[@name='out_of_stock_message']" position="replace">-->
+<!--                </xpath>-->
+            </field>
+        </record>
+</odoo>

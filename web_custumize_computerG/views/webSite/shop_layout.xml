@@ -18,7 +18,7 @@
              border: 1pt solid green !important;
              border-radius: 5px !important;"
                                   class="ml-2 text-right alert alert-success w-40">
-                                Delivery within 1-2 days
+                                In Stock | Ship 1-2 Days
                             </span>
                         </b>
                     </div>
@@ -28,7 +28,7 @@
                         <b>
                             <span style="border-radius: 5px !important; margin-left:5px !important; border: 1pt solid black !important;"
                                   class="ml-2 text-right alert alert-warning w-40">
-                                Delivery within 4-8 days
+                                In Remote Stock | Ship 4-8 Days
                             </span>
                         </b>
                     </div>
@@ -192,7 +192,7 @@
              border: 1pt solid green !important;
              border-radius: 5px !important;"
                                   class="ml-2 text-right alert alert-success w-40">
-                                Delivery within 1-2 days
+                                In Stock | Ship 1-2 Days
                             </span>
                         </b>
                     </div>
@@ -202,7 +202,7 @@
                         <b>
                             <span style="border-radius: 5px !important; margin-left:5px !important; border: 1pt solid black !important;"
                                   class="ml-2 text-right alert alert-warning w-40">
-                                Delivery within 4-8 days
+                                In Remote Stock | Ship 4-8 Days
                             </span>
                         </b>
                     </div>
