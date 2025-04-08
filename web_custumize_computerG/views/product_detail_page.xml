@@ -2,11 +2,14 @@
 <odoo>
     <data>
         <template id="product" inherit_id="website_sale.product">
+            <xpath expr="//div[@class='availability_messages o_not_editable']" position="replace">
+            </xpath>
             <xpath expr="//div[@id='product_option_block']" position="before">
-                <div class="row mt-4 mb-4" t-if="product.qty_available > 0">
-                    <div class="col-12">
-                        <b>
-                            <span style="
+                <div class="col-12">
+                    <div class="row mt-4 mb-4" t-if="product.qty_available > 0">
+                        <div class="col-12">
+                            <b>
+                                <span style="
                 margin-left:5px !important;
                 font-weight: 500 !important;
                 background: #e5ffe978 !important;
@@ -16,17 +19,17 @@
                 color: #067d24 !important;
                 border: 1px solid #19a22f; !important
 "
-                                  class="ml-2 text-right alert alert-success w-40">
-                                <span t-esc="int(product.qty_available)"/>
-                                in Stock | Ship 1-2 days
-                            </span>
-                        </b>
+                                      class="ml-2 text-right alert alert-success w-40">
+                                    <span t-esc="int(product.qty_available)"/>
+                                    in Stock | Ship 1-2 days
+                                </span>
+                            </b>
+                        </div>
                     </div>
-                </div>
-                <div class="row mt-4 mb-4" t-if="product.qty_available_wt > 0">
-                    <div class="col-12">
-                        <b>
-                            <span style="
+                    <div class="row mt-4 mb-4" t-if="product.qty_available_wt > 0">
+                        <div class="col-12">
+                            <b>
+                                <span style="
                             margin-left:5px !important;
                 font-weight: 500 !important;
                 background: #e5ffe978 !important;
@@ -36,13 +39,15 @@
                 color: #067d24 !important;
                 border: 1px solid #19a22f; !important
                 "
-                                  class="ml-2 text-right alert alert-warning w-40">
-                                <span t-esc="int(product.qty_available_wt)"/>
-                                in remote Stock | Ship 4-8 days
-                            </span>
-                        </b>
+                                      class="ml-2 text-right alert alert-warning w-40">
+                                    <span t-esc="int(product.qty_available_wt)"/>
+                                    in remote Stock | Ship 4-8 days
+                                </span>
+                            </b>
+                        </div>
                     </div>
                 </div>
+
             </xpath>
         </template>
 
