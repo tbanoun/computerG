@@ -14,7 +14,7 @@
                     </div>
                     <ul class="list-inline mb-1">
                         <!--1-->
-                        <div t-if="line.product_id.product.showDelivryMessage">
+                        <div t-if="line.product_id.showDelivryMessage">
                             <div class="row mt-4 mb-4" t-if="check_qty > 0">
                                 <div class="col-12">
                                     <b>
@@ -133,7 +133,7 @@ font-weight: 500 !important;
                         </div>
                         <t t-set="check_qty" t-value="line.product_id.qty_available - line.product_uom_qty"/>
                         <t t-set="check_qty_wt" t-value="line.product_id.qty_available_wt - line.product_uom_qty"/>
-                        <div t-if="line.product_id.product.showDelivryMessage">
+                        <div t-if="line.product_id.showDelivryMessage">
                             <div class="row mt-4 mb-4" t-if="check_qty > 0">
                                 <!--1-->
                                 <div class="col-12">
