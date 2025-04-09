@@ -22,6 +22,7 @@
         'views/webSite/layout.xml',
         'views/webSite/shop_layout.xml',
         'views/webSite/button_payment.xml',
+        'views/webSite/carte_sidbar.xml',
 
         #backend
         'views/product_template.xml',
