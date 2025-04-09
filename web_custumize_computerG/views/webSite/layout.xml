@@ -107,7 +107,7 @@ font-weight: 500 !important;
                 border: 1px solid #19a22f; !important
 "
                                           class="ml-2 text-right alert alert-warning w-40">
-                                        <span class="cls-sahrane" t-esc="product.out_of_stock_message">
+                                        <span class="cls-sahrane" t-esc="line.product_id.out_of_stock_message">
                                         </span>
                                     </span>
                                 </b>
