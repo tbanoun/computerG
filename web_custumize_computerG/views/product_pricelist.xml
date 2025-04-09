@@ -6,7 +6,7 @@
         <field name="model">product.pricelist</field>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='currency_id']" position="after">
-                <field name="showQtyOnStock" widget="boolean_toggle"/>
+                <field string="Show quantity on stock" name="showQtyOnStock" widget="boolean_toggle"/>
             </xpath>
         </field>
     </record>
