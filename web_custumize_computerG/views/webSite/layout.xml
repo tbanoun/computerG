@@ -103,6 +103,7 @@ font-weight: 500 !important;
                             </div>
                         </div>
                         <div t-if="0 >= (line.product_id.qty_available_wt + line.product_id.virtual_available) and line.product_id.allow_out_of_stock_order">
+                            <br/>
                             <div class="col-12">
                                 <b>
                                     <span style="

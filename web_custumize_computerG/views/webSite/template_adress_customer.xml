@@ -110,10 +110,10 @@ font-size: 8pt !important;
                         </div>
                     </div>
                     <!--4-->
-                    <div t-if="0 >= (line.product_id.qty_available_wt + line.product_id.virtual_available) and line.product_id.allow_out_of_stock_order">
-                        <div class="col-12">
-                            <b>
-                                <span style="
+                    <div class="col-12"
+                         t-if="0 >= (line.product_id.qty_available_wt + line.product_id.virtual_available) and line.product_id.allow_out_of_stock_order">
+                        <b>
+                            <span style="
                                 font-size: 8pt !important;
                                 font-weight: 500 !important;
                 background: #e5ffe978 !important;
@@ -123,13 +123,12 @@ font-size: 8pt !important;
                 color: #067d24 !important;
                 border: 1px solid #19a22f; !important
 "
-                                      class="ml-2 text-right alert alert-warning w-40">
-                                    <span style="font-size: 8pt !important;" class="cls-sahrane"
-                                          t-esc="line.product_id.out_of_stock_message">
-                                    </span>
+                                  class="ml-2 text-right alert alert-warning w-40">
+                                <span style="font-size: 8pt !important;" class="cls-sahrane"
+                                      t-esc="line.product_id.out_of_stock_message">
                                 </span>
-                            </b>
-                        </div>
+                            </span>
+                        </b>
                     </div>
                 </td>
             </xpath>
