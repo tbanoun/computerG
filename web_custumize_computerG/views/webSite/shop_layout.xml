@@ -10,6 +10,11 @@
         <field name="arch" type="xml">
             <xpath expr="//div[hasclass('tp-product-wrapper')]//div[hasclass('tp-product-content')]" position="inside">
                 <div class="row mt-4 mb-4" t-if="product.qty_available > 0">
+                    <style>
+                        .cls-sahrane p{
+                        display: contents !important;
+                        }
+                    </style>
                     <div class="col-12">
                         <b>
                             <span style="font-weight: 500 !important;
@@ -20,7 +25,10 @@
                 color: #067d24 !important;
                 border: 1px solid #19a22f; !important"
                                   class="ml-2 text-right alert alert-success w-40">
-                                In Stock | Ship 1-2 Days
+                                In Stock |
+                                <span class="cls-sahrane"
+                                      t-esc="line.product_id.messageDelivryTimeStock">
+                                </span>
                             </span>
                         </b>
                     </div>
@@ -36,7 +44,10 @@
                 color: #067d24 !important;
                 border: 1px solid #19a22f; !important"
                                   class="ml-2 text-right alert alert-warning w-40">
-                                In Remote Stock | Ship 4-8 Days
+                                In Remote Stock |
+                                <span class="cls-sahrane"
+                                      t-esc="line.product_id.messageDelivryTimeRemoteStock">
+                                </span>
                             </span>
                         </b>
                     </div>

@@ -6,6 +6,11 @@
             </xpath>
             <xpath expr="//div[@id='product_option_block']" position="before">
                 <div class="col-12">
+                    <style>
+                        .cls-sahrane p{
+                        display: contents !important;
+                        }
+                    </style>
                     <div class="row mt-4 mb-4" t-if="product.qty_available > 0 and product.showDelivryMessage">
                         <div class="col-12">
                             <b>
@@ -27,25 +32,28 @@
                                                 <span
                                                         t-esc="int(product.qty_available)"/>
                                                 <span>
-                                                    In Stock | Ship 1-2 Days
+                                                    In Stock |
+                                                    <span class="cls-sahrane"
+                                                          t-esc="line.product_id.messageDelivryTimeStock">
+                                                    </span>
                                                 </span>
                                             </span>
                                             <t t-else="">
-                                                <span>
-                                                    Ship 1-2 Days
+                                                <span class="cls-sahrane"
+                                                      t-esc="line.product_id.messageDelivryTimeStock">
                                                 </span>
                                             </t>
 
                                         </t>
                                         <t t-else="">
-                                            <span>
-                                                Ship 1-2 Days
+                                            <span class="cls-sahrane"
+                                                  t-esc="line.product_id.messageDelivryTimeStock">
                                             </span>
                                         </t>
                                     </t>
                                     <t t-else="">
-                                        <span>
-                                            Ship 1-2 Days
+                                        <span class="cls-sahrane"
+                                              t-esc="line.product_id.messageDelivryTimeStock">
                                         </span>
                                     </t>
                                 </span>
@@ -72,20 +80,29 @@
                                                 <span
                                                         t-esc="int(product.qty_available_wt)"/>
                                                 <span>
-                                                    In Remote Stock | Ship 4-8 Days
+                                                    In Remote Stock |
+                                                    <span class="cls-sahrane"
+                                                          t-esc="line.product_id.messageDelivryTimeRemoteStock">
+                                                    </span>
                                                 </span>
                                             </span>
                                             <span t-else="">
-                                                Ship 4-8 Days
+                                                <span class="cls-sahrane"
+                                                      t-esc="line.product_id.messageDelivryTimeRemoteStock">
+                                                </span>
                                             </span>
                                         </t>
                                         <span t-else="">
-                                            Ship 4-8 Days
+                                            <span class="cls-sahrane"
+                                                  t-esc="line.product_id.messageDelivryTimeRemoteStock">
+                                            </span>
                                         </span>
                                     </t>
                                     <t t-else="">
                                         <span>
-                                            Ship 4-8 Days
+                                            <span class="cls-sahrane"
+                                                  t-esc="line.product_id.messageDelivryTimeRemoteStock">
+                                            </span>
                                         </span>
 
                                     </t>
@@ -93,12 +110,6 @@
                             </b>
                         </div>
                     </div>
-                    <style>
-                        .cls-sahrane p{
-                        display: contents !important;
-                        }
-                    </style>
-
                     <div class="row mt-4 mb-4"
                          t-if="0 >= (product.qty_available_wt + product.qty_available) and product.allow_out_of_stock_order">
                         <div class="col-12">

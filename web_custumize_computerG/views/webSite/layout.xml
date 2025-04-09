@@ -7,6 +7,11 @@
                 <t t-set="check_qty" t-value="line.product_id.qty_available - line.product_uom_qty"/>
                 <t t-set="check_qty_wt" t-value="line.product_id.qty_available_wt - line.product_uom_qty"/>
                 <td class='td-product_name'>
+                    <style>
+                        .cls-sahrane p{
+                        display: contents !important;
+                        }
+                    </style>
                     <div>
                         <a class="tp-link-dark" t-att-href="line.product_id.website_url">
                             <span t-out="line.product_id.display_name"/>
@@ -26,7 +31,8 @@
                 color: #067d24 !important;
                 border: 1px solid #19a22f; !important"
                                               class="ml-2 text-right alert alert-success w-40">
-                                            Ship In 1-2 Days
+                                            <span class="cls-sahrane" t-esc="line.product_id.messageDelivryTimeStock">
+                                            </span>
                                         </span>
                                     </b>
                                 </div>
@@ -45,7 +51,9 @@
                 border: 1px solid #19a22f; !important"
                                               class="ml-2 text-right alert alert-success w-40">
                                             <span t-esc="int(line.product_id.qty_available)"/>
-                                            Pcs | Ship In 1-2 Days
+                                            Pcs |
+                                            <span class="cls-sahrane" t-esc="line.product_id.messageDelivryTimeStock">
+                                            </span>
                                         </span>
                                     </b>
                                 </div>
@@ -65,7 +73,10 @@
                 border: 1px solid #19a22f; !important"
                                               class="ml-2 text-right alert alert-success w-40">
                                             <span t-esc="int(qtyDelivred1)"/>
-                                            Pcs | Ship In 4-8 Days
+                                            Pcs |
+                                            <span class="cls-sahrane"
+                                                  t-esc="line.product_id.messageDelivryTimeRemoteStock">
+                                            </span>
                                         </span>
                                     </b>
                                 </div>
@@ -83,18 +94,15 @@ font-weight: 500 !important;
                 border: 1px solid #19a22f; !important
 "
                                               class="ml-2 text-right alert alert-warning w-40">
-                                            Ship In 4-8 Days
+                                            <span class="cls-sahrane"
+                                                  t-esc="line.product_id.messageDelivryTimeRemoteStock">
+                                            </span>
                                         </span>
                                     </b>
                                 </div>
                             </div>
                         </div>
                         <div t-if="0 >= (line.product_id.qty_available_wt + line.product_id.qty_available) and line.product_id.allow_out_of_stock_order">
-                            <style>
-                                .cls-sahrane p{
-                                display: contents !important;
-                                }
-                            </style>
                             <div class="col-12">
                                 <b>
                                     <span style="
@@ -119,7 +127,6 @@ font-weight: 500 !important;
             </xpath>
 
         </template>
-
 
 
     </data>

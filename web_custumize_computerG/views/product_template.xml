@@ -8,6 +8,8 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='out_of_stock_message']" position="after">
                     <field string="Display/Hide Delivery Message" name="showDelivryMessage" widget="boolean_toggle"/>
+                    <field name="messageDelivryTimeStock" attrs="{'readonly': [('showDelivryMessage', '=', False )]}"/>
+                    <field name="messageDelivryTimeRemoteStock" attrs="{'readonly': [('showDelivryMessage', '=', False )]}"/>
                 </xpath>
                 <xpath expr="//field[@name='out_of_stock_message']" position="replace">
                 </xpath>
