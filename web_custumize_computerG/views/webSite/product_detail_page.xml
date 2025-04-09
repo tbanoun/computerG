@@ -94,7 +94,12 @@
             <field name="key">web_custumize_computerG.product_extra_fields</field>
             <field name="arch" type="xml">
                 <xpath expr="//h6[@class='me-1 d-inline-block mb-0']" position="replace">
-                    <b>SKU :</b>
+                    <h6 class="me-1 d-inline-block mb-0">
+                        <t t-set="field_name" t-value="field.dr_label or field.label"/>
+                        <t t-set="field_name" t-value="field_name.replace('Référence interne :', 'SKU').replace('Référence interne', 'SKU')"/>
+                        <t t-out="field_name"/>
+                            :
+                    </h6>
                 </xpath>
             </field>
         </record>
