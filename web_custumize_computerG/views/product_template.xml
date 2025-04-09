@@ -9,8 +9,8 @@
                 <xpath expr="//field[@name='out_of_stock_message']" position="after">
                     <field string="Display/Hide Delivery Message" name="showDelivryMessage" widget="boolean_toggle"/>
                 </xpath>
-<!--                <xpath expr="//field[@name='out_of_stock_message']" position="replace">-->
-<!--                </xpath>-->
+                <xpath expr="//field[@name='out_of_stock_message']" position="replace">
+                </xpath>
             </field>
         </record>
 </odoo>
