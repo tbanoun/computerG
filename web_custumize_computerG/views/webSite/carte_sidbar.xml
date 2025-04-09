@@ -35,14 +35,19 @@
                          t-elif="check_qty_wt + line.product_id.qty_available > 0 and line.product_id.qty_available > 0">
                         <div class="col-12">
                             <b>
-                                <span style="border-radius: 5px !important; margin-left:5px !important; border: 1pt solid black !important;"
+                                <span style="font-weight: 500 !important;
+                background: #e5ffe978 !important;
+                padding: 0.4rem 0.6rem !important;
+                width: fit-content !important;
+                border-radius: 0.2rem !important;
+                color: #067d24 !important;
+                border: 1px solid #19a22f; !important"
                                       class="ml-2 text-right alert alert-success w-40">
                                     <span t-esc="int(line.product_id.qty_available)"/>
                                     Pcs | Ship In 1-2 Days
                                 </span>
                             </b>
                         </div>
-                        <br/>
                         <br/>
                         <br/>
                         <div class="col-12">
