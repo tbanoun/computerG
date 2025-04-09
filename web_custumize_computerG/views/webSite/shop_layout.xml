@@ -193,7 +193,6 @@
         </field>
     </record>
 
-
     <!--page grid view product-->
     <record id="product_item_grid_1" model="ir.ui.view">
         <field name="name">product_item_grid_1_nce</field>

@@ -34,26 +34,26 @@
                                                 <span>
                                                     In Stock |
                                                     <span class="cls-sahrane"
-                                                          t-esc="line.product_id.messageDelivryTimeStock">
+                                                          t-esc="product.messageDelivryTimeStock">
                                                     </span>
                                                 </span>
                                             </span>
                                             <t t-else="">
                                                 <span class="cls-sahrane"
-                                                      t-esc="line.product_id.messageDelivryTimeStock">
+                                                      t-esc="product.messageDelivryTimeStock">
                                                 </span>
                                             </t>
 
                                         </t>
                                         <t t-else="">
                                             <span class="cls-sahrane"
-                                                  t-esc="line.product_id.messageDelivryTimeStock">
+                                                  t-esc="product.messageDelivryTimeStock">
                                             </span>
                                         </t>
                                     </t>
                                     <t t-else="">
                                         <span class="cls-sahrane"
-                                              t-esc="line.product_id.messageDelivryTimeStock">
+                                              t-esc="product.messageDelivryTimeStock">
                                         </span>
                                     </t>
                                 </span>
@@ -82,26 +82,26 @@
                                                 <span>
                                                     In Remote Stock |
                                                     <span class="cls-sahrane"
-                                                          t-esc="line.product_id.messageDelivryTimeRemoteStock">
+                                                          t-esc="product.messageDelivryTimeRemoteStock">
                                                     </span>
                                                 </span>
                                             </span>
                                             <span t-else="">
                                                 <span class="cls-sahrane"
-                                                      t-esc="line.product_id.messageDelivryTimeRemoteStock">
+                                                      t-esc="product.messageDelivryTimeRemoteStock">
                                                 </span>
                                             </span>
                                         </t>
                                         <span t-else="">
                                             <span class="cls-sahrane"
-                                                  t-esc="line.product_id.messageDelivryTimeRemoteStock">
+                                                  t-esc="product.messageDelivryTimeRemoteStock">
                                             </span>
                                         </span>
                                     </t>
                                     <t t-else="">
                                         <span>
                                             <span class="cls-sahrane"
-                                                  t-esc="line.product_id.messageDelivryTimeRemoteStock">
+                                                  t-esc="product.messageDelivryTimeRemoteStock">
                                             </span>
                                         </span>
 
