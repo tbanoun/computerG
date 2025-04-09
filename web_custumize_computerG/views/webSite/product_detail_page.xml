@@ -20,12 +20,28 @@
                 border: 1px solid #19a22f; !important
 "
                                       class="ml-2 text-right alert alert-success w-40">
-                                    <t t-if="request.env.user.property_product_pricelist">
-                                        <span t-if="request.env.user.property_product_pricelist.showQtyOnStock"
-                                              t-esc="int(product.qty_available)"/>
-                                        <span>
-                                            In Stock | Ship 1-2 Days
-                                        </span>
+                                    <t t-if="request.env.user">
+                                        <t t-if="request.env.user.property_product_pricelist">
+
+                                            <span t-if="request.env.user.property_product_pricelist.showQtyOnStock">
+                                                <span
+                                                        t-esc="int(product.qty_available)"/>
+                                                <span>
+                                                    In Stock | Ship 1-2 Days
+                                                </span>
+                                            </span>
+                                            <t t-else="">
+                                                <span>
+                                                    Ship 1-2 Days
+                                                </span>
+                                            </t>
+
+                                        </t>
+                                        <t t-else="">
+                                            <span>
+                                                Ship 1-2 Days
+                                            </span>
+                                        </t>
                                     </t>
                                     <t t-else="">
                                         <span>
@@ -52,12 +68,20 @@
                                       class="ml-2 text-right alert alert-warning w-40">
                                     <t t-if="request.env.user">
                                         <t t-if="request.env.user.property_product_pricelist">
-                                            <span t-if="request.env.user.property_product_pricelist.showQtyOnStock"
-                                                  t-esc="int(product.qty_available_wt)"/>
-                                            <span>
-                                                In Remote Stock | Ship 4-8 Days
+                                            <span t-if="request.env.user.property_product_pricelist.showQtyOnStock">
+                                                <span
+                                                        t-esc="int(product.qty_available_wt)"/>
+                                                <span>
+                                                    In Remote Stock | Ship 4-8 Days
+                                                </span>
+                                            </span>
+                                            <span t-else="">
+                                                Ship 4-8 Days
                                             </span>
                                         </t>
+                                        <span t-else="">
+                                            Ship 4-8 Days
+                                        </span>
                                     </t>
                                     <t t-else="">
                                         <span>
