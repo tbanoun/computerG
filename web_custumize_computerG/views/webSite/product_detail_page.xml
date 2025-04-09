@@ -86,5 +86,18 @@
         </template>
 
 
+        <!--update title reference internal-->
+        <record id="product_extra_fields" model="ir.ui.view">
+            <field name="name">address_custom</field>
+            <field name="inherit_id" search="[('key', '=', 'theme_prime.product_extra_fields')]"/>
+            <field name="type">qweb</field>
+            <field name="key">web_custumize_computerG.product_extra_fields</field>
+            <field name="arch" type="xml">
+                <xpath expr="//h6[@class='me-1 d-inline-block mb-0']" position="replace">
+                    <b>SKU :</b>
+                </xpath>
+            </field>
+        </record>
+
     </data>
 </odoo>
