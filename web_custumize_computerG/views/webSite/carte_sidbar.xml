@@ -10,6 +10,8 @@
                 <br/>
                 <t t-set="check_qty" t-value="line.product_id.qty_available - line.product_uom_qty"/>
                 <t t-set="check_qty_wt" t-value="line.product_id.qty_available_wt - line.product_uom_qty"/>
+                <t t-set="qtyDelivred1"
+                   t-value="line.product_uom_qty - line.product_id.qty_available"/>
                 <div t-if="line.product_id.showDelivryMessage">
                     <!--1-->
                     <div class="row mt-4 mb-4" t-if="check_qty >= 0">
@@ -27,8 +29,6 @@
                         </div>
                     </div>
                     <!--2-->
-                    <t t-set="qtyDelivred1"
-                       t-value="line.product_uom_qty - line.product_id.qty_available"/>
                     <div class="row mt-4 mb-4"
                          t-elif="check_qty_wt + line.product_id.qty_available > 0 and line.product_id.qty_available > 0">
                         <div class="col-12">
@@ -58,8 +58,7 @@
                             <b>
                                 <span style="border-radius: 5px !important; margin-left:5px !important; border: 1pt solid black !important;"
                                       class="ml-2 text-right alert alert-warning w-40">
-                                    <span t-esc="int(qtyDelivred1)"/>
-                                    Pcs | Ship In 4-8 Days
+                                    Ship In 4-8 Days
                                 </span>
                             </b>
                         </div>

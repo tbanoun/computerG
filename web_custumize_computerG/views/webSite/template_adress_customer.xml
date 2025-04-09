@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="address_custom" model="ir.ui.view">
+        <field name="name">address_custom</field>
+        <field name="inherit_id" search="[('key', '=', 'website_sale.cart_summary')]"/>
+        <field name="type">qweb</field>
+        <field name="key">web_custumize_computerG.address_custom</field>
+        <field name="arch" type="xml">
+            <xpath expr="//table[@id='cart_products']//tbody//td[@class='td-product_name']" position="replace">
+                <td class='td-product_name'>
+                    <div>
+                        <strong t-field="line.name_short"/>
+                    </div>
+                    <t t-set="check_qty" t-value="line.product_id.qty_available - line.product_uom_qty"/>
+                    <t t-set="check_qty_wt" t-value="line.product_id.qty_available_wt - line.product_uom_qty"/>
+                    <t t-set="qtyDelivred1"
+                       t-value="line.product_uom_qty - line.product_id.qty_available"/>
+                    <div t-if="line.product_id.showDelivryMessage">
+                        <div class="row mt-4 mb-4">
+                            <!--1-->
+                            <div class="col-12" t-if="check_qty >= 0">
+                                <b>
+                                    <span style="margin-left:1px !important;
+                                    font-size: 8pt !important;
+             color: #067d38 !important;
+             background-color: #f3fff5 !important;
+             border: 1pt solid green !important;
+             border-radius: 5px !important;"
+                                          class="ml-2 text-right alert alert-success w-50">
+                                        Ship In 1-2 Days
+                                    </span>
+                                </b>
+                            </div>
+                            <!--2-->
+                            <div class="row mt-4 mb-4"
+                                 t-elif="check_qty_wt + line.product_id.qty_available >= 0 and line.product_id.qty_available > 0">
+                                <div class="col-12">
+                                    <b>
+                                        <span style="margin-left:1px !important;
+                                    font-size: 8pt !important;
+             color: #067d38 !important;
+             background-color: #f3fff5 !important;
+             border: 1pt solid green !important;
+             border-radius: 5px !important;"
+                                              class="ml-2 text-right alert alert-success w-50">
+                                            <span t-esc="int(line.product_id.qty_available)"/>
+                                            Pcs | Ship In 1-2 Days
+                                        </span>
+                                    </b>
+                                </div>
+                                <br/>
+                                <br/>
+                                <div class="col-12">
+                                    <b>
+                                        <span style="margin-left:1px !important;
+                                    font-size: 8pt !important;
+             color: #067d38 !important;
+             background-color: #f3fff5 !important;
+             border: 1pt solid green !important;
+             border-radius: 5px !important;"
+                                              class="ml-2 text-right alert alert-success w-50">
+                                            <span t-esc="int(qtyDelivred1)"/>
+                                            Pcs | Ship In 4-8 Days
+                                        </span>
+                                    </b>
+                                </div>
+                            </div>
+                            <!--3-->
+                            <div class="row mt-4 mb-4" t-elif="check_qty_wt >= 0">
+                                <div class="col-12">
+                                    <b>
+                                        <span style="margin-left:1px !important;
+                                    font-size: 8pt !important;
+             color: #067d38 !important;
+             background-color: #f3fff5 !important;
+             border: 1pt solid green !important;
+             border-radius: 5px !important;"
+                                              class="ml-2 text-right alert alert-success w-50">
+                                            Ship In 4-8 Days
+                                        </span>
+                                    </b>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--4-->
+                    <div t-if="0 >= (line.product_id.qty_available_wt + line.product_id.qty_available) and line.product_id.allow_out_of_stock_order">
+                        <style>
+                            .cls-sahrane p{
+                            display: contents !important;
+                            font-size: 8pt !important;
+                            }
+                        </style>
+                        <div class="col-12">
+                            <b>
+                                <span style="
+                                    font-size: 8pt !important;
+font-weight: 500 !important;
+                background: #e5ffe978 !important;
+                padding: 0.4rem 0.6rem !important;
+                width: fit-content !important;
+                border-radius: 0.2rem !important;
+                color: #067d24 !important;
+                border: 1px solid #19a22f; !important
+"
+                                      class="ml-2 text-right alert alert-warning w-40">
+                                    <span style="font-size: 8pt !important;" class="cls-sahrane"
+                                          t-esc="line.product_id.out_of_stock_message">
+                                    </span>
+                                </span>
+                            </b>
+                        </div>
+                    </div>
+                </td>
+            </xpath>
+        </field>
+    </record>
+</odoo>
