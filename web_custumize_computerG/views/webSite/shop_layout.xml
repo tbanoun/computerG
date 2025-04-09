@@ -12,13 +12,15 @@
                 <div class="row mt-4 mb-4" t-if="product.qty_available > 0">
                     <div class="col-12">
                         <b>
-                            <span style="margin-left:5px !important;
-             color: #067d38 !important;
-             background-color: #f3fff5 !important;
-             border: 1pt solid green !important;
-             border-radius: 5px !important;"
+                            <span style="font-weight: 500 !important;
+                background: #e5ffe978 !important;
+                padding: 0.4rem 0.6rem !important;
+                width: fit-content !important;
+                border-radius: 0.2rem !important;
+                color: #067d24 !important;
+                border: 1px solid #19a22f; !important"
                                   class="ml-2 text-right alert alert-success w-40">
-                               In Stock | Ship 1-2 Days
+                                In Stock | Ship 1-2 Days
                             </span>
                         </b>
                     </div>
@@ -26,7 +28,13 @@
                 <div class="row mt-4 mb-4" t-if="product.qty_available_wt > 0">
                     <div class="col-12">
                         <b>
-                            <span style="border-radius: 5px !important; margin-left:5px !important; border: 1pt solid black !important;"
+                            <span style="font-weight: 500 !important;
+                background: #e5ffe978 !important;
+                padding: 0.4rem 0.6rem !important;
+                width: fit-content !important;
+                border-radius: 0.2rem !important;
+                color: #067d24 !important;
+                border: 1px solid #19a22f; !important"
                                   class="ml-2 text-right alert alert-warning w-40">
                                 In Remote Stock | Ship 4-8 Days
                             </span>
@@ -173,8 +181,6 @@
             </xpath>
         </field>
     </record>
-
-
 
 
     <!--page grid view product-->
