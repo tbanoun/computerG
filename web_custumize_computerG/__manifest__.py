@@ -27,6 +27,7 @@
 
         #backend
         'views/product_template.xml',
+        'views/product_pricelist.xml',
 
         #reports
         'reports/update_invoice.xml',

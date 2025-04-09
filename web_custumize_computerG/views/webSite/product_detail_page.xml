@@ -20,10 +20,18 @@
                 border: 1px solid #19a22f; !important
 "
                                       class="ml-2 text-right alert alert-success w-40">
-                                    <span t-esc="int(product.qty_available)"/>
-                                    <span>
-                                        In Stock | Ship 1-2 Days
-                                    </span>
+                                    <t t-if="request.env.user.property_product_pricelist">
+                                        <span t-if="request.env.user.property_product_pricelist.showQtyOnStock"
+                                              t-esc="int(product.qty_available)"/>
+                                        <span>
+                                            In Stock | Ship 1-2 Days
+                                        </span>
+                                    </t>
+                                    <t t-else="">
+                                        <span>
+                                            In Stock | Ship 1-2 Days
+                                        </span>
+                                    </t>
                                 </span>
                             </b>
                         </div>
@@ -42,11 +50,21 @@
                 border: 1px solid #19a22f; !important
                 "
                                       class="ml-2 text-right alert alert-warning w-40">
-                                    <span t-esc="int(product.qty_available_wt)"/>
-                                    <span>
-                                        In Remote Stock | Ship 4-8 Days
-                                    </span>
+                                    <t t-if="request.env.user">
+                                        <t t-if="request.env.user.property_product_pricelist">
+                                            <span t-if="request.env.user.property_product_pricelist.showQtyOnStock"
+                                                  t-esc="int(product.qty_available_wt)"/>
+                                            <span>
+                                                In Remote Stock | Ship 4-8 Days
+                                            </span>
+                                        </t>
+                                    </t>
+                                    <t t-else="">
+                                        <span>
+                                            Ship 4-8 Days
+                                        </span>
 
+                                    </t>
                                 </span>
                             </b>
                         </div>
@@ -96,9 +114,10 @@
                 <xpath expr="//h6[@class='me-1 d-inline-block mb-0']" position="replace">
                     <h6 class="me-1 d-inline-block mb-0">
                         <t t-set="field_name" t-value="field.dr_label or field.label"/>
-                        <t t-set="field_name" t-value="field_name.replace('Référence interne :', 'SKU').replace('Référence interne', 'SKU')"/>
+                        <t t-set="field_name"
+                           t-value="field_name.replace('Référence interne :', 'SKU').replace('Référence interne', 'SKU')"/>
                         <t t-out="field_name"/>
-                            :
+                        :
                     </h6>
                 </xpath>
             </field>
