@@ -17,7 +17,7 @@
                     <div>
                         <strong t-field="line.name_short"/>
                     </div>
-                    <t t-set="check_qty" t-value="line.product_id.qty_available - line.product_uom_qty"/>
+                    <t t-set="check_qty" t-value="line.product_id.virtual_available - line.product_uom_qty"/>
                     <t t-set="check_qty_wt" t-value="line.product_id.qty_available_wt - line.product_uom_qty"/>
                     <t t-set="qtyDelivred1"
                        t-value="line.product_uom_qty - line.product_id.qty_available"/>
@@ -43,7 +43,7 @@
                             </div>
                             <!--2-->
                             <div class="row mt-4 mb-4"
-                                 t-elif="check_qty_wt + line.product_id.qty_available >= 0 and line.product_id.qty_available > 0">
+                                 t-elif="check_qty_wt + line.product_id.virtual_available >= 0 and line.product_id.virtual_available > 0">
                                 <div class="col-12">
                                     <b>
                                         <span style="font-weight: 500 !important;
@@ -55,7 +55,7 @@
                 color: #067d24 !important;
                 border: 1px solid #19a22f; !important"
                                               class="ml-2 text-right alert alert-success w-50">
-                                            <span t-esc="int(line.product_id.qty_available)"/>
+                                            <span t-esc="int(line.product_id.virtual_available)"/>
                                             Pcs |
                                             <span class="cls-sahrane"
                                                   t-esc="line.product_id.messageDelivryTimeStock">
@@ -110,7 +110,7 @@ font-size: 8pt !important;
                         </div>
                     </div>
                     <!--4-->
-                    <div t-if="0 >= (line.product_id.qty_available_wt + line.product_id.qty_available) and line.product_id.allow_out_of_stock_order">
+                    <div t-if="0 >= (line.product_id.qty_available_wt + line.product_id.virtual_available) and line.product_id.allow_out_of_stock_order">
                         <div class="col-12">
                             <b>
                                 <span style="

@@ -11,7 +11,7 @@
                         display: contents !important;
                         }
                     </style>
-                    <div class="row mt-4 mb-4" t-if="product.qty_available > 0 and product.showDelivryMessage">
+                    <div class="row mt-4 mb-4" t-if="product.virtual_available > 0 and product.showDelivryMessage">
                         <div class="col-12">
                             <b>
                                 <span style="
@@ -30,7 +30,7 @@
 
                                             <span t-if="request.env.user.property_product_pricelist.showQtyOnStock">
                                                 <span
-                                                        t-esc="int(product.qty_available)"/>
+                                                        t-esc="int(product.virtual_available)"/>
                                                 <span>
                                                     In Stock |
                                                     <span class="cls-sahrane"
@@ -111,7 +111,7 @@
                         </div>
                     </div>
                     <div class="row mt-4 mb-4"
-                         t-if="0 >= (product.qty_available_wt + product.qty_available) and product.allow_out_of_stock_order">
+                         t-if="0 >= (product.qty_available_wt + product.virtual_available) and product.allow_out_of_stock_order">
                         <div class="col-12">
                             <b>
                                 <span style="

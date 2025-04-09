@@ -9,7 +9,7 @@
         <field name="key">web_custumize_computerG.product_item_grid_1_nce2</field>
         <field name="arch" type="xml">
             <xpath expr="//div[hasclass('tp-product-wrapper')]//div[hasclass('tp-product-content')]" position="inside">
-                <div class="row mt-4 mb-4" t-if="product.qty_available > 0">
+                <div class="row mt-4 mb-4" t-if="product.virtual_available > 0">
                     <style>
                         .cls-sahrane p{
                         display: contents !important;
