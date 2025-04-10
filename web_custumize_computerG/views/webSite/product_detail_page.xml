@@ -153,8 +153,8 @@
                     </t>
                 </div>
             </xpath>
-            <xpath expr="//div[@id='product_option_block']" position="replace">
-            </xpath>
+<!--            <xpath expr="//div[@id='product_option_block']" position="replace">-->
+<!--            </xpath>-->
         </template>
 
 
