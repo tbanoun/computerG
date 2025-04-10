@@ -8,6 +8,40 @@ class PricelistItem(models.Model):
     margin = fields.Float(string="Margin (%)", default=0,
                           digits=(16, 2))
 
+    rule_tip = fields.Char(compute='_compute_rule_tip')
+
+    @api.depends_context('lang')
+    @api.depends('compute_price', 'price_discount', 'price_surcharge', 'base', 'price_round')
+    def _compute_rule_tip(self):
+        base_selection_vals = {elem[0]: elem[1] for elem in self._fields['base']._description_selection(self.env)}
+        self.rule_tip = False
+        for item in self:
+            if item.compute_price != 'formula':
+                continue
+            base_amount = 100
+            discount_factor = (100 - item.price_discount) / 100
+            margin = item.margin
+            discounted_price = base_amount * discount_factor
+            if item.price_round:
+                discounted_price = tools.float_round(discounted_price, precision_rounding=item.price_round)
+            surcharge = tools.format_amount(item.env, item.price_surcharge, item.currency_id)
+            typePrice = 'cost'
+            if self.base == 'list_price':
+                typePrice = 'Sales Price'
+            item.rule_tip = _(
+                "%(base)s with a profit margin %(margin)s and with a %(discount)s %% discount and %(surcharge)s extra fee\n"
+                f"Example: ((%(base)s +(%(base)s * Profit Margin)) + Extra Fee)",
+                base=base_selection_vals[item.base],
+                discount=item.price_discount,
+                surcharge=surcharge,
+                amount=tools.format_amount(item.env, 100, item.currency_id),
+                discount_charge=discount_factor,
+                price_surcharge=surcharge,
+                margin =margin,
+                total_amount=tools.format_amount(
+                    item.env, discounted_price + item.price_surcharge, item.currency_id),
+            )
+
     def _compute_price(self, product, quantity, uom, date, currency=None):
         """Compute the unit price of a product in the context of a pricelist application.
 

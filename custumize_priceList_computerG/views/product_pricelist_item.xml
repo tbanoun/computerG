@@ -34,8 +34,8 @@
                                 'invisible': ['|', ('compute_price', '!=', 'formula'), ('base', '!=', 'pricelist')],
                                 'required': [('compute_price', '=', 'formula'), ('base', '=', 'pricelist')],
                                 'readonly': [('base', '!=', 'pricelist')]}"/>
-<!--                        <label for="price_discount" string="Discount"-->
-<!--                               attrs="{'invisible':[('compute_price', '!=', 'formula')]}"/>-->
+                        <!--                        <label for="price_discount" string="Discount"-->
+                        <!--                               attrs="{'invisible':[('compute_price', '!=', 'formula')]}"/>-->
                         <label string="Margins" for="margin"
                                attrs="{'invisible':[('compute_price', '!=', 'formula')]}"/>
                         <div class="o_row" attrs="{'invisible':[('compute_price', '!=', 'formula')]}">
@@ -49,26 +49,30 @@
                                options="{'field_digits': True}"/>
                         <field name="price_round" string="Rounding Method"
                                attrs="{'invisible':[('compute_price', '!=', 'formula')]}"/>
-<!--                        <label string="Margins" for="price_min_margin"-->
-<!--                               attrs="{'invisible':[('compute_price', '!=', 'formula')]}"/>-->
-                         <label for="price_discount" string="Discount"
+                        <!--                        <label string="Margins" for="price_min_margin"-->
+                        <!--                               attrs="{'invisible':[('compute_price', '!=', 'formula')]}"/>-->
+                        <label for="price_discount" string="Discount"
                                attrs="{'invisible':[('compute_price', '!=', 'formula')]}"/>
                         <div class="o_row" attrs="{'invisible':[('compute_price', '!=', 'formula')]}">
                             <field name="price_discount"/>
                             <span>%</span>
                         </div>
-<!--                        <div class="o_row" attrs="{'invisible':[('compute_price', '!=', 'formula')]}">-->
-<!--                            <field name="price_min_margin" string="Min. Margin" class="oe_inline"-->
-<!--                                   widget="monetary"-->
-<!--                                   nolabel="1"-->
-<!--                                   options="{'field_digits': True}"/>-->
-<!--                            <i class="fa fa-long-arrow-right mx-2 oe_edit_only" aria-label="Arrow icon" title="Arrow"/>-->
-<!--                            <field name="price_max_margin" string="Max. Margin" class="oe_inline"-->
-<!--                                   widget="monetary"-->
-<!--                                   nolabel="1"-->
-<!--                                   options="{'field_digits': True}"/>-->
-<!--                        </div>-->
+                        <!--                        <div class="o_row" attrs="{'invisible':[('compute_price', '!=', 'formula')]}">-->
+                        <!--                            <field name="price_min_margin" string="Min. Margin" class="oe_inline"-->
+                        <!--                                   widget="monetary"-->
+                        <!--                                   nolabel="1"-->
+                        <!--                                   options="{'field_digits': True}"/>-->
+                        <!--                            <i class="fa fa-long-arrow-right mx-2 oe_edit_only" aria-label="Arrow icon" title="Arrow"/>-->
+                        <!--                            <field name="price_max_margin" string="Max. Margin" class="oe_inline"-->
+                        <!--                                   widget="monetary"-->
+                        <!--                                   nolabel="1"-->
+                        <!--                                   options="{'field_digits': True}"/>-->
+                        <!--                        </div>-->
                     </group>
+                    <div class="alert alert-info" role="alert" style="white-space: pre;"
+                         attrs="{'invisible': [('compute_price', '!=', 'formula')]}">
+                        <field name="rule_tip"/>
+                    </div>
                 </group>
 
                 <group string="Conditions">
