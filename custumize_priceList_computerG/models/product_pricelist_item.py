@@ -85,7 +85,7 @@ class PricelistItem(models.Model):
             if self.price_surcharge:
                 price += convert(self.price_surcharge)
             if self.margin:
-                price = price + (convert((self.margin / 100) * base_price))
+                # price = price + (convert((self.margin / 100) * base_price))
                 price = math.ceil(price + ((self.margin / 100) * base_price))
         else:  # empty self, or extended pricelist price computation logic
             price = self._compute_base_price(product, quantity, uom, date, currency)
