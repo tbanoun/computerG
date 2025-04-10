@@ -1,5 +1,6 @@
 from odoo import models, fields, api, tools, _
 from odoo.exceptions import ValidationError
+import math
 
 
 class PricelistItem(models.Model):
@@ -37,7 +38,7 @@ class PricelistItem(models.Model):
                 amount=tools.format_amount(item.env, 100, item.currency_id),
                 discount_charge=discount_factor,
                 price_surcharge=surcharge,
-                margin =margin,
+                margin=margin,
                 total_amount=tools.format_amount(
                     item.env, discounted_price + item.price_surcharge, item.currency_id),
             )
@@ -85,6 +86,7 @@ class PricelistItem(models.Model):
                 price += convert(self.price_surcharge)
             if self.margin:
                 price = price + (convert((self.margin / 100) * base_price))
+                price = math.ceil(price + ((self.margin / 100) * base_price))
         else:  # empty self, or extended pricelist price computation logic
             price = self._compute_base_price(product, quantity, uom, date, currency)
         return price
