@@ -42,7 +42,7 @@
                 width: fit-content !important;
                 border-radius: 0.2rem !important;
                 color: #803D19 !important;
-                border: 1px solid #19a22f; !important"
+                border: 1px solid #803D19; !important"
                                   class="ml-2 text-right alert alert-warning w-40">
                                 In Remote Stock |
                                 <span class="cls-sahrane"

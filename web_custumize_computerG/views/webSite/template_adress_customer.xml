@@ -74,7 +74,7 @@
                 width: fit-content !important;
                 border-radius: 0.2rem !important;
                 color: #803D19 !important;
-                border: 1px solid #19a22f; !important"
+                border: 1px solid #803D19; !important"
                                               class="ml-2 text-right alert alert-success w-50">
                                             <span t-esc="int(qtyDelivred1)"/>
                                             Pcs |
@@ -97,7 +97,7 @@ font-size: 8pt !important;
                 width: fit-content !important;
                 border-radius: 0.2rem !important;
                 color: #803D19 !important;
-                border: 1px solid #19a22f; !important"
+                border: 1px solid #803D19; !important"
                                               class="ml-2 text-right alert alert-success w-50">
                                             <span class="cls-sahrane"
                                                   t-esc="line.product_id.messageDelivryTimeRemoteStock">
@@ -121,7 +121,7 @@ font-size: 8pt !important;
                 width: fit-content !important;
                 border-radius: 0.2rem !important;
                 color: #DA020E !important;
-                border: 1px solid #19a22f; !important
+                border: 1px solid #DA020E; !important
 "
                                   class="ml-2 text-right alert alert-warning w-40">
                                 <span style="font-size: 8pt !important;" class="cls-sahrane"

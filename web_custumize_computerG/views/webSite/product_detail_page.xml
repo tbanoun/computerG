@@ -69,7 +69,7 @@
                 padding: 0.4rem 0.6rem !important;
                 width: fit-content !important;
                 border-radius: 0.2rem !important;
-                border: 1px solid #19a22f; !important
+                border: 1px solid #803D19; !important
                 "
                                       class="ml-2 text-right alert alert-warning w-40">
                                     <t t-if="request.env.user.id != request.env.ref('base.public_user').id">
@@ -85,7 +85,7 @@
                                                     </span>
                                                 </span>
                                             </span>
-                                            <span style=" color: 803D19 !important;
+                                            <span style=" color: #803D19 !important;
                 background: #FFF0E8 !important;" t-else="">
                                                 <span class="cls-sahrane"
                                                       t-esc="product.messageDelivryTimeRemoteStock">
@@ -123,7 +123,7 @@
                 width: fit-content !important;
                 border-radius: 0.2rem !important;
                 color: #DA020E !important;
-                border: 1px solid #19a22f; !important
+                border: 1px solid #DA020E; !important
                 "
                                       class="ml-2 text-right alert alert-warning w-40">
                                     <span class="cls-sahrane" t-esc="product.out_of_stock_message">
