@@ -112,7 +112,7 @@
                         </div>
                     </div>
                     <div class="row mt-4 mb-4"
-                         t-if="0 >= (product.qty_available_wt + product.virtual_available) and product.allow_out_of_stock_order">
+                         t-if="0 >= product.qty_available_wt and  0 >= product.virtual_available and product.allow_out_of_stock_order">
                         <div class="col-12">
                             <b>
                                 <span style="
@@ -126,6 +126,9 @@
                 border: 1px solid #DA020E; !important
                 "
                                       class="ml-2 text-right alert alert-warning w-40">
+                                    <span class="cls-sahrane"
+                                          t-esc="(product.qty_available_wt + product.virtual_available)">
+                                    </span>
                                     <span class="cls-sahrane" t-esc="product.out_of_stock_message">
                                     </span>
 
