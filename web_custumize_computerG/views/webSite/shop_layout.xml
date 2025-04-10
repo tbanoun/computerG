@@ -95,73 +95,73 @@
     <!--    </record>-->
 
     <!--list view-->
-    <record id="product_item_list_1" model="ir.ui.view">
-        <field name="name">product_item_list_1</field>
-        <field name="inherit_id" search="[('key', '=', 'theme_prime.product_item_list_1')]"/>
-        <field name="type">qweb</field>
-        <field name="key">web_custumize_computerG.product_item_list_1</field>
-        <field name="arch" type="xml">
-            <xpath expr="//form" position="replace">
-                <form action="/shop/cart/update" method="post" itemscope="itemscope"
-                      t-att-data-publish="product.website_published and 'on' or 'off'"
-                      itemtype="http://schema.org/Product">
-                    <input name="product_id" t-att-value="product_variant_id" type="hidden"/>
-                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"
-                           t-nocache="The csrf token must always be up to date."/>
-                    <div class="tp-product-wrapper">
-                        <div class="tp-product-top position-relative overflow-hidden">
-                            <a t-att-href="product_href" class="tp-product-image-container d-block h-100"
-                               itemprop="url">
-                                <img t-attf-src="/web/image/product.template/#{product.id}/#{product_image_size}"
-                                     itemprop="image" loading="lazy" class="h-100 w-100 tp-product-image"/>
-                            </a>
-                            <t t-call="theme_prime.product_label">
-                                <t t-set="label" t-value="product.dr_label_id"/>
-                            </t>
-                            <t t-call="theme_prime.product_label">
-                                <t t-set="stock" t-value="True"/>
-                            </t>
-                            <t t-call="theme_prime.product_item_actions"/>
-                        </div>
-                        <div class="tp-product-content py-3">
-                            <h5 class="text-center text-md-start">
-                                <a class="tp-link-dark text-truncate d-block" t-att-title="product.name" itemprop="name"
-                                   t-att-href="product_href" t-att-content="product.name" t-field="product.name"/>
-                                <a t-if="not product.website_published" role="button" t-att-href="product_href"
-                                   class="btn btn-sm btn-danger" title="This product is unpublished.">
-                                    Unpublished
-                                </a>
-                            </h5>
-                            <t t-call="theme_prime.product_item_price">
-                                <t t-set="_classes" t-valuef="text-center text-md-start"/>
-                                <t t-set="_size" t-valuef="h5"/>
-                            </t>
-                            <t t-if="_config_product_item.get('show_product_preview_swatches')"
-                               t-call="theme_prime.product_preview_swatches">
-                                <t t-set="_classes"
-                                   t-valuef="mt-2 d-flex justify-content-center justify-content-md-start"/>
-                                <t t-set="parent_selector" t-valuef="form"/>
-                                <t t-set="img_selector" t-valuef=".tp-product-image-container img"/>
-                                <t t-set="img_size" t-value="product_image_size"/>
-                            </t>
-                            <div t-if="product.description_sale" class="text-center text-md-start mt-2"
-                                 itemprop="description"
-                                 t-field="product.description_sale"/>
-                            <t t-if="_config_product_item.get('show_rating') and is_view_active('website_sale.product_comment')">
-                                <t t-set="rating_stats" t-value="product.sudo().rating_get_stats()"/>
-                                <t t-if="rating_stats['total']" t-call="theme_prime.product_rating">
-                                    <t t-set="rating_avg" t-value="product.rating_avg"/>
-                                    <t t-set="_classes" t-valuef="text-center text-md-start mt-1"/>
-                                </t>
-                            </t>
-                            <div class="text-center text-md-start o_wsale_product_btn mt-3"
-                                 t-if="_config_product_item.get('show_add_to_cart') and product_variant_id and (template_price_vals['price_reduce'] or not website.prevent_zero_price_sale) and product._website_show_quick_add()">
-                                <a href="#" role="button" class="a-submit btn btn-primary" aria-label="Shopping cart">
-                                    <i class="dri dri-cart"/>
-                                    Add to Cart
-                                </a>
-                            </div>
-                            <br/>
+<!--    <record id="product_item_list_1" model="ir.ui.view">-->
+<!--        <field name="name">product_item_list_1</field>-->
+<!--        <field name="inherit_id" search="[('key', '=', 'theme_prime.product_item_list_1')]"/>-->
+<!--        <field name="type">qweb</field>-->
+<!--        <field name="key">web_custumize_computerG.product_item_list_1</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <xpath expr="//form" position="replace">-->
+<!--                <form action="/shop/cart/update" method="post" itemscope="itemscope"-->
+<!--                      t-att-data-publish="product.website_published and 'on' or 'off'"-->
+<!--                      itemtype="http://schema.org/Product">-->
+<!--                    <input name="product_id" t-att-value="product_variant_id" type="hidden"/>-->
+<!--                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"-->
+<!--                           t-nocache="The csrf token must always be up to date."/>-->
+<!--                    <div class="tp-product-wrapper">-->
+<!--                        <div class="tp-product-top position-relative overflow-hidden">-->
+<!--                            <a t-att-href="product_href" class="tp-product-image-container d-block h-100"-->
+<!--                               itemprop="url">-->
+<!--                                <img t-attf-src="/web/image/product.template/#{product.id}/#{product_image_size}"-->
+<!--                                     itemprop="image" loading="lazy" class="h-100 w-100 tp-product-image"/>-->
+<!--                            </a>-->
+<!--                            <t t-call="theme_prime.product_label">-->
+<!--                                <t t-set="label" t-value="product.dr_label_id"/>-->
+<!--                            </t>-->
+<!--                            <t t-call="theme_prime.product_label">-->
+<!--                                <t t-set="stock" t-value="True"/>-->
+<!--                            </t>-->
+<!--                            <t t-call="theme_prime.product_item_actions"/>-->
+<!--                        </div>-->
+<!--                        <div class="tp-product-content py-3">-->
+<!--                            <h5 class="text-center text-md-start">-->
+<!--                                <a class="tp-link-dark text-truncate d-block" t-att-title="product.name" itemprop="name"-->
+<!--                                   t-att-href="product_href" t-att-content="product.name" t-field="product.name"/>-->
+<!--                                <a t-if="not product.website_published" role="button" t-att-href="product_href"-->
+<!--                                   class="btn btn-sm btn-danger" title="This product is unpublished.">-->
+<!--                                    Unpublished-->
+<!--                                </a>-->
+<!--                            </h5>-->
+<!--                            <t t-call="theme_prime.product_item_price">-->
+<!--                                <t t-set="_classes" t-valuef="text-center text-md-start"/>-->
+<!--                                <t t-set="_size" t-valuef="h5"/>-->
+<!--                            </t>-->
+<!--                            <t t-if="_config_product_item.get('show_product_preview_swatches')"-->
+<!--                               t-call="theme_prime.product_preview_swatches">-->
+<!--                                <t t-set="_classes"-->
+<!--                                   t-valuef="mt-2 d-flex justify-content-center justify-content-md-start"/>-->
+<!--                                <t t-set="parent_selector" t-valuef="form"/>-->
+<!--                                <t t-set="img_selector" t-valuef=".tp-product-image-container img"/>-->
+<!--                                <t t-set="img_size" t-value="product_image_size"/>-->
+<!--                            </t>-->
+<!--                            <div t-if="product.description_sale" class="text-center text-md-start mt-2"-->
+<!--                                 itemprop="description"-->
+<!--                                 t-field="product.description_sale"/>-->
+<!--                            <t t-if="_config_product_item.get('show_rating') and is_view_active('website_sale.product_comment')">-->
+<!--                                <t t-set="rating_stats" t-value="product.sudo().rating_get_stats()"/>-->
+<!--                                <t t-if="rating_stats['total']" t-call="theme_prime.product_rating">-->
+<!--                                    <t t-set="rating_avg" t-value="product.rating_avg"/>-->
+<!--                                    <t t-set="_classes" t-valuef="text-center text-md-start mt-1"/>-->
+<!--                                </t>-->
+<!--                            </t>-->
+<!--                            <div class="text-center text-md-start o_wsale_product_btn mt-3"-->
+<!--                                 t-if="_config_product_item.get('show_add_to_cart') and product_variant_id and (template_price_vals['price_reduce'] or not website.prevent_zero_price_sale) and product._website_show_quick_add()">-->
+<!--                                <a href="#" role="button" class="a-submit btn btn-primary" aria-label="Shopping cart">-->
+<!--                                    <i class="dri dri-cart"/>-->
+<!--                                    Add to Cart-->
+<!--                                </a>-->
+<!--                            </div>-->
+<!--                            <br/>-->
                             <!--                            <div class="row mt-4 mb-4" t-if="product.qty_available > 0">-->
                             <!--                                <div class="col-12">-->
                             <!--                                    <b>-->
@@ -186,48 +186,48 @@
                             <!--                                    </b>-->
                             <!--                                </div>-->
                             <!--                            </div>-->
-                        </div>
-                    </div>
-                </form>
-            </xpath>
-        </field>
-    </record>
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--            </xpath>-->
+<!--        </field>-->
+<!--    </record>-->
 
     <!--page grid view product-->
-    <record id="product_item_grid_1" model="ir.ui.view">
-        <field name="name">product_item_grid_1_nce</field>
-        <field name="inherit_id" search="[('key', '=', 'theme_prime.product_item_grid_1')]"/>
-        <field name="type">qweb</field>
-        <field name="key">web_custumize_computerG.product_item_grid_1</field>
-        <field name="arch" type="xml">
-            <xpath expr="//div[@class='tp-product-content border-top p-2 position-relative text-center text-lg-start']"
-                   position="replace">
-                <div class="tp-product-content border-top p-2 position-relative text-center text-lg-start">
-                    <h6 class="mb-1 tp-product-title">
-                        <a class="tp-link-dark text-truncate d-block" t-att-title="product.name" itemprop="name"
-                           t-att-href="product_href" t-att-content="product.name" t-field="product.name"/>
-                        <a t-if="not product.website_published" role="button" t-att-href="product_href"
-                           class="btn btn-sm btn-danger" title="This product is unpublished.">
-                            Unpublished
-                        </a>
-                    </h6>
-                    <t t-call="theme_prime.product_item_price"/>
-                    <t t-if="is_view_active('website_sale.product_comment')">
-                        <t t-set="rating_stats" t-value="product.sudo().rating_get_stats()"/>
-                        <t t-if="rating_stats['total']" t-call="theme_prime.product_rating">
-                            <t t-set="rating_avg" t-value="product.rating_avg"/>
-                            <t t-set="_classes" t-valuef="mt-1 small d-lg-none"/>
-                        </t>
-                    </t>
-                    <t t-if="_config_product_item.get('show_product_preview_swatches')"
-                       t-call="theme_prime.product_preview_swatches">
-                        <t t-set="_classes"
-                           t-valuef="tp-product-preview-swatches-md bg-white d-flex mt-1 p-lg-2 justify-content-center justify-content-lg-start"/>
-                        <t t-set="_limit" t-value="4"/>
-                        <t t-set="parent_selector" t-valuef="form"/>
-                        <t t-set="img_selector" t-valuef=".tp-product-image-container img"/>
-                        <t t-set="img_size" t-value="product_image_size"/>
-                    </t>
+<!--    <record id="product_item_grid_1" model="ir.ui.view">-->
+<!--        <field name="name">product_item_grid_1_nce</field>-->
+<!--        <field name="inherit_id" search="[('key', '=', 'theme_prime.product_item_grid_1')]"/>-->
+<!--        <field name="type">qweb</field>-->
+<!--        <field name="key">web_custumize_computerG.product_item_grid_1</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <xpath expr="//div[@class='tp-product-content border-top p-2 position-relative text-center text-lg-start']"-->
+<!--                   position="replace">-->
+<!--                <div class="tp-product-content border-top p-2 position-relative text-center text-lg-start">-->
+<!--                    <h6 class="mb-1 tp-product-title">-->
+<!--                        <a class="tp-link-dark text-truncate d-block" t-att-title="product.name" itemprop="name"-->
+<!--                           t-att-href="product_href" t-att-content="product.name" t-field="product.name"/>-->
+<!--                        <a t-if="not product.website_published" role="button" t-att-href="product_href"-->
+<!--                           class="btn btn-sm btn-danger" title="This product is unpublished.">-->
+<!--                            Unpublished-->
+<!--                        </a>-->
+<!--                    </h6>-->
+<!--                    <t t-call="theme_prime.product_item_price"/>-->
+<!--                    <t t-if="is_view_active('website_sale.product_comment')">-->
+<!--                        <t t-set="rating_stats" t-value="product.sudo().rating_get_stats()"/>-->
+<!--                        <t t-if="rating_stats['total']" t-call="theme_prime.product_rating">-->
+<!--                            <t t-set="rating_avg" t-value="product.rating_avg"/>-->
+<!--                            <t t-set="_classes" t-valuef="mt-1 small d-lg-none"/>-->
+<!--                        </t>-->
+<!--                    </t>-->
+<!--                    <t t-if="_config_product_item.get('show_product_preview_swatches')"-->
+<!--                       t-call="theme_prime.product_preview_swatches">-->
+<!--                        <t t-set="_classes"-->
+<!--                           t-valuef="tp-product-preview-swatches-md bg-white d-flex mt-1 p-lg-2 justify-content-center justify-content-lg-start"/>-->
+<!--                        <t t-set="_limit" t-value="4"/>-->
+<!--                        <t t-set="parent_selector" t-valuef="form"/>-->
+<!--                        <t t-set="img_selector" t-valuef=".tp-product-image-container img"/>-->
+<!--                        <t t-set="img_size" t-value="product_image_size"/>-->
+<!--                    </t>-->
                     <!--                    <div class="row mt-4 mb-4" t-if="product.qty_available > 0">-->
                     <!--                        <div class="col-12 text-center">-->
                     <!--                            <b>-->
@@ -254,10 +254,10 @@
                     <!--                            </b>-->
                     <!--                        </div>-->
                     <!--                    </div>-->
-                </div>
-            </xpath>
-        </field>
-    </record>
+<!--                </div>-->
+<!--            </xpath>-->
+<!--        </field>-->
+<!--    </record>-->
 
     <record id="product_availability" model="ir.ui.view">
         <field name="name">product_item_grid_1_nce</field>

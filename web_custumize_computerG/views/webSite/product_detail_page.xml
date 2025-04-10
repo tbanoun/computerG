@@ -151,7 +151,7 @@
                     <h6 class="me-1 d-inline-block mb-0">
                         <t t-set="field_name" t-value="field.dr_label or field.label"/>
                         <t t-set="field_name"
-                           t-value="field_name.replace('Référence interne :', 'SKU').replace('Référence interne', 'SKU')"/>
+                           t-value="field_name.replace('Référence interne :', 'SKU').replace('Référence interne', 'SKU').replace('internal Reference', 'SKU').replace('Internal Reference', 'SKU')"/>
                         <t t-out="field_name"/>
                         :
                     </h6>
