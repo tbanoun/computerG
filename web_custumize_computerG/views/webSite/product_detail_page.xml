@@ -152,6 +152,8 @@
                 </div>
             </xpath>
             <xpath expr="//div[@id='product_option_block']" position="replace">
+                <div id='product_option_block'>
+                </div>
             </xpath>
         </template>
 
