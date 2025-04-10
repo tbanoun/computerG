@@ -11,11 +11,10 @@
                         display: contents !important;
                         }
                     </style>
-                    <div class="row mt-4 mb-4" t-if="product.virtual_available > 0 and product.showDelivryMessage">
+                    <div class="row mt-2 mb-4" t-if="product.virtual_available > 0 and product.showDelivryMessage">
                         <div class="col-12">
                             <b>
                                 <span style="
-                margin-left:5px !important;
                 font-weight: 500 !important;
                 background: #e5ffe978 !important;
                 padding: 0.4rem 0.6rem !important;
@@ -60,11 +59,10 @@
                             </b>
                         </div>
                     </div>
-                    <div class="row mt-4 mb-4" t-if="product.qty_available_wt > 0 and product.showDelivryMessage">
+                    <div class="row mt-2 mb-4" t-if="product.qty_available_wt > 0 and product.showDelivryMessage">
                         <div class="col-12">
                             <b>
                                 <span style="
-                            margin-left:5px !important;
                 font-weight: 500 !important;
                 padding: 0.4rem 0.6rem !important;
                 width: fit-content !important;
@@ -111,12 +109,11 @@
                             </b>
                         </div>
                     </div>
-                    <div class="row mt-4 mb-4"
+                    <div class="row mt-2 mb-4"
                          t-if="0 >= product.qty_available_wt and  0 >= product.virtual_available and product.allow_out_of_stock_order">
                         <div class="col-12">
                             <b>
                                 <span style="
-                            margin-left:5px !important;
                 font-weight: 500 !important;
                 background: #FEEAEA !important;
                 padding: 0.4rem 0.6rem !important;
