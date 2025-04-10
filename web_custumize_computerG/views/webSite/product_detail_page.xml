@@ -12,7 +12,7 @@
                         display: contents !important;
                         }
                     </style>
-                    <div class="row mt-2 mb-4"
+                    <div class="row mt-2 mb-0"
                          t-if="product.virtual_available > 0 and product.showDelivryMessage">
                         <div class="col-12">
                             <b>
@@ -77,7 +77,7 @@
                             </t>
                         </div>
                     </div>
-                    <div class="row mt-2 mb-4"
+                    <div class="row mt-2 mb-0"
                          t-if="product.qty_available_wt > 0 and product.showDelivryMessage">
                         <div class="col-12">
                             <b>
@@ -144,7 +144,7 @@
                             </t>
                         </div>
                     </div>
-                    <div class="row mt-2 mb-4"
+                    <div class="row mt-2 mb-0"
                          t-if="0 >= product.qty_available_wt and  0 >= product.virtual_available and product.allow_out_of_stock_order">
                         <div class="col-12">
                             <b>
@@ -184,9 +184,6 @@
                         </div>
                     </div>
                 </div>
-            </xpath>
-            <xpath expr="//button[contains(@class, 'o_add_compare_dyn')]" position="attributes">
-                <attribute name="class">d-none</attribute>
             </xpath>
         </template>
 
