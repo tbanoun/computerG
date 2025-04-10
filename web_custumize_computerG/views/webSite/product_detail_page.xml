@@ -184,10 +184,7 @@
                     </div>
                 </div>
             </xpath>
-            <xpath expr="//div[@id='product_option_block']" position="replace">
-                <div id='product_option_block'>
-                    <h1>Hello</h1>
-                </div>
+            <xpath expr="//div[@id='product_option_block']//button" position="replace">
             </xpath>
         </template>
 
