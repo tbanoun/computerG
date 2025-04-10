@@ -110,7 +110,7 @@ font-size: 8pt !important;
                         </div>
                     </div>
                     <!--4-->
-                    <div class="col-12" style="margin-top: -35px;"
+                    <div class="col-12"
                          t-if="0 >= (line.product_id.qty_available_wt + line.product_id.virtual_available) and line.product_id.allow_out_of_stock_order">
                         <b>
                             <span style="
