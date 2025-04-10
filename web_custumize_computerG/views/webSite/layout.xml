@@ -65,11 +65,11 @@
                                     <b>
                                         <span style="
             font-weight: 500 !important;
-                background: #e5ffe978 !important;
+                background: #FFF0E8 !important;
                 padding: 0.4rem 0.6rem !important;
                 width: fit-content !important;
                 border-radius: 0.2rem !important;
-                color: #067d24 !important;
+                color: #803D19 !important;
                 border: 1px solid #19a22f; !important"
                                               class="ml-2 text-right alert alert-success w-40">
                                             <span t-esc="int(qtyDelivred1)"/>
@@ -86,11 +86,11 @@
                                     <b>
                                         <span style="
 font-weight: 500 !important;
-                background: #e5ffe978 !important;
+                background: #FFF0E8 !important;
                 padding: 0.4rem 0.6rem !important;
                 width: fit-content !important;
                 border-radius: 0.2rem !important;
-                color: #067d24 !important;
+                color: #803D19 !important;
                 border: 1px solid #19a22f; !important
 "
                                               class="ml-2 text-right alert alert-warning w-40">
@@ -108,11 +108,11 @@ font-weight: 500 !important;
                                 <b>
                                     <span style="
 font-weight: 500 !important;
-                background: #e5ffe978 !important;
+                background: #FEEAEA !important;
                 padding: 0.4rem 0.6rem !important;
                 width: fit-content !important;
                 border-radius: 0.2rem !important;
-                color: #067d24 !important;
+                color: #DA020E !important;
                 border: 1px solid #19a22f; !important
 "
                                           class="ml-2 text-right alert alert-warning w-40">

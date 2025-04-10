@@ -66,17 +66,16 @@
                                 <span style="
                             margin-left:5px !important;
                 font-weight: 500 !important;
-                background: #e5ffe978 !important;
                 padding: 0.4rem 0.6rem !important;
                 width: fit-content !important;
                 border-radius: 0.2rem !important;
-                color: #067d24 !important;
                 border: 1px solid #19a22f; !important
                 "
                                       class="ml-2 text-right alert alert-warning w-40">
                                     <t t-if="request.env.user.id != request.env.ref('base.public_user').id">
                                         <t t-if="request.env.user.property_product_pricelist">
-                                            <span t-if="request.env.user.property_product_pricelist.showQtyOnStock">
+                                            <span style=" color: #803D19 !important;
+                background: #e5ffe978 !important;" t-if="request.env.user.property_product_pricelist.showQtyOnStock">
                                                 <span
                                                         t-esc="int(product.qty_available_wt)"/>
                                                 <span>
@@ -86,25 +85,27 @@
                                                     </span>
                                                 </span>
                                             </span>
-                                            <span t-else="">
+                                            <span style=" color: 803D19 !important;
+                background: #FFF0E8 !important;" t-else="">
                                                 <span class="cls-sahrane"
                                                       t-esc="product.messageDelivryTimeRemoteStock">
                                                 </span>
                                             </span>
                                         </t>
-                                        <span t-else="">
+                                        <span style=" color: #803D19 !important;
+                background: #FFF0E8 !important;" t-else="">
                                             <span class="cls-sahrane"
                                                   t-esc="product.messageDelivryTimeRemoteStock">
                                             </span>
                                         </span>
                                     </t>
-                                    <t t-else="">
+                                    <t style=" color: #803D19 !important;
+                background: #FFF0E8 !important;" t-else="">
                                         <span>
                                             <span class="cls-sahrane"
                                                   t-esc="product.messageDelivryTimeRemoteStock">
                                             </span>
                                         </span>
-
                                     </t>
                                 </span>
                             </b>
@@ -117,11 +118,11 @@
                                 <span style="
                             margin-left:5px !important;
                 font-weight: 500 !important;
-                background: #e5ffe978 !important;
+                background: #FEEAEA !important;
                 padding: 0.4rem 0.6rem !important;
                 width: fit-content !important;
                 border-radius: 0.2rem !important;
-                color: #067d24 !important;
+                color: #DA020E !important;
                 border: 1px solid #19a22f; !important
                 "
                                       class="ml-2 text-right alert alert-warning w-40">
