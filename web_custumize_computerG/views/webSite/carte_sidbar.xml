@@ -96,7 +96,7 @@
                     </div>
                 </div>
                 <div t-if="0 >= (line.product_id.qty_available_wt + line.product_id.virtual_available) and line.product_id.allow_out_of_stock_order">
-                    <div class="col-12" style="margin-top: -10px !important;">
+                    <div class="col-12" style="margin-top: -10px !important; margin-bottom: 10px !important;">
                         <b>
                             <span style="
 font-weight: 500 !important;
@@ -113,7 +113,6 @@ font-weight: 500 !important;
                             </span>
                         </b>
                     </div>
-                    <br/>
                 </div>
             </xpath>
         </field>

@@ -22,7 +22,7 @@
                     <t t-set="qtyDelivred1"
                        t-value="line.product_uom_qty - line.product_id.qty_available"/>
                     <div t-if="line.product_id.showDelivryMessage">
-                        <div class="row mt-4 mb-4">
+                        <div class="row mt-1 mb-0">
                             <!--1-->
                             <div class="col-12" t-if="check_qty >= 0">
                                 <b>
@@ -42,7 +42,7 @@
                                 </b>
                             </div>
                             <!--2-->
-                            <div class="row mt-4 mb-4"
+                            <div class="row mt-1 mb-0"
                                  t-elif="check_qty_wt + line.product_id.virtual_available >= 0 and line.product_id.virtual_available > 0">
                                 <div class="col-12">
                                     <b>
@@ -86,7 +86,7 @@
                                 </div>
                             </div>
                             <!--3-->
-                            <div class="row mt-4 mb-4" t-elif="check_qty_wt >= 0">
+                            <div class="row mt-1 mb-0" t-elif="check_qty_wt >= 0">
                                 <div class="col-12">
                                     <b>
                                         <span style="
@@ -110,7 +110,7 @@ font-size: 8pt !important;
                         </div>
                     </div>
                     <!--4-->
-                    <div class="col-12"
+                    <div class="col-12" style="margin-top: -35px;"
                          t-if="0 >= (line.product_id.qty_available_wt + line.product_id.virtual_available) and line.product_id.allow_out_of_stock_order">
                         <b>
                             <span style="
