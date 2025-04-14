@@ -71,31 +71,6 @@ class ImportProduct(models.TransientModel):
     file_xls = fields.Binary()
     file_name = fields.Char(string="File name")
 
-    def updateProduct(self, is_line, row, id_value):
-        try:
-            product_template = self.env.ref(id_value)
-        except Exception as e:
-            return False
-        print('product', product_template)
-        if is_line:
-            # update product line
-            pass
-        else:
-            # update product attribute
-            attrinute_name = row.get('attribute', False)
-            print('attrinute_name', attrinute_name)
-            attrinute_value = row.get('value', False)
-            attrinute_price = row.get('price', 0)
-            if not attrinute_name or not attrinute_value: return True
-            for attrinute_id in product_template.attribute_line_ids:
-                print(attrinute_id)
-                # if attrinute_id.name.lower() == attrinute_name.lower():
-                #     print(attrinute_id.name)
-
-            print('update product attribute')
-            pass
-        return True
-
     @api.constrains('file_name')
     def _check_file_extension(self):
         for record in self:
@@ -119,8 +94,10 @@ class ImportProduct(models.TransientModel):
                 error += 1
                 continue
             update_index += 1
-            attributes = rec.get('attributes', None)
+            attributes = rec.pop('attributes', None)
             if attributes: self.update_attributes(product_template, attributes)
+            self.update_product_template(product_template, rec)
+
         notification = {
             'type': 'ir.actions.client',
             'tag': 'display_notification',
@@ -184,5 +161,7 @@ class ImportProduct(models.TransientModel):
                         'price_extra': price
                     }
                 )
-                print('line.price_extra')
-                print(line.price_extra)
+
+
+    def update_product_template(self, product_id, vals):
+        pass
