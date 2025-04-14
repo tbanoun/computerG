@@ -7,7 +7,6 @@ import io
 
 _logger = logging.getLogger(__name__)
 
-
 def convertXlsOrCsvToDicts(file):
     fichier_decoded = base64.b64decode(file)
     fichier_io = io.BytesIO(fichier_decoded)
@@ -64,6 +63,40 @@ def convertXlsOrCsvToDicts(file):
     return list(produits.values())
 
 
+def generateProductVals(vals):
+    # dr_product_offer_ids / id
+    # categ_id / id
+    # public_categ_ids / id
+    # pos_categ_id / id
+    # seller_ids / currency_id / id
+    # detailed_type = self.select_detailed_type(vals.get('detailed_type', ''))
+
+    product_vals = {}
+    product_vals = {
+        # 'detailed_type': detailed_type,
+        'name': vals.get('name', ''),
+        'standard_price': vals.get('standard_price', 0),
+        'list_price': vals.get('Sales Price', 0),
+        'default_code': vals.get('default_code', ''),
+        'barcode': vals.get('barcode', ''),
+        # 'x_product_website_url': vals.get('x_product_website_url', ''),
+        # 'x_condition': vals.get('x_condition', ''),
+        # 'x_': vals.get('x_', ''),
+        # 'image_url': vals.get('image_url', ''),
+        'available_in_pos': vals.get('available_in_pos', False),
+        'out_of_stock_message': vals.get('out_of_stock_message', ''),
+        'allow_out_of_stock_order': vals.get('allow_out_of_stock_order', False),
+        'showDelivryMessage': vals.get('showDelivryMessage', False),
+        'messageDelivryTimeRemoteStock': vals.get('showDelivryMessage', ''),
+        'seo_name': vals.get('seo_name', ''),
+        'website_meta_title': vals.get('website_meta_title', ''),
+        'website_meta_keywords': vals.get('website_meta_keywords', ''),
+        'website_description': vals.get('website_description', ''),
+        'weight': vals.get('weight', '')
+    }
+    return product_vals
+
+
 class ImportProduct(models.TransientModel):
     _name = 'base.import.product.wizard'
     _description = "Import product using template xlsx"
@@ -87,13 +120,18 @@ class ImportProduct(models.TransientModel):
         for rec in result:
             product_id = rec.get('id', None)
             if not product_id: continue
+            created = False
             try:
                 product_template = self.env.ref(product_id)
             except Exception as e:
                 print(f'error! {e}')
                 error += 1
-                continue
-            update_index += 1
+                # create the product
+                created = True
+                product_template = self.create_product_template(rec)
+                print('product_template', product_template)
+                print('created')
+            if not created: update_index += 1
             attributes = rec.pop('attributes', None)
             if attributes: self.update_attributes(product_template, attributes)
             self.update_product_template(product_template, rec)
@@ -104,7 +142,7 @@ class ImportProduct(models.TransientModel):
             'params': {
                 'title': _('Succès'),
                 'type': 'info',
-                'message': f"{update_index} products have been updated with {error} error(s)!",
+                'message': f"{update_index} products have been updated, and {error} products have been created!",
                 'sticky': True,
             }
         }
@@ -172,31 +210,14 @@ class ImportProduct(models.TransientModel):
             return 'product'
 
     def update_product_template(self, product_id, vals):
-        # dr_product_offer_ids / id
-        # seller_ids / currency_id / id
-        detailed_type = self.select_detailed_type(vals.get('detailed_type', ''))
-        product_vals = {
-            # 'detailed_type': detailed_type,
-            'name': vals.get('name', ''),
-            'standard_price': vals.get('standard_price', 0),
-            'list_price': vals.get('Sales Price', 0),
-            'default_code': vals.get('default_code', ''),
-            'barcode': vals.get('barcode', ''),
-            # 'x_product_website_url': vals.get('x_product_website_url', ''),
-            # 'x_condition': vals.get('x_condition', ''),
-            # 'x_': vals.get('x_', ''),
-            # 'image_url': vals.get('image_url', ''),
-            'available_in_pos': vals.get('available_in_pos', False),
-            'out_of_stock_message': vals.get('out_of_stock_message', ''),
-            'allow_out_of_stock_order': vals.get('allow_out_of_stock_order', False),
-            'showDelivryMessage': vals.get('showDelivryMessage', False),
-            'messageDelivryTimeRemoteStock': vals.get('showDelivryMessage', ''),
-            'seo_name': vals.get('seo_name', ''),
-            'website_meta_title': vals.get('website_meta_title', ''),
-            'website_meta_keywords': vals.get('website_meta_keywords', ''),
-            'website_description': vals.get('website_description', ''),
-            'weight': vals.get('weight', '')
-        }
+        product_vals = generateProductVals(vals)
         product_id.sudo().write(
             product_vals
         )
+
+    def create_product_template(self, vals):
+        product_vals = generateProductVals(vals)
+        product_id = self.env['product.template'].sudo().create(
+            product_vals
+        )
+        return product_id
