@@ -118,7 +118,8 @@ class ImportProduct(models.TransientModel):
             if not attribute: continue
             attribute_name = attribute.get('name', None)
             # search attribute if existe:
-            attribute_databse_id = self.env['product.attribute'].sudo().search([('name', 'ilike', attribute_name)], limit=1)
+            attribute_databse_id = self.env['product.attribute'].sudo().search([('name', 'ilike', attribute_name)],
+                                                                               limit=1)
             if not attribute_databse_id:
                 attribute_databse_id = self.env['product.attribute'].create(
                     {
@@ -149,7 +150,7 @@ class ImportProduct(models.TransientModel):
             config_lines = self.env['product.template.attribute.value'].sudo().search([
                 ('id', 'in', attribute_line_ids.product_template_value_ids.ids)
             ])
-            #update price
+            # update price
             for line in config_lines:
                 price = 0
                 for val in values:
@@ -162,5 +163,40 @@ class ImportProduct(models.TransientModel):
                     }
                 )
 
+    def select_detailed_type(self, name):
+        if 'Consumable':
+            return 'consu'
+        elif 'Service':
+            return 'service'
+        else:
+            return 'product'
+
     def update_product_template(self, product_id, vals):
-        pass
+        # dr_product_offer_ids / id
+        # seller_ids / currency_id / id
+        detailed_type = self.select_detailed_type(vals.get('detailed_type', ''))
+        product_vals = {
+            # 'detailed_type': detailed_type,
+            'name': vals.get('name', ''),
+            'standard_price': vals.get('standard_price', 0),
+            'list_price': vals.get('Sales Price', 0),
+            'default_code': vals.get('default_code', ''),
+            'barcode': vals.get('barcode', ''),
+            # 'x_product_website_url': vals.get('x_product_website_url', ''),
+            # 'x_condition': vals.get('x_condition', ''),
+            # 'x_': vals.get('x_', ''),
+            # 'image_url': vals.get('image_url', ''),
+            'available_in_pos': vals.get('available_in_pos', False),
+            'out_of_stock_message': vals.get('out_of_stock_message', ''),
+            'allow_out_of_stock_order': vals.get('allow_out_of_stock_order', False),
+            'showDelivryMessage': vals.get('showDelivryMessage', False),
+            'messageDelivryTimeRemoteStock': vals.get('showDelivryMessage', ''),
+            'seo_name': vals.get('seo_name', ''),
+            'website_meta_title': vals.get('website_meta_title', ''),
+            'website_meta_keywords': vals.get('website_meta_keywords', ''),
+            'website_description': vals.get('website_description', ''),
+            'weight': vals.get('weight', '')
+        }
+        product_id.sudo().write(
+            product_vals
+        )
