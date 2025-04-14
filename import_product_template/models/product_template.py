@@ -166,7 +166,23 @@ class ImportProduct(models.TransientModel):
                 "product_tmpl_id": product_template.id,
                 "value_ids": value_ids
             }
-            print(vals)
-            self.env['product.template.attribute.line'].sudo().create(
+            attribute_line_ids = self.env['product.template.attribute.line'].sudo().create(
                 vals
             )
+            config_lines = self.env['product.template.attribute.value'].sudo().search([
+                ('id', 'in', attribute_line_ids.product_template_value_ids.ids)
+            ])
+            #update price
+            for line in config_lines:
+                price = 0
+                for val in values:
+                    if val.get('value') == line.name:
+                        price = val.get('price')
+                        break
+                line.sudo().write(
+                    {
+                        'price_extra': price
+                    }
+                )
+                print('line.price_extra')
+                print(line.price_extra)
