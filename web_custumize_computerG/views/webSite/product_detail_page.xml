@@ -28,10 +28,9 @@
                                       class="ml-2 text-right alert alert-success w-40">
                                     <t t-if="request.env.user.id != request.env.ref('base.public_user').id">
                                         <t t-if="request.env.user.property_product_pricelist">
-
-                                            <span t-if="request.env.user.property_product_pricelist.showQtyOnStock">
-                                                <span
-                                                        t-esc="int(product.virtual_available)"/>
+                                            <span id="showQty" t-if="request.env.user.property_product_pricelist.showQtyOnStock">
+                                                <span id="test"
+                                                        />
                                                 <span>
                                                     In Stock |
                                                     <span class="cls-sahrane"

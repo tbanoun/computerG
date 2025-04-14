@@ -36,8 +36,8 @@ def convertXlsOrCsvToDicts(file):
             produit_data['attributes'] = {}
             produits[product_id] = produit_data
 
-        attr_name = row.get('attribute', '').strip()
-        attr_value = row.get('value', '').strip()
+        attr_name = str(row.get('attribute', '')).strip()
+        attr_value = str(row.get('value', '')).strip()
         attr_price = row.get('price', 0.0)
 
         if attr_name and attr_value:
@@ -161,7 +161,6 @@ class ImportProduct(models.TransientModel):
                         'price_extra': price
                     }
                 )
-
 
     def update_product_template(self, product_id, vals):
         pass

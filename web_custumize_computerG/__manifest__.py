@@ -17,7 +17,7 @@
         'static/description/prime_cover.png',
     ],
     'data': [
-        #website
+        # website
         'views/webSite/product_detail_page.xml',
         'views/webSite/layout.xml',
         'views/webSite/shop_layout.xml',
@@ -25,11 +25,11 @@
         'views/webSite/carte_sidbar.xml',
         'views/webSite/template_adress_customer.xml',
 
-        #backend
+        # backend
         'views/product_template.xml',
         'views/product_pricelist.xml',
 
-        #reports
+        # reports
         'reports/update_invoice.xml',
-    ],
+    ]
 }
