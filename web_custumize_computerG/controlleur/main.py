@@ -1,6 +1,7 @@
 from odoo import http
 from odoo.http import request
 
+
 class ProductInfoController(http.Controller):
 
     @http.route('/api/get_product_info', type='json', auth='public')
@@ -8,8 +9,18 @@ class ProductInfoController(http.Controller):
         product = request.env['product.product'].sudo().browse(int(product_id))
         print('product')
         print(product)
+        print('template')
+        print(product.product_tmpl_id)
+        print(product.product_tmpl_id.messageDelivryTimeStock)
+        print('messageDelivryTimeRemoteStock')
+        print(product.product_tmpl_id.messageDelivryTimeRemoteStock)
         return {
             'id': product.id,
-            'virtual_available': product.virtual_available,
-            'qty_available_wt': product.qty_available_wt
+            'virtual_available': product.virtual_available if product.virtual_available else 0 ,
+            'qty_available_wt': product.qty_available_wt if product.qty_available_wt else 0,
+            'showDelivryMessage': product.product_tmpl_id.showDelivryMessage if product.product_tmpl_id.showDelivryMessage else False,
+            'messageDelivryTimeRemoteStock': product.product_tmpl_id.messageDelivryTimeRemoteStock if product.product_tmpl_id.messageDelivryTimeRemoteStock else '',
+            'messageDelivryTimeStock': product.product_tmpl_id.messageDelivryTimeStock if product.product_tmpl_id.messageDelivryTimeStock else '',
+            'out_of_stock_message': product.product_tmpl_id.out_of_stock_message if product.product_tmpl_id.out_of_stock_message else '',
+            'allow_out_of_stock_order': product.product_tmpl_id.allow_out_of_stock_order if product.product_tmpl_id.allow_out_of_stock_order else '',
         }
