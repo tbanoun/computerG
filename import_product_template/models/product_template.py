@@ -127,7 +127,7 @@ def select_categoryId(self, categ_id):
         res = self.env.ref(categ_id)
         res = res.id
     except Exception as e:
-        return None
+        return res
     return res
 
 
