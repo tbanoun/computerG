@@ -1,217 +1,11 @@
+import datetime
+
 from odoo import fields, models, api, _
 import logging
 from odoo.exceptions import ValidationError
-import base64
-import pandas as pd
-import io
-from datetime import datetime
+from .common import *
 
 _logger = logging.getLogger(__name__)
-
-
-def cleanSentence(name):
-    result = str(name).replace('.0', '')
-    return result
-
-
-def convertXlsOrCsvToDicts(file):
-    fichier_decoded = base64.b64decode(file)
-    fichier_io = io.BytesIO(fichier_decoded)
-
-    try:
-        df = pd.read_excel(fichier_io)
-    except Exception:
-        try:
-            fichier_io.seek(0)
-            df = pd.read_csv(fichier_io, sep=',')
-        except Exception as e:
-            raise ValueError(f"Impossible de lire le fichier fourni : {str(e)}")
-
-    df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
-    df.columns = [str(col).strip() for col in df.columns]
-    df.fillna(method='ffill', inplace=True)
-    df = df.fillna('')
-
-    produits = {}
-
-    for _, row in df.iterrows():
-        product_id = row['id']
-        if product_id not in produits:
-            produit_data = {k: row[k] for k in df.columns if k not in [
-                'attribute', 'value', 'price',
-                'attribute_line_ids/product_template_value_ids/id',
-                'Vendors/Vendor', 'Vendors/Vendor Product Name', 'Vendors/Vendor Product Code',
-                'Vendors/Price', 'Vendors/Quantity', 'Vendors/Start Date',
-                'Vendors/End Date', 'Vendors/Delivery Lead Time'
-            ]}
-            produit_data['attributes'] = {}
-            produit_data['vendors'] = []
-            produits[product_id] = produit_data
-
-        # Gestion des attributs
-        attr_name = str(row.get('attribute', '')).strip()
-        attr_value = str(row.get('value', '')).strip()
-        attr_price = row.get('price', 0.0)
-
-        if attr_name and attr_value:
-            if attr_name not in produits[product_id]['attributes']:
-                produits[product_id]['attributes'][attr_name] = []
-
-            produits[product_id]['attributes'][attr_name].append({
-                'value': attr_value,
-                'price': float(attr_price)
-            })
-
-        # Gestion des vendors
-        vendor_name = str(row.get('Vendors/Vendor', '')).strip()
-        if vendor_name:
-            vendor_info = {
-                'vendor_name': vendor_name,
-                'product_name': str(row.get('Vendors/Vendor Product Name', '')).strip(),
-                'product_code': str(row.get('Vendors/Vendor Product Code', '')).strip(),
-                'price': float(row.get('Vendors/Price', 0.0)),
-                'qty': int(row.get('Vendors/Quantity', 0)),
-                'start_date': parse_date(row.get('Vendors/Start Date', '')),
-                'end_date': parse_date(row.get('Vendors/End Date', '')),
-                'time_lead': int(row.get('Vendors/Delivery Lead Time', 0))
-            }
-            produits[product_id]['vendors'].append(vendor_info)
-
-    # Réorganiser les attributs dans le format demandé
-    for produit in produits.values():
-        formatted_attributes = []
-        for attr_name, values in produit['attributes'].items():
-            formatted_attributes.append({
-                'attribute': {
-                    'name': attr_name,
-                    'value': values
-                }
-            })
-        produit['attributes'] = formatted_attributes
-
-    return list(produits.values())
-
-
-def parse_date(value):
-    """Essaye de parser la date au format datetime.date ou retourne une string vide."""
-    if isinstance(value, datetime):
-        return value.date().isoformat()
-    try:
-        return pd.to_datetime(value, dayfirst=True).date().isoformat()
-    except Exception:
-        return ''
-
-
-def select_detailed_type(self, name):
-    if 'Consumable' == name:
-        return 'consu'
-    elif 'Service' == name:
-        return 'service'
-    else:
-        return 'product'
-
-
-def select_tracking_type(self, name):
-    if 'By Unique Serial Number' == name:
-        return 'serial'
-    elif 'By Lots' == name:
-        return 'lot'
-    else:
-        return 'none'
-
-
-def select_categoryId(self, categ_id):
-    res = 1
-    categ_id = str(categ_id).strip()
-    try:
-        res = self.env.ref(categ_id)
-        res = res.id
-    except Exception as e:
-        return res
-    return res
-
-def select_pos_categoryId(self, categ_id):
-    res = None
-    categ_id = str(categ_id).strip()
-    try:
-        res = self.env.ref(categ_id)
-        res = res.id
-    except Exception as e:
-        return None
-    return res
-
-
-def select_categoryIds(self, categ_ids):
-    result = []
-    for categ_id in categ_ids:
-        try:
-            categ_id = self.env.ref(categ_id)
-            if not categ_id: continue
-            result.append(categ_id.id)
-        except Exception as e:
-            continue
-    return result
-
-
-def selectElementDataBase(self, item_ids):
-    result = []
-    item_ids = str(item_ids).split(',')
-    for item_id in item_ids:
-        item_id = str(item_id).strip()
-        try:
-            item = self.env.ref(item_id)
-            result.append(item.id)
-        except Exception as e:
-            continue
-    print('result:', result)
-    return result
-
-
-def selectOneElementDataBase(self, item_id):
-    res = None
-    try:
-        res = self.env.ref(item_id)
-    except Exception as e:
-        return None
-    return res
-
-
-def generateProductVals(self, vals):
-    # seller_ids / currency_id / id
-    # categ_id / id
-    cat = str(vals.get('categ_id/id', '')).strip()
-    category = select_categoryId(self, cat)
-    product_vals = {
-        'name': vals.get('name', ''),
-        'standard_price': vals.get('standard_price', 0),
-        'list_price': vals.get('Sales Price', 0),
-        'default_code': cleanSentence(vals.get('default_code', '')),
-        'barcode': cleanSentence(vals.get('barcode', '')),
-        'x_product_website_url': vals.get('x_product_website_url', ''),
-        'x_condition': vals.get('x_condition', ''),
-        'x_': vals.get('x_', ''),
-        'x_kind': vals.get('x_kind', ''),
-        'image_url': vals.get('image_url', ''),
-        'description_sale': vals.get('description_sale', ''),
-        'available_in_pos': vals.get('available_in_pos', False),
-        'out_of_stock_message': vals.get('out_of_stock_message', ''),
-        'allow_out_of_stock_order': vals.get('allow_out_of_stock_order', False),
-        'showDelivryMessage': vals.get('showDelivryMessage', False),
-        'messageDelivryTimeRemoteStock': vals.get('showDelivryMessage', ''),
-        'seo_name': vals.get('seo_name', ''),
-        'website_meta_title': vals.get('website_meta_title', ''),
-        'website_meta_keywords': vals.get('website_meta_keywords', ''),
-        'website_description': vals.get('website_description', ''),
-        'weight': vals.get('weight', ''),
-        'tracking': select_tracking_type(self, vals.get('tracking', '')),
-        'categ_id': category,
-        'pos_categ_id': select_pos_categoryId(self, vals.get('pos_categ_id/id', None)),
-        'public_categ_ids': [(6, 0, selectElementDataBase(self, vals.get('public_categ_ids/id', None)))],
-        'dr_product_offer_ids': [(6, 0, selectElementDataBase(self, vals.get('dr_product_offer_ids/id', None)))],
-        'dr_product_tab_ids': [(6, 0, selectElementDataBase(self, vals.get('dr_product_tab_ids/id', None)))],
-        'supplier_taxes_id': [(6, 0, selectElementDataBase(self, vals.get('supplier_taxes_id', None)))],
-    }
-    return product_vals
 
 
 class ImportProduct(models.TransientModel):
@@ -319,58 +113,38 @@ class ImportProduct(models.TransientModel):
                 )
 
     def update_list_vendors(self, product_template, vendors):
-        return None
-        # delete attributes product
-        # product_template.sudo().seller_ids.unlink()
-        # for rec in vendors:
-        #     partner_id = selectPartnerId(rec.get('attribute', None))
-        #     if not attribute: continue
-        #     attribute_name = attribute.get('name', None)
-        #     # search attribute if existe:
-        #     attribute_databse_id = self.env['product.attribute'].sudo().search([('name', 'ilike', attribute_name)],
-        #                                                                        limit=1)
-        #     if not attribute_databse_id:
-        #         attribute_databse_id = self.env['product.attribute'].create(
-        #             {
-        #                 "name": attribute_name
-        #             }
-        #         )
-        #     # lop values:
-        #     values = attribute.get('value', None)
-        #     value_ids = []
-        #     for val in values:
-        #         value = self.env['product.attribute.value'].sudo().search(
-        #             [('name', '=', val.get('value', '')), ('attribute_id', '=', attribute_databse_id.id)], limit=1)
-        #         if not value:
-        #             value = self.env['product.attribute.value'].create({
-        #                 'name': val.get('value', ''),
-        #                 'attribute_id': attribute_databse_id.id
-        #             })
-        #         value_ids.append(value.id)
-        #         # # #
-        #     vals = {
-        #         "attribute_id": attribute_databse_id.id,
-        #         "product_tmpl_id": product_template.id,
-        #         "value_ids": value_ids
-        #     }
-        #     attribute_line_ids = self.env['product.template.attribute.line'].sudo().create(
-        #         vals
-        #     )
-        #     config_lines = self.env['product.template.attribute.value'].sudo().search([
-        #         ('id', 'in', attribute_line_ids.product_template_value_ids.ids)
-        #     ])
-        #     # update price
-        #     for line in config_lines:
-        #         price = 0
-        #         for val in values:
-        #             if val.get('value') == line.name:
-        #                 price = val.get('price')
-        #                 break
-        #         line.sudo().write(
-        #             {
-        #                 'price_extra': price
-        #             }
-        #         )
+        # delete seller_ids line on product
+        product_template.sudo().seller_ids.unlink()
+        for rec in vendors:
+            # select partner_id
+            partner_id = selectOneElementDataBase(self, rec.get('vendor_id', None))
+            if not partner_id: continue
+            partner_id = partner_id.id
+            # select product_id
+            product_id = selectOneElementDataBase(self, rec.get('product_id', None))
+            if product_id:
+                product_id = product_id.id
+            else:
+                product_id = None
+            product_name = rec.get('product_name', '')
+            product_code = rec.get('product_code', '')
+            vendor_price = convertStrTofloat(rec.get('price', 0.0))
+            vendor_qty = convertStrTofloat(rec.get('qty', 0.0))
+            date_start = rec.get('start_date', None)
+            date_end = rec.get('end_date', None)
+            time_lead = convertStrTofloat(rec.get('time_lead', 0))
+            self.env['product.supplierinfo'].create({
+                'product_id': product_id,
+                'partner_id': partner_id,
+                'price': vendor_price,
+                'delay': time_lead,
+                'product_name': product_name,
+                'product_code': product_code,
+                'date_start': date_start if isinstance(date_start, datetime) else False,
+                'date_end': date_end if isinstance(date_end, datetime) else False,
+                'min_qty': vendor_qty,
+                'product_tmpl_id': product_template.id,
+            })
 
     def update_product_template(self, product_id, vals):
         product_vals = generateProductVals(self, vals)
