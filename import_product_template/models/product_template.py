@@ -8,9 +8,11 @@ from datetime import datetime
 
 _logger = logging.getLogger(__name__)
 
+
 def cleanSentence(name):
     result = str(name).replace('.0', '')
     return result
+
 
 def convertXlsOrCsvToDicts(file):
     fichier_decoded = base64.b64decode(file)
@@ -89,6 +91,7 @@ def convertXlsOrCsvToDicts(file):
 
     return list(produits.values())
 
+
 def parse_date(value):
     """Essaye de parser la date au format datetime.date ou retourne une string vide."""
     if isinstance(value, datetime):
@@ -98,6 +101,7 @@ def parse_date(value):
     except Exception:
         return ''
 
+
 def select_detailed_type(self, name):
     if 'Consumable' == name:
         return 'consu'
@@ -105,6 +109,7 @@ def select_detailed_type(self, name):
         return 'service'
     else:
         return 'product'
+
 
 def select_tracking_type(self, name):
     if 'By Unique Serial Number' == name:
@@ -114,12 +119,17 @@ def select_tracking_type(self, name):
     else:
         return 'none'
 
+
 def select_categoryId(self, categ_id):
+    res = 1
+    categ_id = str(categ_id).strip()
     try:
-        categ_id = self.env.ref(categ_id)
+        res = self.env.ref(categ_id)
+        res = res.id
     except Exception as e:
         return None
-    return categ_id.id
+    return res
+
 
 def select_categoryIds(self, categ_ids):
     result = []
@@ -137,12 +147,15 @@ def selectElementDataBase(self, item_ids):
     result = []
     item_ids = str(item_ids).split(',')
     for item_id in item_ids:
+        item_id = str(item_id).strip()
         try:
             item = self.env.ref(item_id)
             result.append(item.id)
         except Exception as e:
             continue
+    print('result:', result)
     return result
+
 
 def selectOneElementDataBase(self, item_id):
     res = None
@@ -152,21 +165,23 @@ def selectOneElementDataBase(self, item_id):
         return None
     return res
 
+
 def generateProductVals(self, vals):
     # seller_ids / currency_id / id
-
-    product_vals = {}
+    # categ_id / id
+    cat = str(vals.get('categ_id/id', '')).strip()
+    category = select_categoryId(self, cat)
     product_vals = {
         'name': vals.get('name', ''),
         'standard_price': vals.get('standard_price', 0),
         'list_price': vals.get('Sales Price', 0),
         'default_code': cleanSentence(vals.get('default_code', '')),
         'barcode': cleanSentence(vals.get('barcode', '')),
-        # 'x_product_website_url': vals.get('x_product_website_url', ''),
-        # 'x_condition': vals.get('x_condition', ''),
-        # 'x_': vals.get('x_', ''),
-        # 'x_kind': vals.get('x_kind', ''),
-        # 'image_url': vals.get('image_url', ''),
+        'x_product_website_url': vals.get('x_product_website_url', ''),
+        'x_condition': vals.get('x_condition', ''),
+        'x_': vals.get('x_', ''),
+        'x_kind': vals.get('x_kind', ''),
+        'image_url': vals.get('image_url', ''),
         'description_sale': vals.get('description_sale', ''),
         'available_in_pos': vals.get('available_in_pos', False),
         'out_of_stock_message': vals.get('out_of_stock_message', ''),
@@ -179,7 +194,7 @@ def generateProductVals(self, vals):
         'website_description': vals.get('website_description', ''),
         'weight': vals.get('weight', ''),
         'tracking': select_tracking_type(self, vals.get('tracking', '')),
-        'categ_id': select_categoryId(self, vals.get('categ_id/id', None)),
+        'categ_id': category,
         'pos_categ_id': select_categoryId(self, vals.get('pos_categ_id/id', None)),
         'public_categ_ids': [(6, 0, selectElementDataBase(self, vals.get('public_categ_ids/id', None)))],
         'dr_product_offer_ids': [(6, 0, selectElementDataBase(self, vals.get('dr_product_offer_ids/id', None)))],
@@ -187,6 +202,7 @@ def generateProductVals(self, vals):
         'supplier_taxes_id': [(6, 0, selectElementDataBase(self, vals.get('supplier_taxes_id', None)))],
     }
     return product_vals
+
 
 class ImportProduct(models.TransientModel):
     _name = 'base.import.product.wizard'
