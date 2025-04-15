@@ -43,6 +43,7 @@ class ImportProduct(models.TransientModel):
             if not created: update_index += 1
             attributes = rec.pop('attributes', None)
             vendors = rec.pop('vendors', None)
+            print(f'\n\n vendors {vendors}')
             if attributes: self.update_attributes(product_template, attributes)
             if vendors: self.update_list_vendors(product_template, vendors)
             self.update_product_template(product_template, rec)
@@ -129,6 +130,7 @@ class ImportProduct(models.TransientModel):
             product_name = rec.get('product_name', '')
             product_code = rec.get('product_code', '')
             vendor_price = convertStrTofloat(rec.get('price', 0.0))
+            print(f'\n\n vendor price {vendor_price} \n\n')
             vendor_qty = convertStrTofloat(rec.get('qty', 0.0))
             date_start = rec.get('start_date', None)
             date_end = rec.get('end_date', None)
