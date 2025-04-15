@@ -177,7 +177,7 @@ def generateProductVals(self, vals):
         'website_meta_keywords': vals.get('website_meta_keywords', ''),
         'website_description': vals.get('website_description', ''),
         'weight': vals.get('weight', ''),
-        'tracking': select_tracking_type(vals.get('tracking', '')),
+        'tracking': select_tracking_type(self, vals.get('tracking', '')),
         'categ_id': select_categoryId(self, vals.get('categ_id/id', None)),
         'pos_categ_id': select_categoryId(self, vals.get('pos_categ_id/id', None)),
         'public_categ_ids': [(6, 0, select_categoryIds(self, vals.get('public_categ_ids/id', None)))],
