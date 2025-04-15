@@ -15,104 +15,6 @@ def convertStrTofloat(name):
     return 0
 
 
-def convertXlsOrCsvToDicts22(file):
-    fichier_decoded = base64.b64decode(file)
-    fichier_io = io.BytesIO(fichier_decoded)
-    try:
-        df = pd.read_excel(fichier_io)
-    except Exception:
-        try:
-            fichier_io.seek(0)
-            df = pd.read_csv(fichier_io, sep=',')
-        except Exception as e:
-            raise ValueError(f"Impossible de lire le fichier fourni : {str(e)}")
-
-    # Nettoyage des colonnes
-    df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
-    df.columns = [str(col).strip() for col in df.columns]
-
-    # 1. Remplacer toutes les chaînes vides par NaN
-    df.replace(['', ' ', '  '], pd.NA, inplace=True)
-
-    # 2. Pour les colonnes spécifiques numériques, convertir en string et remplacer NaN par ''
-    numeric_columns = ['price', 'value', 'Vendors/Price', 'Vendors/Quantity', 'Vendors/Delivery Lead Time']
-    for col in numeric_columns:
-        if col in df.columns:
-            # D'abord convertir en numérique pour les valeurs valides
-            df[col] = pd.to_numeric(df[col], errors='coerce')
-            # Puis remplacer NaN par ''
-            df[col] = df[col].apply(lambda x: '' if pd.isna(x) else str(x))
-
-    # 3. Ffill seulement pour les colonnes non numériques
-    other_columns = [col for col in df.columns if col not in numeric_columns]
-    df[other_columns] = df[other_columns].fillna(method='ffill')
-
-    # 4. Finalement, remplacer tous les NaN restants par des valeurs par défaut
-    df.fillna('', inplace=True)
-
-    produits = {}
-
-    print("DataFrame après traitement:\n", df)
-    for _, row in df.iterrows():
-        product_id = row['id']
-        if product_id not in produits:
-            produit_data = {k: row[k] for k in df.columns if k not in [
-                'attribute', 'value', 'price',
-                'attribute_line_ids/product_template_value_ids/id',
-                'Vendors/Vendor', 'Vendors/Vendor Product Name', 'Vendors/Vendor Product Code',
-                'Vendors/Price', 'Vendors/Quantity', 'Vendors/Start Date',
-                'Vendors/End Date', 'Vendors/Delivery Lead Time', "seller_ids/product_id/id"
-            ]}
-            produit_data['attributes'] = {}
-            produit_data['vendors'] = []
-            produits[product_id] = produit_data
-
-        # Gestion des attributs
-        attr_name = str(row.get('attribute', '')).strip()
-        attr_value = str(row.get('value', '')).strip()
-        attr_price = row.get('price', '')  # On ne convertit plus en float ici
-
-        if attr_name and attr_value:
-            if attr_name not in produits[product_id]['attributes']:
-                produits[product_id]['attributes'][attr_name] = []
-
-            # Modification ici pour gérer le cas où price est ''
-            price_value = convertStrTofloat(attr_price) if attr_price != '' else ''
-            produits[product_id]['attributes'][attr_name].append({
-                'value': attr_value,
-                'price': price_value
-            })
-
-        # Gestion des vendors
-        vendor_name = str(row.get('Vendors/Vendor', '')).strip()
-        if vendor_name:
-            vendor_info = {
-                'vendor_id': vendor_name,
-                'product_id': str(row.get('seller_ids/product_id/id', '')).strip(),
-                'product_name': str(row.get('Vendors/Vendor Product Name', '')).strip(),
-                'product_code': str(row.get('Vendors/Vendor Product Code', '')).strip(),
-                'price': row.get('Vendors/Price', ''),  # On ne convertit plus en float ici
-                'qty': row.get('Vendors/Quantity', ''),  # Chaîne vide au lieu de 0
-                'start_date': parse_date(row.get('Vendors/Start Date', '')),
-                'end_date': parse_date(row.get('Vendors/End Date', '')),
-                'time_lead': row.get('Vendors/Delivery Lead Time', '')  # Chaîne vide au lieu de 0
-            }
-            produits[product_id]['vendors'].append(vendor_info)
-
-    # Réorganisation des attributs
-    for produit in produits.values():
-        formatted_attributes = []
-        for attr_name, values in produit['attributes'].items():
-            formatted_attributes.append({
-                'attribute': {
-                    'name': attr_name,
-                    'value': values
-                }
-            })
-        produit['attributes'] = formatted_attributes
-
-    return list(produits.values())
-
 def parse_date(value):
     """Essaye de parser la date au format datetime.date ou retourne une string vide."""
     if isinstance(value, datetime):
@@ -149,12 +51,12 @@ def convertXlsOrCsvToDicts(file):
                 'attribute_line_ids/product_template_value_ids/id',
                 'Vendors/Vendor', 'Vendors/Vendor Product Name', 'Vendors/Vendor Product Code',
                 'Vendors/Price', 'Vendors/Quantity', 'Vendors/Start Date',
-                'Vendors/End Date', 'Vendors/Delivery Lead Time', "seller_ids/product_id/id"
+                'Vendors/End Date', 'Vendors/Delivery Lead Time', "seller_ids/product_id/id",
+                "seller_ids/currency_id/id",
             ]}
             produit_data['attributes'] = {}
             produit_data['vendors'] = []
             produits[product_id] = produit_data
-
         # Gestion des attributs
         attr_name = str(row.get('attribute', '')).strip()
         attr_value = str(row.get('value', '')).strip()
@@ -171,6 +73,8 @@ def convertXlsOrCsvToDicts(file):
 
         # Gestion des vendors
         vendor_name = str(row.get('Vendors/Vendor', '')).strip()
+        currency_id = str(row.get('seller_ids/currency_id/id.1', '')).strip()
+        taxes_ids = str(row.get('supplier_taxes_id', '')).strip()
         if vendor_name:
             vendor_info = {
                 'vendor_id': vendor_name,
@@ -181,7 +85,9 @@ def convertXlsOrCsvToDicts(file):
                 'qty': int(row.get('Vendors/Quantity', 0)),
                 'start_date': parse_date(row.get('Vendors/Start Date', '')),
                 'end_date': parse_date(row.get('Vendors/End Date', '')),
-                'time_lead': int(row.get('Vendors/Delivery Lead Time', 0))
+                'time_lead': int(row.get('Vendors/Delivery Lead Time', 0)),
+                'currency_id': currency_id,
+                'taxes_ids': taxes_ids,
             }
             produits[product_id]['vendors'].append(vendor_info)
 
@@ -196,7 +102,6 @@ def convertXlsOrCsvToDicts(file):
                 }
             })
         produit['attributes'] = formatted_attributes
-
     return list(produits.values())
 
 
@@ -273,7 +178,6 @@ def selectElementDataBase(self, item_ids):
             result.append(item.id)
         except Exception as e:
             continue
-    print('result:', result)
     return result
 
 
@@ -321,4 +225,5 @@ def generateProductVals(self, vals):
         'dr_product_tab_ids': [(6, 0, selectElementDataBase(self, vals.get('dr_product_tab_ids/id', None)))],
         'supplier_taxes_id': [(6, 0, selectElementDataBase(self, vals.get('supplier_taxes_id', None)))],
     }
+    print('tqxtes', selectElementDataBase(self, vals.get('supplier_taxes_id', None)))
     return product_vals

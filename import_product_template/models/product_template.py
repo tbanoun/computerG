@@ -1,5 +1,7 @@
 import datetime
 
+from reportlab.lib.pagesizes import elevenSeventeen
+
 from odoo import fields, models, api, _
 import logging
 from odoo.exceptions import ValidationError
@@ -43,7 +45,6 @@ class ImportProduct(models.TransientModel):
             if not created: update_index += 1
             attributes = rec.pop('attributes', None)
             vendors = rec.pop('vendors', None)
-            print(f'\n\n vendors {vendors}')
             if attributes: self.update_attributes(product_template, attributes)
             if vendors: self.update_list_vendors(product_template, vendors)
             self.update_product_template(product_template, rec)
@@ -127,14 +128,16 @@ class ImportProduct(models.TransientModel):
                 product_id = product_id.id
             else:
                 product_id = None
+            currency_id = selectOneElementDataBase(self, rec.get('currency_id', ''))
+            currency_id = currency_id.id if currency_id else None
             product_name = rec.get('product_name', '')
             product_code = rec.get('product_code', '')
             vendor_price = convertStrTofloat(rec.get('price', 0.0))
-            print(f'\n\n vendor price {vendor_price} \n\n')
             vendor_qty = convertStrTofloat(rec.get('qty', 0.0))
             date_start = rec.get('start_date', None)
             date_end = rec.get('end_date', None)
             time_lead = convertStrTofloat(rec.get('time_lead', 0))
+            # taxes_ids = selectElementDataBase(self, rec.get('taxes_ids', 0))
             self.env['product.supplierinfo'].create({
                 'product_id': product_id,
                 'partner_id': partner_id,
@@ -146,6 +149,8 @@ class ImportProduct(models.TransientModel):
                 'date_end': date_end if isinstance(date_end, datetime) else False,
                 'min_qty': vendor_qty,
                 'product_tmpl_id': product_template.id,
+                'currency_id': currency_id,
+                # 'supplier_taxes_id': [(6, 0, taxes_ids)],
             })
 
     def update_product_template(self, product_id, vals):
@@ -157,6 +162,7 @@ class ImportProduct(models.TransientModel):
     def create_product_template(self, vals):
         product_vals = generateProductVals(self, vals)
         product_vals['detailed_type'] = 'product'
+        print(product_vals)
         product_id = self.env['product.template'].sudo().create(
             product_vals
         )
