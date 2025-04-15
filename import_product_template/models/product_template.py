@@ -130,6 +130,16 @@ def select_categoryId(self, categ_id):
         return res
     return res
 
+def select_pos_categoryId(self, categ_id):
+    res = None
+    categ_id = str(categ_id).strip()
+    try:
+        res = self.env.ref(categ_id)
+        res = res.id
+    except Exception as e:
+        return None
+    return res
+
 
 def select_categoryIds(self, categ_ids):
     result = []
@@ -195,7 +205,7 @@ def generateProductVals(self, vals):
         'weight': vals.get('weight', ''),
         'tracking': select_tracking_type(self, vals.get('tracking', '')),
         'categ_id': category,
-        'pos_categ_id': select_categoryId(self, vals.get('pos_categ_id/id', None)),
+        'pos_categ_id': select_pos_categoryId(self, vals.get('pos_categ_id/id', None)),
         'public_categ_ids': [(6, 0, selectElementDataBase(self, vals.get('public_categ_ids/id', None)))],
         'dr_product_offer_ids': [(6, 0, selectElementDataBase(self, vals.get('dr_product_offer_ids/id', None)))],
         'dr_product_tab_ids': [(6, 0, selectElementDataBase(self, vals.get('dr_product_tab_ids/id', None)))],
