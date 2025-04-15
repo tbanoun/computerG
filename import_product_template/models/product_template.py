@@ -99,17 +99,17 @@ def parse_date(value):
         return ''
 
 def select_detailed_type(self, name):
-    if 'Consumable':
+    if 'Consumable' == name:
         return 'consu'
-    elif 'Service':
+    elif 'Service' == name:
         return 'service'
     else:
         return 'product'
 
 def select_tracking_type(self, name):
-    if 'By Unique Serial Number':
+    if 'By Unique Serial Number' == name:
         return 'serial'
-    elif 'By Lots':
+    elif 'By Lots' == name:
         return 'lot'
     else:
         return 'none'
@@ -139,7 +139,7 @@ def selectElementDataBase(self, item_ids):
     for item_id in item_ids:
         try:
             item = self.env.ref(item_id)
-            result.append(item_id.id)
+            result.append(item.id)
         except Exception as e:
             continue
     return result
@@ -162,11 +162,11 @@ def generateProductVals(self, vals):
         'list_price': vals.get('Sales Price', 0),
         'default_code': cleanSentence(vals.get('default_code', '')),
         'barcode': cleanSentence(vals.get('barcode', '')),
-        'x_product_website_url': vals.get('x_product_website_url', ''),
-        'x_condition': vals.get('x_condition', ''),
-        'x_': vals.get('x_', ''),
-        'x_kind': vals.get('x_kind', ''),
-        'image_url': vals.get('image_url', ''),
+        # 'x_product_website_url': vals.get('x_product_website_url', ''),
+        # 'x_condition': vals.get('x_condition', ''),
+        # 'x_': vals.get('x_', ''),
+        # 'x_kind': vals.get('x_kind', ''),
+        # 'image_url': vals.get('image_url', ''),
         'description_sale': vals.get('description_sale', ''),
         'available_in_pos': vals.get('available_in_pos', False),
         'out_of_stock_message': vals.get('out_of_stock_message', ''),
@@ -183,9 +183,8 @@ def generateProductVals(self, vals):
         'pos_categ_id': select_categoryId(self, vals.get('pos_categ_id/id', None)),
         'public_categ_ids': [(6, 0, selectElementDataBase(self, vals.get('public_categ_ids/id', None)))],
         'dr_product_offer_ids': [(6, 0, selectElementDataBase(self, vals.get('dr_product_offer_ids/id', None)))],
-        'dr_product_offer_ids': [(6, 0, selectElementDataBase(self, vals.get('dr_product_offer_ids/id', None)))],
         'dr_product_tab_ids': [(6, 0, selectElementDataBase(self, vals.get('dr_product_tab_ids/id', None)))],
-        'supplier_taxes_id': [(6, 0, selectOneElementDataBase(self, vals.get('supplier_taxes_id', None)))],
+        'supplier_taxes_id': [(6, 0, selectElementDataBase(self, vals.get('supplier_taxes_id', None)))],
     }
     return product_vals
 
