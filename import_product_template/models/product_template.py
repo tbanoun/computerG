@@ -135,6 +135,7 @@ def select_categoryIds(self, categ_ids):
 
 def selectElementDataBase(self, item_ids):
     result = []
+    item_ids = str(item_ids).split(',')
     for item_id in item_ids:
         try:
             item = self.env.ref(item_id)
@@ -180,7 +181,7 @@ def generateProductVals(self, vals):
         'tracking': select_tracking_type(self, vals.get('tracking', '')),
         'categ_id': select_categoryId(self, vals.get('categ_id/id', None)),
         'pos_categ_id': select_categoryId(self, vals.get('pos_categ_id/id', None)),
-        'public_categ_ids': [(6, 0, select_categoryIds(self, vals.get('public_categ_ids/id', None)))],
+        'public_categ_ids': [(6, 0, selectElementDataBase(self, vals.get('public_categ_ids/id', None)))],
         'dr_product_offer_ids': [(6, 0, selectElementDataBase(self, vals.get('dr_product_offer_ids/id', None)))],
         'dr_product_offer_ids': [(6, 0, selectElementDataBase(self, vals.get('dr_product_offer_ids/id', None)))],
         'dr_product_tab_ids': [(6, 0, selectElementDataBase(self, vals.get('dr_product_tab_ids/id', None)))],
