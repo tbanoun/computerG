@@ -214,6 +214,7 @@ def generateProductVals(self, vals):
         'standard_price': vals.get('standard_price', 0),
         'list_price': vals.get('Sales Price', 0),
         'default_code': cleanSentence(vals.get('default_code', '')),
+        'is_published': cleanSentence(vals.get('Is Published', False)),
         'barcode': cleanSentence(vals.get('barcode', '')),
         'x_product_website_url': vals.get('x_product_website_url', ''),
         'x_condition': vals.get('x_condition', ''),
