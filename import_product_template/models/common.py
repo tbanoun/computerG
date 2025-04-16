@@ -88,20 +88,20 @@ def convertXlsOrCsvToDicts(file):
             })
 
         # Gestion des vendors
-        vendor_name = str(row.get('Vendors/Vendor', '')).strip()
-        currency_id = str(row.get('seller_ids/currency_id/id', '')).strip()
-        taxes_ids = str(row.get('supplier_taxes_id', '')).strip()
+        vendor_name = cleanSentence(row.get('Vendors/Vendor', '')).strip()
+        currency_id = cleanSentence(row.get('seller_ids/currency_id/id', '')).strip()
+        taxes_ids = cleanSentence(row.get('supplier_taxes_id', '')).strip()
         if vendor_name:
             vendor_info = {
                 'vendor_id': vendor_name,
-                'product_id': str(row.get('seller_ids/product_id/id', '')).strip(),
-                'product_name': str(row.get('Vendors/Vendor Product Name', '')).strip(),
-                'product_code': str(row.get('Vendors/Vendor Product Code', '')).strip(),
+                'product_id': cleanSentence(row.get('seller_ids/product_id/id', '')).strip(),
+                'product_name': cleanSentence(row.get('Vendors/Vendor Product Name', '')).strip(),
+                'product_code': cleanSentence(row.get('Vendors/Vendor Product Code', '')).strip(),
                 'price': convertStrTofloat(row.get('Vendors/Price', 0.0)),
-                'qty': int(row.get('Vendors/Quantity', 0)),
+                'qty': convertStrTofloat(row.get('Vendors/Quantity', 0)),
                 'start_date': parse_date(row.get('Vendors/Start Date', '')),
                 'end_date': parse_date(row.get('Vendors/End Date', '')),
-                'time_lead': int(row.get('Vendors/Delivery Lead Time', 0)),
+                'time_lead': convertStrTofloat(row.get('Vendors/Delivery Lead Time', 0)),
                 'currency_id': currency_id,
                 'taxes_ids': taxes_ids,
             }
