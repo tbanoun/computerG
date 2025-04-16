@@ -128,8 +128,8 @@ class ImportProduct(models.TransientModel):
                 product_id = product_id.id
             else:
                 product_id = None
-            currency_id = selectOneElementDataBase(self, rec.get('currency_id', ''))
-            currency_id = currency_id.id if currency_id else None
+            # currency_id = selectOneElementDataBase(self, rec.get('currency_id', ''))
+            # currency_id = currency_id.id if currency_id else None
             product_name = rec.get('product_name', '')
             product_code = rec.get('product_code', '')
             vendor_price = convertStrTofloat(rec.get('price', 0.0))
@@ -149,21 +149,85 @@ class ImportProduct(models.TransientModel):
                 'date_end': date_end if isinstance(date_end, datetime) else False,
                 'min_qty': vendor_qty,
                 'product_tmpl_id': product_template.id,
-                'currency_id': currency_id,
+                # 'currency_id': currency_id,
                 # 'supplier_taxes_id': [(6, 0, taxes_ids)],
             })
 
     def update_product_template(self, product_id, vals):
         product_vals = generateProductVals(self, vals)
+        qty = product_vals.pop('quantity', 0)
+
         product_id.sudo().write(
             product_vals
         )
+        # delete qty
+        stock_ids = self.env['stock.quant'].sudo().search(
+            [
+                (
+                    'product_id', '=', product_id.id
+                )
+            ]
+        )
+        if stock_ids: stock_ids.sudo().unlink()
+        location_id = self.env['stock.location'].sudo().search(
+            [
+                (
+                    'usage', '=', 'internal'
+                )
+            ], limit=1
+        )
+        if location_id:
+            stock_id = self.env['stock.quant'].sudo().create({
+                "location_id": location_id.id,
+                "product_id": product_id.product_variant_id.id,
+                "product_tmpl_id": product_id.id,
+                "inventory_quantity": qty
+            })
+        stock_id.sudo().action_apply_inventory()
 
     def create_product_template(self, vals):
         product_vals = generateProductVals(self, vals)
         product_vals['detailed_type'] = 'product'
-        print(product_vals)
+        qty = product_vals.pop('quantity', 0)
         product_id = self.env['product.template'].sudo().create(
             product_vals
         )
+        self.updateQtyStockProduct(product_id, qty)
+
         return product_id
+
+    def updateQtyStockProduct(self, product_id, availableQuantity):
+        """ function to update qty product on supplier wherehouse """
+        location_id = self.env['stock.location'].sudo().search(
+            [
+                (
+                    'usage', 'in', ['internal', 'transit']
+                )
+
+            ], limit=1
+        )
+        print('location_id', location_id, location_id.name)
+        stock_id = self.env['stock.quant'].sudo().search([
+            ("product_id", "=", product_id.product_variant_id.id),
+        ], limit=1)
+        if stock_id:
+            stock_id.sudo().write({
+                "inventory_quantity": availableQuantity
+            })
+            stock_id.sudo().action_apply_inventory()
+        else:
+            stock_id = self.env['stock.quant'].sudo().create({
+                "location_id": product_id.property_stock_inventory.id,
+                "product_id": product_id.product_variant_id.id,
+                "inventory_quantity": availableQuantity
+            })
+            stock_id.sudo().action_apply_inventory()
+
+        print('OKOK')
+        print('OKOK', stock_id)
+        print('product_id', stock_id.product_id)
+        print('product_tmpl_id', stock_id.product_tmpl_id)
+        print('product_tmpl_id', stock_id.product_tmpl_id.name)
+        print('default_code', stock_id.product_tmpl_id.default_code)
+        print('OKOK', stock_id.inventory_quantity)
+        return True

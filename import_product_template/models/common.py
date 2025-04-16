@@ -24,7 +24,6 @@ def parse_date(value):
     except Exception:
         return ''
 
-
 def convertXlsOrCsvToDicts(file):
     fichier_decoded = base64.b64decode(file)
     fichier_io = io.BytesIO(fichier_decoded)
@@ -36,11 +35,26 @@ def convertXlsOrCsvToDicts(file):
             df = pd.read_csv(fichier_io, sep=',')
         except Exception as e:
             raise ValueError(f"Impossible de lire le fichier fourni : {str(e)}")
-    df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
-    df.columns = [str(col).strip() for col in df.columns]
-    df.fillna(method='ffill', inplace=True)
-    df = df.fillna('')
+    premiere_valeur_id = df['id'].dropna().iloc[0] if not df['id'].dropna().empty else 0
 
+    # Étape 2 : Remplir les NaN dans 'id' avec cette valeur
+    df['id'] = df['id'].fillna(premiere_valeur_id)
+
+    # Étape 3 : Remplacer les autres NaN (dans les autres colonnes) par 0
+    colonnes_autres = df.columns.difference(['id'])
+    df[colonnes_autres] = df[colonnes_autres].fillna(0)
+
+
+    # df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
+    # df.columns = [str(col).strip() for col in df.columns]
+    # df.fillna(method='ffill', inplace=True)
+
+    pd.set_option('display.max_rows', None)  # Show all rows
+    pd.set_option('display.max_columns', None)  # Show all columns
+    pd.set_option('display.width', None)  # Auto-detect terminal width
+    pd.set_option('display.max_colwidth', None)  # Show full column content
+
+    # Now display the DataFrame
     produits = {}
 
     for _, row in df.iterrows():
@@ -201,21 +215,24 @@ def generateProductVals(self, vals):
         'list_price': vals.get('Sales Price', 0),
         'default_code': cleanSentence(vals.get('default_code', '')),
         'barcode': cleanSentence(vals.get('barcode', '')),
-        'x_product_website_url': vals.get('x_product_website_url', ''),
-        'x_condition': vals.get('x_condition', ''),
-        'x_': vals.get('x_', ''),
-        'x_kind': vals.get('x_kind', ''),
-        'image_url': vals.get('image_url', ''),
+        # 'x_product_website_url': vals.get('x_product_website_url', ''),
+        # 'x_condition': vals.get('x_condition', ''),
+        # 'x_': vals.get('x_', ''),
+        # 'x_kind': vals.get('x_kind', ''),
+        # 'image_url': vals.get('image_url', ''),
         'description_sale': vals.get('description_sale', ''),
         'available_in_pos': vals.get('available_in_pos', False),
         'out_of_stock_message': vals.get('out_of_stock_message', ''),
         'allow_out_of_stock_order': vals.get('allow_out_of_stock_order', False),
         'showDelivryMessage': vals.get('showDelivryMessage', False),
-        'messageDelivryTimeRemoteStock': vals.get('showDelivryMessage', ''),
+        'messageDelivryTimeStock': vals.get('messageDelivryTimeStock', ''),
+        'messageDelivryTimeRemoteStock': vals.get('messageDelivryTimeRemoteStock', ''),
         'seo_name': vals.get('seo_name', ''),
         'website_meta_title': vals.get('website_meta_title', ''),
+        'quantity': vals.get('Quantity On Hand', 0),
         'website_meta_keywords': vals.get('website_meta_keywords', ''),
         'website_description': vals.get('website_description', ''),
+        'show_availability': vals.get('show_availability', False),
         'weight': vals.get('weight', ''),
         'tracking': select_tracking_type(self, vals.get('tracking', '')),
         'categ_id': category,
@@ -225,5 +242,4 @@ def generateProductVals(self, vals):
         'dr_product_tab_ids': [(6, 0, selectElementDataBase(self, vals.get('dr_product_tab_ids/id', None)))],
         'supplier_taxes_id': [(6, 0, selectElementDataBase(self, vals.get('supplier_taxes_id', None)))],
     }
-    print('tqxtes', selectElementDataBase(self, vals.get('supplier_taxes_id', None)))
     return product_vals
