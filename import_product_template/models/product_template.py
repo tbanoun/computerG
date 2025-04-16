@@ -227,3 +227,33 @@ class ImportProduct(models.TransientModel):
         print(f'The stock {stock_id} has ok')
         stock_id.sudo().action_apply_inventory()
         return True
+
+
+
+class TestProductQty(models.Model):
+    _inherit = "product.template"
+
+    def updateQtyStockProduct(self):
+        """ function to update qty product on supplier wherehouse """
+        default_product_id = self.env.context.get('default_product_id', len(self.product_variant_ids) == 1 and self.product_variant_id.id)
+        location_id = self.env['stock.location'].sudo().search(
+            [
+                (
+                    'usage', 'in', ['internal', 'transit']
+                )
+            ], limit=1
+        )
+        print('self.product_variant_id.name')
+        print(self.product_variant_id.name)
+        print(self.name)
+        stock_id = self.env['stock.quant'].sudo().create({
+            "location_id": location_id.id,
+            "product_id": self.product_variant_id.id,
+            "inventory_quantity": 44,
+            "quantity": 44,
+        })
+        print(f'The stock {stock_id} has ok')
+        print(f'Fuck You {stock_id.inventory_quantity} has Bingooo')
+        stock_id.sudo().action_apply_inventory()
+        print(f'Fuck quantity {stock_id.quantity} has Bingooo')
+        return True
