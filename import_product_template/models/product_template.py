@@ -192,42 +192,26 @@ class ImportProduct(models.TransientModel):
         product_id = self.env['product.template'].sudo().create(
             product_vals
         )
-        self.updateQtyStockProduct(product_id, qty)
+        # self.updateQtyStockProduct(product_id, qty)
 
         return product_id
 
     def updateQtyStockProduct(self, product_id, availableQuantity):
         """ function to update qty product on supplier wherehouse """
+        default_product_id = self.env.context.get('default_product_id', len(product_id.product_variant_ids) == 1 and product_id.product_variant_id.id)
         location_id = self.env['stock.location'].sudo().search(
             [
                 (
                     'usage', 'in', ['internal', 'transit']
                 )
-
             ], limit=1
         )
-        print('location_id', location_id, location_id.name)
-        stock_id = self.env['stock.quant'].sudo().search([
-            ("product_id", "=", product_id.product_variant_id.id),
-        ], limit=1)
-        if stock_id:
-            stock_id.sudo().write({
-                "inventory_quantity": availableQuantity
-            })
-            stock_id.sudo().action_apply_inventory()
-        else:
-            stock_id = self.env['stock.quant'].sudo().create({
-                "location_id": product_id.property_stock_inventory.id,
-                "product_id": product_id.product_variant_id.id,
-                "inventory_quantity": availableQuantity
-            })
-            stock_id.sudo().action_apply_inventory()
-
-        print('OKOK')
-        print('OKOK', stock_id)
-        print('product_id', stock_id.product_id)
-        print('product_tmpl_id', stock_id.product_tmpl_id)
-        print('product_tmpl_id', stock_id.product_tmpl_id.name)
-        print('default_code', stock_id.product_tmpl_id.default_code)
-        print('OKOK', stock_id.inventory_quantity)
+        stock_id = self.env['stock.quant'].sudo().create({
+            "location_id": product_id.stockQuant.id,
+            "product_id": default_product_id,
+            "inventory_quantity": availableQuantity,
+            "quantity": availableQuantity
+        })
+        print(f'The stock {stock_id} has ok')
+        stock_id.sudo().action_apply_inventory()
         return True
