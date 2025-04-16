@@ -207,6 +207,12 @@ def selectOneElementDataBase(self, item_id):
 
 
 def getValueBool(val):
+    val = cleanSentence(val)
+    val = val.strip().upper()
+    if val == 'TRUE':
+        return True
+    else: return False
+
     if isinstance(cleanSentence(val), bool):
         return bool(val)
     return False
@@ -216,6 +222,7 @@ def generateProductVals(self, vals):
     cat = str(vals.get('categ_id/id', '')).strip()
     category = select_categoryId(self, cat)
     is_published = getValueBool(cleanSentence(vals.get('Is Published', False)))
+    print('IS PUBLISHED', is_published)
     available_in_pos = getValueBool(cleanSentence(vals.get('available_in_pos', False)))
     allow_out_of_stock_order = getValueBool(cleanSentence(vals.get('allow_out_of_stock_order', False)))
     showDelivryMessage = getValueBool(cleanSentence(vals.get('showDelivryMessage', False)))
@@ -228,19 +235,19 @@ def generateProductVals(self, vals):
         'list_price': vals.get('Sales Price', 0),
         'default_code': cleanSentence(vals.get('default_code', '')),
         'barcode': cleanSentence(vals.get('barcode', '')),
-        'is_published': is_published,
-        'x_product_website_url': cleanSentence(vals.get('x_product_website_url', '')),
-        'x_condition': cleanSentence(vals.get('x_condition', '')),
-        'x_CPU': cleanSentence(vals.get('x_CPU', '')),
-        'x_': cleanSentence(vals.get('x_', '')),
-        'x_GPU': cleanSentence(vals.get('x_GPU', '')),
-        'x_sreen_size': cleanSentence(vals.get('x_sreen_size', '')),
-        'x_ram': cleanSentence(vals.get('x_ram', '')),
-        'manufacturer_id': cleanSentence(vals.get('manufacturer_id', '')),
-        'x_hddtype': cleanSentence(vals.get('x_hddtype', '')),
-        'x_kind': cleanSentence(vals.get('x_kind', '')),
-        'dr_label_id': cleanSentence(vals.get('dr_label_id/id', '')),
-        'image_url': cleanSentence(vals.get('image_url', '')),
+        # 'is_published': is_published,
+        # 'x_product_website_url': cleanSentence(vals.get('x_product_website_url', '')),
+        # 'x_condition': cleanSentence(vals.get('x_condition', '')),
+        # 'x_CPU': cleanSentence(vals.get('x_CPU', '')),
+        # 'x_': cleanSentence(vals.get('x_', '')),
+        # 'x_GPU': cleanSentence(vals.get('x_GPU', '')),
+        # 'x_sreen_size': cleanSentence(vals.get('x_sreen_size', '')),
+        # 'x_ram': cleanSentence(vals.get('x_ram', '')),
+        # 'manufacturer_id': cleanSentence(vals.get('manufacturer_id', '')),
+        # 'x_hddtype': cleanSentence(vals.get('x_hddtype', '')),
+        # 'x_kind': cleanSentence(vals.get('x_kind', '')),
+        # 'dr_label_id': cleanSentence(vals.get('dr_label_id/id', '')),
+        # 'image_url': cleanSentence(vals.get('image_url', '')),
         'description_sale': cleanSentence(vals.get('description_sale', '')),
         'available_in_pos': available_in_pos,
         'out_of_stock_message': vals.get('out_of_stock_message', ''),
