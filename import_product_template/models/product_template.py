@@ -157,6 +157,18 @@ class ImportProduct(models.TransientModel):
 
     def update_product_template(self, product_id, vals):
         product_vals = generateProductVals(self, vals)
+        #manufacturer_id
+        manufacturer_id = product_vals.pop('manufacturer_id', None)
+        if manufacturer_id: manufacturer_id = selectOneElementDataBase(self, manufacturer_id)
+        manufacturer_id = manufacturer_id.id if manufacturer_id else None
+        # dr_label_id
+        dr_label_id = product_vals.pop('dr_label_id', None)
+        if dr_label_id: dr_label_id = selectOneElementDataBase(self, dr_label_id)
+        dr_label_id = dr_label_id.id if dr_label_id else None
+
+        product_vals['manufacturer_id'] = manufacturer_id
+        product_vals['dr_label_id'] = dr_label_id
+        
         qty = product_vals.pop('quantity', 0)
 
         product_id.sudo().write(
@@ -189,7 +201,6 @@ class ImportProduct(models.TransientModel):
 
     def create_product_template(self, vals):
         product_vals = generateProductVals(self, vals)
-        # dr_label_id
         product_vals['detailed_type'] = 'product'
         qty = product_vals.pop('quantity', 0)
         # manufacturer_id
