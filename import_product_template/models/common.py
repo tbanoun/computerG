@@ -24,6 +24,7 @@ def parse_date(value):
     except Exception:
         return ''
 
+
 def convertXlsOrCsvToDicts(file):
     fichier_decoded = base64.b64decode(file)
     fichier_io = io.BytesIO(fichier_decoded)
@@ -42,8 +43,7 @@ def convertXlsOrCsvToDicts(file):
 
     # Étape 3 : Remplacer les autres NaN (dans les autres colonnes) par 0
     colonnes_autres = df.columns.difference(['id'])
-    df[colonnes_autres] = df[colonnes_autres].fillna(0)
-
+    df[colonnes_autres] = df[colonnes_autres].fillna('')
 
     # df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
     # df.columns = [str(col).strip() for col in df.columns]
@@ -53,6 +53,8 @@ def convertXlsOrCsvToDicts(file):
     pd.set_option('display.max_columns', None)  # Show all columns
     pd.set_option('display.width', None)  # Auto-detect terminal width
     pd.set_option('display.max_colwidth', None)  # Show full column content
+
+    print(df)
 
     # Now display the DataFrame
     produits = {}
@@ -87,7 +89,7 @@ def convertXlsOrCsvToDicts(file):
 
         # Gestion des vendors
         vendor_name = str(row.get('Vendors/Vendor', '')).strip()
-        currency_id = str(row.get('seller_ids/currency_id/id.1', '')).strip()
+        currency_id = str(row.get('seller_ids/currency_id/id', '')).strip()
         taxes_ids = str(row.get('supplier_taxes_id', '')).strip()
         if vendor_name:
             vendor_info = {
@@ -204,44 +206,55 @@ def selectOneElementDataBase(self, item_id):
     return res
 
 
+def getValueBool(val):
+    if isinstance(cleanSentence(val), bool):
+        return bool(val)
+    return False
+
+
 def generateProductVals(self, vals):
-    # seller_ids / currency_id / id
-    # categ_id / id
     cat = str(vals.get('categ_id/id', '')).strip()
     category = select_categoryId(self, cat)
+    is_published = getValueBool(cleanSentence(vals.get('Is Published', False)))
+    available_in_pos = getValueBool(cleanSentence(vals.get('available_in_pos', False)))
+    allow_out_of_stock_order = getValueBool(cleanSentence(vals.get('allow_out_of_stock_order', False)))
+    showDelivryMessage = getValueBool(cleanSentence(vals.get('showDelivryMessage', False)))
+    show_availability = getValueBool(cleanSentence(vals.get('show_availability', False)))
+    quantity = convertStrTofloat(cleanSentence(vals.get('Quantity On Hand', False)))
+    weight = convertStrTofloat(cleanSentence(vals.get('weight', False)))
     product_vals = {
         'name': vals.get('name', ''),
         'standard_price': vals.get('standard_price', 0),
         'list_price': vals.get('Sales Price', 0),
         'default_code': cleanSentence(vals.get('default_code', '')),
-        'is_published': cleanSentence(vals.get('Is Published', False)),
         'barcode': cleanSentence(vals.get('barcode', '')),
-        'x_product_website_url': vals.get('x_product_website_url', ''),
-        'x_condition': vals.get('x_condition', ''),
-        'x_CPU': vals.get('x_CPU', ''),
-        'x_': vals.get('x_', ''),
-        'x_GPU': vals.get('x_GPU', ''),
-        'x_sreen_size': vals.get('x_sreen_size', ''),
-        'x_ram': vals.get('x_ram', ''),
-        'manufacturer_id': vals.get('manufacturer_id', ''),
-        'x_hddtype': vals.get('x_hddtype', ''),
-        'x_kind': vals.get('x_kind', ''),
-        'dr_label_id': vals.get('dr_label_id/id', ''),
-        'image_url': vals.get('image_url', ''),
-        'description_sale': vals.get('description_sale', ''),
-        'available_in_pos': vals.get('available_in_pos', False),
+        'is_published': is_published,
+        # 'x_product_website_url': cleanSentence(vals.get('x_product_website_url', '')),
+        # 'x_condition': cleanSentence(vals.get('x_condition', '')),
+        # 'x_CPU': cleanSentence(vals.get('x_CPU', '')),
+        # 'x_': cleanSentence(vals.get('x_', '')),
+        # 'x_GPU': cleanSentence(vals.get('x_GPU', '')),
+        # 'x_sreen_size': cleanSentence(vals.get('x_sreen_size', '')),
+        # 'x_ram': cleanSentence(vals.get('x_ram', '')),
+        # 'manufacturer_id': cleanSentence(vals.get('manufacturer_id', '')),
+        # 'x_hddtype': cleanSentence(vals.get('x_hddtype', '')),
+        # 'x_kind': cleanSentence(vals.get('x_kind', '')),
+        # 'dr_label_id': cleanSentence(vals.get('dr_label_id/id', '')),
+        # 'image_url': cleanSentence(vals.get('image_url', '')),
+        'description_sale': cleanSentence(vals.get('description_sale', '')),
+        'available_in_pos': available_in_pos,
         'out_of_stock_message': vals.get('out_of_stock_message', ''),
-        'allow_out_of_stock_order': vals.get('allow_out_of_stock_order', False),
-        'showDelivryMessage': vals.get('showDelivryMessage', False),
+        'allow_out_of_stock_order': allow_out_of_stock_order,
+        'showDelivryMessage': showDelivryMessage,
         'messageDelivryTimeStock': vals.get('messageDelivryTimeStock', ''),
         'messageDelivryTimeRemoteStock': vals.get('messageDelivryTimeRemoteStock', ''),
-        'seo_name': vals.get('seo_name', ''),
-        'website_meta_title': vals.get('website_meta_title', ''),
-        'quantity': vals.get('Quantity On Hand', 0),
-        'website_meta_keywords': vals.get('website_meta_keywords', ''),
-        'website_description': vals.get('website_description', ''),
-        'show_availability': vals.get('show_availability', False),
-        'weight': vals.get('weight', ''),
+        'seo_name': cleanSentence(vals.get('seo_name', '')),
+        'website_meta_title': cleanSentence(vals.get('website_meta_title', '')),
+        'quantity': quantity,
+        'website_meta_keywords': cleanSentence(vals.get('website_meta_keywords', '')),
+        'website_description': cleanSentence(vals.get('website_description', '')),
+        'show_availability': show_availability,
+        'weight': weight,
         'tracking': select_tracking_type(self, vals.get('tracking', '')),
         'categ_id': category,
         'pos_categ_id': select_pos_categoryId(self, vals.get('pos_categ_id/id', None)),

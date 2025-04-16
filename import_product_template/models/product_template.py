@@ -128,8 +128,8 @@ class ImportProduct(models.TransientModel):
                 product_id = product_id.id
             else:
                 product_id = None
-            # currency_id = selectOneElementDataBase(self, rec.get('currency_id', ''))
-            # currency_id = currency_id.id if currency_id else None
+            currency_id = selectOneElementDataBase(self, rec.get('currency_id', ''))
+            currency_id = currency_id.id if currency_id else None
             product_name = rec.get('product_name', '')
             product_code = rec.get('product_code', '')
             vendor_price = convertStrTofloat(rec.get('price', 0.0))
@@ -137,8 +137,7 @@ class ImportProduct(models.TransientModel):
             date_start = rec.get('start_date', None)
             date_end = rec.get('end_date', None)
             time_lead = convertStrTofloat(rec.get('time_lead', 0))
-            # taxes_ids = selectElementDataBase(self, rec.get('taxes_ids', 0))
-            self.env['product.supplierinfo'].create({
+            vals = {
                 'product_id': product_id,
                 'partner_id': partner_id,
                 'price': vendor_price,
@@ -149,9 +148,12 @@ class ImportProduct(models.TransientModel):
                 'date_end': date_end if isinstance(date_end, datetime) else False,
                 'min_qty': vendor_qty,
                 'product_tmpl_id': product_template.id,
-                # 'currency_id': currency_id,
-                # 'supplier_taxes_id': [(6, 0, taxes_ids)],
-            })
+            }
+            if currency_id:
+                vals['currency_id'] = currency_id
+            self.env['product.supplierinfo'].create(
+                vals
+            )
 
     def update_product_template(self, product_id, vals):
         product_vals = generateProductVals(self, vals)
@@ -161,29 +163,29 @@ class ImportProduct(models.TransientModel):
             product_vals
         )
         # delete qty
-        stock_ids = self.env['stock.quant'].sudo().search(
-            [
-                (
-                    'product_id', '=', product_id.id
-                )
-            ]
-        )
-        if stock_ids: stock_ids.sudo().unlink()
-        location_id = self.env['stock.location'].sudo().search(
-            [
-                (
-                    'usage', '=', 'internal'
-                )
-            ], limit=1
-        )
-        if location_id:
-            stock_id = self.env['stock.quant'].sudo().create({
-                "location_id": location_id.id,
-                "product_id": product_id.product_variant_id.id,
-                "product_tmpl_id": product_id.id,
-                "inventory_quantity": qty
-            })
-        stock_id.sudo().action_apply_inventory()
+        # stock_ids = self.env['stock.quant'].sudo().search(
+        #     [
+        #         (
+        #             'product_id', '=', product_id.id
+        #         )
+        #     ]
+        # )
+        # if stock_ids: stock_ids.sudo().unlink()
+        # location_id = self.env['stock.location'].sudo().search(
+        #     [
+        #         (
+        #             'usage', '=', 'internal'
+        #         )
+        #     ], limit=1
+        # )
+        # if location_id:
+        #     stock_id = self.env['stock.quant'].sudo().create({
+        #         "location_id": location_id.id,
+        #         "product_id": product_id.product_variant_id.id,
+        #         "product_tmpl_id": product_id.id,
+        #         "inventory_quantity": qty
+        #     })
+        # stock_id.sudo().action_apply_inventory()
 
     def create_product_template(self, vals):
         product_vals = generateProductVals(self, vals)
@@ -210,7 +212,8 @@ class ImportProduct(models.TransientModel):
 
     def updateQtyStockProduct(self, product_id, availableQuantity):
         """ function to update qty product on supplier wherehouse """
-        default_product_id = self.env.context.get('default_product_id', len(product_id.product_variant_ids) == 1 and product_id.product_variant_id.id)
+        default_product_id = self.env.context.get('default_product_id',
+                                                  len(product_id.product_variant_ids) == 1 and product_id.product_variant_id.id)
         location_id = self.env['stock.location'].sudo().search(
             [
                 (
@@ -229,13 +232,13 @@ class ImportProduct(models.TransientModel):
         return True
 
 
-
 class TestProductQty(models.Model):
     _inherit = "product.template"
 
     def updateQtyStockProduct(self):
         """ function to update qty product on supplier wherehouse """
-        default_product_id = self.env.context.get('default_product_id', len(self.product_variant_ids) == 1 and self.product_variant_id.id)
+        default_product_id = self.env.context.get('default_product_id',
+                                                  len(self.product_variant_ids) == 1 and self.product_variant_id.id)
         location_id = self.env['stock.location'].sudo().search(
             [
                 (
