@@ -29,7 +29,7 @@
                         </t>
                         <!--set qty_available_wt-->
                         <t t-set="qty_available_wt" t-value="0"/>
-                        <t t-if="line.product_id.qty_available_wt > 0">
+                        <t t-if="line.product_id.qty_available_wt > 0 and showDelivryMessage">
                             <t t-set="qty_available_wt" t-value="int(line.product_id.qty_available_wt)"/>
                         </t>
                         <t t-set="qtyReset" t-value="line.product_uom_qty - (virtual_available+qty_available_wt)"/>
