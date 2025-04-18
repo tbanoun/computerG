@@ -6,11 +6,14 @@ class ProductInfoController(http.Controller):
 
     @http.route('/api/get_product_info', type='json', auth='public')
     def get_product_info(self, product_id):
+        print('product_id', product_id)
         product = request.env['product.product'].sudo().browse(int(product_id))
         print('product')
         print(product)
+        print(product.name)
         print('template')
         print(product.product_tmpl_id)
+        print(product.product_tmpl_id.name)
         print(product.product_tmpl_id.messageDelivryTimeStock)
         print('messageDelivryTimeRemoteStock')
         print(product.product_tmpl_id.messageDelivryTimeRemoteStock)
