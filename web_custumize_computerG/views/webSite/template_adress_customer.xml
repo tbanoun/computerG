@@ -36,7 +36,7 @@
                         <!--show message delivery stock -->
                         <!--cas 1 virtual_available > 0-->
                         <div t-if="virtual_available > 0">
-                                <div class="col-12 mt-1">
+                                <div class="col-12 mt-2">
                                     <b>
                                         <span style="font-weight: 500 !important;
                 background: #e5ffe978 !important;
@@ -59,7 +59,7 @@
                         </div>
                         <!--cas 2 qty_available_wt > 0 and line.product_uom_qty > virtual_available-->
                         <t t-if="line.product_uom_qty > virtual_available and qty_available_wt > 0 ">
-                            <div class="col-12 mt-1">
+                            <div class="col-12 mt-2">
                                 <b>
                                     <span style="
                 font-weight: 500 !important;
@@ -82,7 +82,7 @@
                         </t>
                         <!--cas 3 qtyReset > 0-->
                         <t t-if="qtyReset > 0">
-                            <div class="col-12 mt-1">
+                            <div class="col-12 mt-2">
                                 <b>
                                     <span style="
                                                     font-weight: 500 !important;
