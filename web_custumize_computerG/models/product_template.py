@@ -13,6 +13,18 @@ class ProductTemplate(models.Model):
             product.dr_show_out_of_stock = 'OUT_OF_STOCK'
 
 
+    out_of_stock_message_text = fields.Char(compute='_compute_dr_show_out_of_stock', compute_sudo=True)
+
+    def _compute_out_of_stock_message_text(self):
+        for rec in self:
+            if rec.virtual_available > 0:
+                rec.out_of_stock_message_text = rec.messageDelivryTimeStock
+            elif rec.qty_available_wt > 0:
+                rec.out_of_stock_message_text = rec.messageDelivryTimeRemoteStock
+            else:
+                rec.out_of_stock_message_text = rec.out_of_stock_message
+
+
 class ProductProduct(models.Model):
     _inherit = "product.product"
 

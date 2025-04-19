@@ -12,10 +12,10 @@
                 <field string="Continue Selling on Remote Stock" name="showDelivryMessage"/>
                 <field name="messageDelivryTimeStock"/>
                 <field name="messageDelivryTimeRemoteStock"/>
-                <field name="dr_show_out_of_stock"/>
+                <field name="out_of_stock_message_text"/>
             </xpath>
-<!--            <xpath expr="//field[@name='out_of_stock_message_text']" position="replace">-->
-            <!--            </xpath>-->
+            <xpath expr="//field[@name='out_of_stock_message_text']" position="replace">
+            </xpath>
         </field>
     </record>
 </odoo>
