@@ -36,6 +36,7 @@ class ImportProduct(models.TransientModel):
             created = False
             try:
                 product_template = self.env.ref(product_id)
+                print(f'\n\ product_template {product_template} \n\n')
             except Exception as e:
                 print(f'error! {e}')
                 error += 1
@@ -202,7 +203,7 @@ class ImportProduct(models.TransientModel):
 
     def create_product_template(self, vals):
         product_vals = generateProductVals(self, vals)
-        product_vals['Product Type'] = 'product'
+        product_vals['detailed_type'] = 'product'
         qty = product_vals.pop('quantity', 0)
         # manufacturer_id
         manufacturer_id = product_vals.pop('manufacturer_id', None)
@@ -262,17 +263,11 @@ class TestProductQty(models.Model):
                 )
             ], limit=1
         )
-        print('self.product_variant_id.name')
-        print(self.product_variant_id.name)
-        print(self.name)
         stock_id = self.env['stock.quant'].sudo().create({
             "location_id": location_id.id,
             "product_id": self.product_variant_id.id,
             "inventory_quantity": 44,
             "quantity": 44,
         })
-        print(f'The stock {stock_id} has ok')
-        print(f'Fuck You {stock_id.inventory_quantity} has Bingooo')
         stock_id.sudo().action_apply_inventory()
-        print(f'Fuck quantity {stock_id.quantity} has Bingooo')
         return True

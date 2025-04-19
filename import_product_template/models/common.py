@@ -149,6 +149,26 @@ def select_tracking_type(self, name):
     else:
         return 'none'
 
+def select_tracking_type_with_key(name):
+    if 'serial' == name:
+        return 'By Unique Serial Number'
+    elif 'lot' == name:
+        return 'By Lots'
+    else:
+        return ''
+
+def generateNewRow():
+    result = []
+    for i in range(0, 42):
+        result.append('')
+    return result
+
+def generateNewRowAttribute():
+    result = []
+    for i in range(0, 52):
+        result.append('')
+    return result
+
 
 def select_categoryId(self, categ_id):
     res = 1
@@ -235,18 +255,18 @@ def generateProductVals(self, vals):
         'default_code': cleanSentence(vals.get('SKU', '')),
         'barcode': cleanSentence(vals.get('Barcode', '')),
         'is_published': is_published,
-        'x_product_website_url': cleanSentence(vals.get('Website URL Bz', '')),
-        'x_condition': cleanSentence(vals.get('Condition Bz', '')),
-        'x_CPU': cleanSentence(vals.get('CPU Bz', '')),
-        'x_': cleanSentence(vals.get('Rubric Bz', '')),
-        'x_GPU': cleanSentence(vals.get('GPU Bz', '')),
-        'x_sreen_size': cleanSentence(vals.get('Sreen Size Bz', '')),
-        'x_ram': cleanSentence(vals.get('RAM Bz', '')),
+        # 'x_product_website_url': cleanSentence(vals.get('Website URL Bz', '')),
+        # 'x_condition': cleanSentence(vals.get('Condition Bz', '')),
+        # 'x_CPU': cleanSentence(vals.get('CPU Bz', '')),
+        # 'x_': cleanSentence(vals.get('Rubric Bz', '')),
+        # 'x_GPU': cleanSentence(vals.get('GPU Bz', '')),
+        # 'x_sreen_size': cleanSentence(vals.get('Sreen Size Bz', '')),
+        # 'x_ram': cleanSentence(vals.get('RAM Bz', '')),
         # 'manufacturer_id': cleanSentence(vals.get('manufacturer_id', '')),
-        'x_hddtype': cleanSentence(vals.get('Hard Drive Type Bz', '')),
-        'x_kind': cleanSentence(vals.get('Hard Drive Type Bz', '')),
-        'dr_label_id': cleanSentence(vals.get('Label', '')),
-        'image_url': cleanSentence(vals.get('Image URL', '')),
+        # 'x_hddtype': cleanSentence(vals.get('Hard Drive Type Bz', '')),
+        # 'x_kind': cleanSentence(vals.get('Hard Drive Type Bz', '')),
+        # 'dr_label_id': cleanSentence(vals.get('Label', '')),
+        # 'image_url': cleanSentence(vals.get('Image URL', '')),
         'description_sale': cleanSentence(vals.get('Sale Description', '')),
         'available_in_pos': available_in_pos,
         'out_of_stock_message': vals.get('Out of Stock Message', ''),
@@ -270,3 +290,12 @@ def generateProductVals(self, vals):
         'supplier_taxes_id': [(6, 0, selectElementDataBase(self, vals.get('Vendor Taxes', None)))],
     }
     return product_vals
+
+
+def generateExportId(el):
+    try:
+        el.export_data(['id'])
+        xml_id = el.export_data(['id']).get('datas')[0][0]
+        xml_id = el.get_metadata()[0].get('xmlid')
+        return xml_id
+    except Exception: return None

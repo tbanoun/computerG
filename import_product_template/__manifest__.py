@@ -18,5 +18,6 @@
         'security/ir.model.access.csv',
         #views
         'views/product_template_import.xml',
+        'views/product_template_list.xml',
     ],
 }
