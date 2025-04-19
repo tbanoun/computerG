@@ -202,7 +202,7 @@ class ImportProduct(models.TransientModel):
 
     def create_product_template(self, vals):
         product_vals = generateProductVals(self, vals)
-        product_vals['detailed_type'] = 'product'
+        product_vals['Product Type'] = 'product'
         qty = product_vals.pop('quantity', 0)
         # manufacturer_id
         manufacturer_id = product_vals.pop('manufacturer_id', None)
