@@ -32,8 +32,10 @@ class ProductTemplate(models.Model):
                 text = rec.out_of_stock_message
                 # rec.out_of_stock_message_text = rec.out_of_stock_message
             text = str(text)
-            text = text.replace('<p>', '').replace('</p>', '')
-            rec.out_of_stock_message_text = text
+            soup = bs(text, 'html.parser')
+            if soup: text_soup = soup.get_text()
+            else: text_soup = text
+            rec.out_of_stock_message_text = text_soup
 
 
 
