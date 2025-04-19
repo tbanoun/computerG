@@ -32,7 +32,7 @@ class ProductTemplate(models.Model):
                 text = rec.out_of_stock_message
                 # rec.out_of_stock_message_text = rec.out_of_stock_message
             if isinstance(text, str):
-                text = text.replace('<p>', '').replcae('</p>', '')
+                text = text.replace('<p>', '').replace('</p>', '')
             else: text = ''
             rec.out_of_stock_message_text = text
 
