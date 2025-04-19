@@ -10,7 +10,7 @@ class ProductTemplate(models.Model):
 
     def _compute_dr_show_out_of_stock(self):
         for product in self:
-            product.dr_show_out_of_stock = 'Hello world!!'
+            product.dr_show_out_of_stock = 'OUT_OF_STOCK'
 
 
 class ProductProduct(models.Model):
