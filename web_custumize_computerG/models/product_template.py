@@ -13,10 +13,13 @@ class ProductTemplate(models.Model):
             product.dr_show_out_of_stock = 'OUT_OF_STOCK'
 
 
-    out_of_stock_message_text = fields.Char(compute='_compute_dr_show_out_of_stock', compute_sudo=True)
+    # out_of_stock_message_text = fields.Char(compute='_compute_dr_show_out_of_stock', compute_sudo=True)
+    out_of_stock_message_text = fields.Text(compute='_compute_dr_show_out_of_stock', string="Out-of-Stock Text Message", default="Ask for Availability",
+                                            translate=True)
 
     def _compute_out_of_stock_message_text(self):
         for rec in self:
+            rec.out_of_stock_message_text = ''
             if rec.virtual_available > 0:
                 rec.out_of_stock_message_text = rec.messageDelivryTimeStock
             elif rec.qty_available_wt > 0:
