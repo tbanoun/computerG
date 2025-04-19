@@ -14,7 +14,7 @@ class ProductTemplate(models.Model):
 
 
     # out_of_stock_message_text = fields.Char(compute='_compute_dr_show_out_of_stock', compute_sudo=True)
-    out_of_stock_message_text = fields.Text(compute='_compute_dr_show_out_of_stock', string="Out-of-Stock Text Message", default="Ask for Availability",
+    out_of_stock_message_text = fields.Text(compute='_compute_out_of_stock_message_text', string="Out-of-Stock Text Message", default="Ask for Availability",
                                             translate=True)
 
     def _compute_out_of_stock_message_text(self):
