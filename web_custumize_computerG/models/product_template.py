@@ -8,6 +8,9 @@ class ProductTemplate(models.Model):
     messageDelivryTimeRemoteStock = fields.Char('Delivery Time – Remote Stock Message', default='Ship 4-8 Days')
     messageDelivryTimeStock = fields.Char('Delivery Time – Stock Message', default='Ship 1-2 Days')
 
+    def _compute_dr_show_out_of_stock(self):
+        for product in self:
+            product.dr_show_out_of_stock = 'Hello world!!'
 
 
 class ProductProduct(models.Model):
