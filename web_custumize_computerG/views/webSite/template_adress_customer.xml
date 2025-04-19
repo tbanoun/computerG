@@ -17,7 +17,7 @@
                     <div>
                         <strong t-field="line.name_short"/>
                     </div>
-                       <ul class="list-inline mb-1">
+                        <ul class="list-inline mb-1">
                         <!--1-->
                         <!--init value-->
                         <!--set showDelivryMessage-->
@@ -25,7 +25,8 @@
                         <!--set virtual_available-->
                         <t t-set="virtual_available" t-value="0"/>
                         <t t-if="line.product_id.virtual_available > 0">
-                            <t t-set="virtual_available" t-value="int(line.product_id.virtual_available)"/>
+                            <t t-set="virtual_available"
+                               t-value="int(line.product_id.virtual_available)"/>
                         </t>
                         <!--set qty_available_wt-->
                         <t t-set="qty_available_wt" t-value="0"/>
@@ -33,22 +34,54 @@
                             <t t-set="qty_available_wt" t-value="int(line.product_id.qty_available_wt)"/>
                         </t>
                         <t t-set="qtyReset" t-value="line.product_uom_qty - (virtual_available+qty_available_wt)"/>
+
+
+                        <!--on stock-->
+                        <t t-set="qtyResetOnStock" t-value="line.product_uom_qty"/>
+                        <t t-if="qtyResetOnStock >= virtual_available and virtual_available > 0">
+                            <t t-set="virtual_available" t-value="virtual_available"/>
+                            <t t-set="qtyResetOnStock" t-value="qtyResetOnStock - virtual_available"/>
+                        </t>
+                        <t t-elif="virtual_available >= line.product_uom_qty">
+                            <t t-set="virtual_available" t-value="qtyResetOnStock"/>
+                            <t t-set="qtyResetOnStock" t-value="0"/>
+                        </t>
+
+                        <!--on remote stock-->
+                        <t t-set="qtyResetOnRemoteStock" t-value="0"/>
+                        <t t-if="qtyResetOnStock > 0">
+                            <t t-if="qtyResetOnStock > qty_available_wt and qty_available_wt > 0">
+                                <t t-set="qty_available_wt" t-value="qty_available_wt"/>
+                                <t t-set="qtyResetOnRemoteStock" t-value="qtyResetOnStock - qty_available_wt"/>
+                            </t>
+                            <t t-elif="qty_available_wt > qtyResetOnStock">
+                                <t t-set="qtyResetOnRemoteStock" t-value="0"/>
+                                <t t-set="qty_available_wt" t-value="qtyResetOnStock"/>
+                            </t>
+                        </t>
+                        <t t-if="qtyResetOnRemoteStock > 0">
+                            <t t-set="qtyReset" t-value="qtyResetOnRemoteStock"/>
+                        </t>
+                        h:
+                        <span class="cls-sahrane" t-esc="int(virtual_available)"/>
+
+
                         <!--show message delivery stock -->
                         <!--cas 1 virtual_available > 0-->
                         <div t-if="virtual_available > 0">
-                                <div class="col-12 mt-2">
+                            <div class="row mt-3 mb-3">
+                                <div class="col-12">
                                     <b>
                                         <span style="font-weight: 500 !important;
                 background: #e5ffe978 !important;
                 padding: 0.4rem 0.6rem !important;
                 width: fit-content !important;
-                font-size: 7pt !important;
                 border-radius: 0.2rem !important;
                 color: #067d24 !important;
                 border: 1px solid #19a22f; !important"
                                               class="ml-2 text-right alert alert-success w-40">
                                             <span class="cls-sahrane">
-                                                <span class="cls-sahrane" t-esc="virtual_available"/>
+                                                <span class="cls-sahrane" t-esc="int(virtual_available)"/>
                                                 In Stock |
                                             </span>
                                             <span class="cls-sahrane" t-esc="line.product_id.messageDelivryTimeStock">
@@ -56,10 +89,11 @@
                                         </span>
                                     </b>
                                 </div>
+                            </div>
                         </div>
                         <!--cas 2 qty_available_wt > 0 and line.product_uom_qty > virtual_available-->
                         <t t-if="line.product_uom_qty > virtual_available and qty_available_wt > 0 ">
-                            <div class="col-12 mt-2">
+                            <div class="col-12 mt-3 mb-3">
                                 <b>
                                     <span style="
                 font-weight: 500 !important;
@@ -67,7 +101,6 @@
                 padding: 0.4rem 0.6rem !important;
                 width: fit-content !important;
                 border-radius: 0.2rem !important;
-                font-size: 7pt !important;
                 color: #803D19 !important;
                 border: 1px solid #803D19; !important"
                                           class="ml-2 text-right alert alert-success w-40">
@@ -82,14 +115,13 @@
                         </t>
                         <!--cas 3 qtyReset > 0-->
                         <t t-if="qtyReset > 0">
-                            <div class="col-12 mt-2">
+                            <div class="col-12 mt-3 mb-3">
                                 <b>
                                     <span style="
                                                     font-weight: 500 !important;
                                                     background: #fcf2f2 !important;
                                                     padding: 0.4rem 0.6rem !important;
                                                     width: fit-content !important;
-                                                    font-size: 7pt !important;
                                                     border-radius: 0.2rem !important;
                                                     color: #DA020E !important;
                                                     border: 1px solid #DA020E; !important
