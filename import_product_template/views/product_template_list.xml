@@ -7,9 +7,22 @@
             <field name="inherit_id" ref="product.product_template_form_view"/>
             <field name="arch" type="xml">
                 <xpath expr="//header" position="inside">
-                    <button name="exportData" type="object" string="Export template product" class="btn-primary"/>
+                    <button name="exportData" type="object" string="Export Template for Products" class="btn btn-info"/>
                 </xpath>
             </field>
         </record>
+
+
+        <record id="view_stock_product_template_tree" model="ir.ui.view">
+            <field name="name">product.template.stock.tree.inherit</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_tree_view"/>
+            <field name="arch" type="xml">
+                <header position="inside">
+                    <button name="exportData" type="object" string="Export Template for Products" class="btn btn-info"/>
+                </header>
+            </field>
+        </record>
+
     </data>
 </odoo>
