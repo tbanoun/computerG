@@ -58,7 +58,7 @@
                         </t>
                         <t t-if="qtyResetOnRemoteStock > 0">
                             <t t-set="qtyReset" t-value="qtyResetOnRemoteStock"/>
-                        </t>s
+                        </t>
                         <!--show message delivery stock -->
                         <!--cas 1 virtual_available > 0-->
                         <div t-if="virtual_available > 0">
