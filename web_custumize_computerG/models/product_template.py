@@ -1,4 +1,5 @@
 from odoo import fields, models, api
+from bs4 import BeautifulSoup as bs
 
 class ProductTemplate(models.Model):
     _inherit = "product.template"
@@ -18,14 +19,21 @@ class ProductTemplate(models.Model):
                                             translate=True)
 
     def _compute_out_of_stock_message_text(self):
+        text = ''
         for rec in self:
             rec.out_of_stock_message_text = ''
             if rec.virtual_available > 0:
-                rec.out_of_stock_message_text = rec.messageDelivryTimeStock
+                text = rec.messageDelivryTimeStock
+                # rec.out_of_stock_message_text = rec.messageDelivryTimeStock
             elif rec.qty_available_wt > 0:
-                rec.out_of_stock_message_text = rec.messageDelivryTimeRemoteStock
+                text = rec.messageDelivryTimeRemoteStock
+                # rec.out_of_stock_message_text = rec.messageDelivryTimeRemoteStock
             else:
-                rec.out_of_stock_message_text = rec.out_of_stock_message
+                text = rec.out_of_stock_message
+                # rec.out_of_stock_message_text = rec.out_of_stock_message
+            soup = bs(text, 'html.parser')
+            rec.out_of_stock_message_text = soup.get_text()
+
 
 
 class ProductProduct(models.Model):
