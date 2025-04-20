@@ -199,35 +199,6 @@
 
 
     <!-- ===== PAGE Trade-In Your Device 3 ===== -->
-    <template id="wizard_checkout" inherit_id="website_sale.wizard_checkout"
-              name="s_newsletter_block_form_template reCAPTCHA">
-        <xpath expr="//div[contains(@class, 's_website_form_submit')]"
-               position="before">
-            <script src="https://www.google.com/recaptcha/api.js" async="async" defer="defer"/>
-
-            <div class="form-group ml-4" style="margin: 15px 0;">
-                <div class="g-recaptcha" data-sitekey="6Lccex4rAAAAAObaQPCJ9ECIoNMdG8yOXJTHXv2x"/>
-                <div id="recaptcha-error-signup" style="color: red; display: none;">
-                    Veuillez cocher la case "Je ne suis pas un robot".
-                </div>
-            </div>
-
-            <script><![CDATA[
-                document.addEventListener('DOMContentLoaded', function() {
-                    const form = document.querySelector('.oe_signup_form');
-                    if (form) {
-                        form.addEventListener('submit', function(e) {
-                            const response = grecaptcha.getResponse();
-                            if (!response) {
-                                e.preventDefault();
-                                document.getElementById('recaptcha-error-signup').style.display = 'block';
-                            }
-                        });
-                    }
-                });
-            ]]></script>
-        </xpath>
-    </template>
 
 
     <template id="extra_info" inherit_id="website_sale.extra_info"
