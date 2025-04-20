@@ -2,7 +2,10 @@
 <odoo>
     <!-- ===== PAGE DE CONNEXION ===== -->
     <template id="login" inherit_id="web.login" name="Login with reCAPTCHA">
-        <xpath expr="//form" position="after">
+
+        <xpath expr="//div[contains(@t-attf-class, 'oe_login_buttons')]"
+               position="before">
+
             <!-- Intégration reCAPTCHA v2 -->
             <script src="https://www.google.com/recaptcha/api.js" async="async" defer="defer"/>
 
@@ -39,7 +42,8 @@
 
     <!-- ===== PAGE D'INSCRIPTION ===== -->
     <template id="signup" inherit_id="auth_signup.signup" name="Signup with reCAPTCHA">
-        <xpath expr="//form" position="after">
+        <xpath expr="//div[contains(@class, 'oe_login_buttons')]"
+               position="before">
             <script src="https://www.google.com/recaptcha/api.js" async="async" defer="defer"/>
 
             <div class="form-group" style="margin: 15px 0;">
