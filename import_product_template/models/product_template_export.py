@@ -40,7 +40,6 @@ class ProductTemplateExport(models.Model):
         all_result = []
         for product in self:
             product_xmld_id = generateExportId(product)
-            print('product_xmld_id', product_xmld_id)
             category_xmld_id = generateExportId(product.categ_id)
             pos_categ_id = generateExportId(product.pos_categ_id)
             supplier_taxes_id = generateExportId(product.supplier_taxes_id)
@@ -61,6 +60,8 @@ class ProductTemplateExport(models.Model):
                 if not rec_xmld_id: continue
                 dr_product_offer_ids += f'{rec_xmld_id},'
             tracking = select_tracking_type_with_key(product.tracking)
+            manufacturer_id = product.manufacturer_id.id if product.manufacturer_id else 0
+            # manufacturer_id = 0
             # Get first seller ids
 
             # Prepare the row data
@@ -75,18 +76,17 @@ class ProductTemplateExport(models.Model):
                 category_xmld_id or '',  # categ_id/id
                 product.default_code or "",  # default_code
                 product.barcode or "",  # barcode
-                product.x_product_website_url,  # x_product_website_url (empty in example)
-                product.x_CPU,  # x_CPU (empty in example)
-                product.x_sreen_size,  # x_sreen_size (empty in example)
-                product.x_hddtype,  # x_hddtype (empty in example)
-                product.x_ram,  # x_ram (empty in example)
-                product.x_GPU,  # x_GPU (empty in example)
-                "", # f"__export__.res_partner_{product.manufacturer.id}_{product.manufacturer.id}" if product.manufacturer else "",
-                # manufacturer_id
-                product.x_kind,  # x_kind (empty in example)
-                product.x_condition,  # x_condition (empty in example)
-                product.x_,  # x_ (empty in example)
-                product.image_url,  # image_url (you can add product.image_1920 URL here)
+                product.x_product_website_url or "",  # x_product_website_url (empty in example)
+                product.x_CPU or "",  # x_CPU (empty in example)
+                product.x_sreen_size or "",  # x_sreen_size (empty in example)
+                product.x_hddtype or "",  # x_hddtype (empty in example)
+                product.x_ram or "",  # x_ram (empty in example)
+                product.x_GPU or "",  # x_GPU (empty in example)
+                manufacturer_id or "", # f"__export__.res_partner_{product.manufacturer.id}_{product.manufacturer.id}" if product.manufacturer else "",
+                product.x_kind or "",  # x_kind (empty in example)
+                product.x_condition or "",  # x_condition (empty in example)
+                product.x_ or "",  # x_ (empty in example)
+                product.image_url or "",  # image_url (you can add product.image_1920 URL here)
                 public_categ_ids or '', # public_categ_ids/id
                 product.available_in_pos or '', # available_in_pos
                 pos_categ_id or '', # pos_categ_id/id
@@ -120,8 +120,9 @@ class ProductTemplateExport(models.Model):
                 currency_xmld_id = generateExportId(rec.currency_id)
                 if not currency_xmld_id: currency_xmld_id = ''
                 product_id_xmld_id = generateExportId(rec.product_id)
-                if not product_id_xmld_id: currency_xmld_id = ''
+                if not product_id_xmld_id: product_id_xmld_id = ''
                 if not start: row = generateNewRow()
+                print(f'\n\n {currency_xmld_id} \n\n')
                 row.append(vendor_xmld_id)
                 row.append(rec.product_name or '')
                 row.append(rec.product_code or '')

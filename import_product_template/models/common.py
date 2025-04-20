@@ -155,7 +155,7 @@ def select_tracking_type_with_key(name):
     elif 'lot' == name:
         return 'By Lots'
     else:
-        return ''
+        return 'No Tracking'
 
 def generateNewRow():
     result = []
