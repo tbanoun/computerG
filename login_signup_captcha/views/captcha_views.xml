@@ -165,10 +165,11 @@
         </xpath>
     </template>
 
-
+    <!--website_mass_mailing-->
     <!-- ===== PAGE Trade-In Your Device 3 ===== -->
-    <template id="s_newsletter_block_form_template" inherit_id="website_mass_mailing.s_newsletter_block_form_template"
-              name="s_newsletter_block_form_template reCAPTCHA">
+    <template id="s_newsletter_block_form_template"
+              inherit_id="website_mass_mailing.s_newsletter_block_form_template"
+              name="newsletter block form template reCAPTCHA">
         <xpath expr="//div[contains(@class, 's_website_form_submit')]"
                position="before">
             <script src="https://www.google.com/recaptcha/api.js" async="async" defer="defer"/>
@@ -199,10 +200,8 @@
 
 
     <!-- ===== PAGE Trade-In Your Device 3 ===== -->
-
-
     <template id="extra_info" inherit_id="website_sale.extra_info"
-              name="s_newsletter_block_form_template reCAPTCHA">
+              name="s newsletter block form template reCAPTCHA">
         <xpath expr="//div[contains(@class, 's_website_form_submit')]"
                position="before">
             <script src="https://www.google.com/recaptcha/api.js" async="async" defer="defer"/>

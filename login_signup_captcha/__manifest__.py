@@ -16,8 +16,10 @@
     'depends': ['base'],
     'images': ['static/description/banner.gif'],
     'license': 'LGPL-3',
-    'depends': ['base','web'],
-    'data': ['views/captcha_views.xml'],
+    'depends': ['base','web', 'website_mass_mailing'],
+    'data': [
+        'views/captcha_views.xml'
+        ],
     'installable': True,
     'auto_install': False,
 
