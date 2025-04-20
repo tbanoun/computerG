@@ -1,76 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!--    Login page-->
-
-    <template id="login" inherit_id="web.login" name="OAuth Login buttons">
-        <xpath expr="//form" position="before">
-            <t t-set="form_small" t-value="True" t-if="len(providers) &gt; 2"/>
-        </xpath>
-        <xpath expr="//div[hasclass('o_login_auth')]" position="inside">
-            <t t-call="auth_oauth.providers"/>
-        </xpath>
-    </template>
-
-    <template id="login" inherit_id="web.login" name="Login Inherit">
+    <!-- Login Page -->
+    <template id="login" inherit_id="web.login" name="Login with reCAPTCHA">
         <xpath expr="//form" position="after">
-            <script src='https://www.google.com/recaptcha/api.js'></script>
-            <div id="captcha" class="imageContainer">
-                <div class="form-group">
-                    <!-- specify your site  in data-sitekey attribute-->
-                    <div class="g-recaptcha" data-sitekey="6LfvQ7AqAAAAAI3FGHmFxvwIoZor4UuM9tnJNvWu"
-                         data-callback="verifyRecaptchaCallback" data-expired-callback="expiredRecaptchaCallback"></div>
-                    <input class="form-control d-none" data-recaptcha="true"/>
-                    <div class="help-block with-errors" id="err" style='color: red'></div>
-                </div>
-            </div>
+            <script src="https://www.google.com/recaptcha/api.js?render=6LdhdR4rAAAAAE8GMt_ToOGXsfqvUe2Mv4lXRpUX"></script>
             <script>
-                $("form").submit(function(event) {
+                document.addEventListener('DOMContentLoaded', function() {
+                    const loginForm = document.querySelector('.oe_login_form');
 
-                var recaptcha = $("#g-recaptcha-response").val();
-                if (recaptcha === "") {
-                event.preventDefault();
-                document.getElementById('err').innerHTML="Please verify Captcha";
-                }
-                else{
-                return true;
-                }
+                    if (loginForm) {
+                        loginForm.addEventListener('submit', function(e) {
+                            e.preventDefault();
+
+                            grecaptcha.ready(function() {
+                                grecaptcha.execute('6LdhdR4rAAAAAE8GMt_ToOGXsfqvUe2Mv4lXRpUX', {action: 'login'})
+                                .then(function(token) {
+                                    // Add token to form
+                                    const input = document.createElement('input');
+                                    input.type = 'hidden';
+                                    input.name = 'recaptcha_response';
+                                    input.value = token;
+                                    loginForm.appendChild(input);
+
+                                    // Submit form properly
+                                    loginForm.submit();
+                                })
+                                .catch(function(error) {
+                                    console.error('reCAPTCHA error:', error);
+                                    alert('CAPTCHA verification failed. Please try again.');
+                                });
+                            });
+                        });
+                    }
                 });
-
             </script>
         </xpath>
     </template>
-    <!--    signup page-->
 
-    <template id="signup" inherit_id="auth_signup.signup" name="OAuth Signup buttons">
-        <xpath expr="//form" position="before">
-            <t t-set="form_small" t-value="True"/>
-        </xpath>
-        <xpath expr="//div[hasclass('o_login_auth')]" position="inside">
-            <t t-call="auth_oauth.providers"/>
-        </xpath>
-    </template>
-
-    <template id="signup" inherit_id="auth_signup.signup" name="Signup Inherit">
+    <!-- Signup Page -->
+    <template id="signup" inherit_id="auth_signup.signup" name="Signup with reCAPTCHA">
         <xpath expr="//form" position="after">
-            <script src='https://www.google.com/recaptcha/api.js'></script>
-            <div id="captcha" class="imageContainer">
-                <div class="g-recaptcha" data-sitekey="6LfvQ7AqAAAAAI3FGHmFxvwIoZor4UuM9tnJNvWu"
-                     data-callback="verifyRecaptchaCallback" data-expired-callback="expiredRecaptchaCallback"></div>
-                <input class="form-control d-none" data-recaptcha="true"/>
-                <div class="help-block with-errors" id="err" style='color: red' required="required"></div>
-            </div>
             <script>
-                $(".oe_signup_form").submit(function(event) {
-                var recaptcha = $("#g-recaptcha-response").val();
-                if (recaptcha === "") {
-                event.preventDefault();
-                document.getElementById('err').innerHTML="Please check Captcha";
-                var $btn = $form.find('.oe_login_buttons > button[type="submit"]');
-                $btn.attr('enabled', 'enabled');
-                }
-                else{
-                return true;
-                }
+                document.addEventListener('DOMContentLoaded', function() {
+                    const signupForm = document.querySelector('.oe_signup_form');
+
+                    if (signupForm) {
+                        signupForm.addEventListener('submit', function(e) {
+                            e.preventDefault();
+
+                            grecaptcha.ready(function() {
+                                grecaptcha.execute('6LdhdR4rAAAAAE8GMt_ToOGXsfqvUe2Mv4lXRpUX', {action: 'signup'})
+                                .then(function(token) {
+                                    // Add token to form
+                                    const input = document.createElement('input');
+                                    input.type = 'hidden';
+                                    input.name = 'recaptcha_response';
+                                    input.value = token;
+                                    signupForm.appendChild(input);
+
+                                    // Submit form
+                                    signupForm.submit();
+                                })
+                                .catch(function(error) {
+                                    console.error('reCAPTCHA error:', error);
+                                    const errorDiv = document.getElementById('err') || document.createElement('div');
+                                    errorDiv.id = 'err';
+                                    errorDiv.style.color = 'red';
+                                    errorDiv.textContent = 'CAPTCHA verification failed. Please try again.';
+                                    signupForm.appendChild(errorDiv);
+                                });
+                            });
+                        });
+                    }
                 });
             </script>
         </xpath>
