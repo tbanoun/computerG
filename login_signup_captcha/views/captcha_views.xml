@@ -1,79 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Login Page -->
-    <template id="login" inherit_id="web.login" name="Login with reCAPTCHA">
+    <!-- ===== LOGIN PAGE ===== -->
+    <template id="login" inherit_id="web.login" name="Login with reCAPTCHA v2">
         <xpath expr="//form" position="after">
-            <script src="https://www.google.com/recaptcha/api.js?render=6LdhdR4rAAAAAE8GMt_ToOGXsfqvUe2Mv4lXRpUX"></script>
-            <script>
+            <!-- Correction : ajout de async="true" defer="true" -->
+            <script src="https://www.google.com/recaptcha/api.js" async="true" defer="true"/>
+
+            <!-- Widget reCAPTCHA -->
+            <div class="form-group" style="margin: 15px 0;">
+                <div class="g-recaptcha" data-sitekey="6LdhdR4rAAAAAE8GMt_ToOGXsfqvUe2Mv4lXRpUX"/>
+                <div id="recaptcha-error" style="color: red; display: none;">
+                    Veuillez vérifier que vous n'êtes pas un robot.
+                </div>
+            </div>
+
+            <!-- Script corrigé pour éviter les erreurs XML -->
+            <script><![CDATA[
                 document.addEventListener('DOMContentLoaded', function() {
                     const loginForm = document.querySelector('.oe_login_form');
-
                     if (loginForm) {
                         loginForm.addEventListener('submit', function(e) {
-                            e.preventDefault();
-
-                            grecaptcha.ready(function() {
-                                grecaptcha.execute('6LdhdR4rAAAAAE8GMt_ToOGXsfqvUe2Mv4lXRpUX', {action: 'login'})
-                                .then(function(token) {
-                                    // Add token to form
-                                    const input = document.createElement('input');
-                                    input.type = 'hidden';
-                                    input.name = 'recaptcha_response';
-                                    input.value = token;
-                                    loginForm.appendChild(input);
-
-                                    // Submit form properly
-                                    loginForm.submit();
-                                })
-                                .catch(function(error) {
-                                    console.error('reCAPTCHA error:', error);
-                                    alert('CAPTCHA verification failed. Please try again.');
-                                });
-                            });
+                            const recaptchaResponse = grecaptcha.getResponse();
+                            if (!recaptchaResponse) {
+                                e.preventDefault();
+                                document.getElementById('recaptcha-error').style.display = 'block';
+                            }
                         });
                     }
                 });
-            </script>
+            ]]></script>
         </xpath>
     </template>
 
-    <!-- Signup Page -->
-    <template id="signup" inherit_id="auth_signup.signup" name="Signup with reCAPTCHA">
+    <!-- ===== SIGNUP PAGE ===== -->
+    <template id="signup" inherit_id="auth_signup.signup" name="Signup with reCAPTCHA v2">
         <xpath expr="//form" position="after">
-            <script>
+            <script src="https://www.google.com/recaptcha/api.js" async="true" defer="true"/>
+
+            <div class="form-group" style="margin: 15px 0;">
+                <div class="g-recaptcha" data-sitekey="6LdhdR4rAAAAAE8GMt_ToOGXsfqvUe2Mv4lXRpUX"/>
+                <div id="recaptcha-error-signup" style="color: red; display: none;">
+                    Veuillez vérifier que vous n'êtes pas un robot.
+                </div>
+            </div>
+
+            <script><![CDATA[
                 document.addEventListener('DOMContentLoaded', function() {
                     const signupForm = document.querySelector('.oe_signup_form');
-
                     if (signupForm) {
                         signupForm.addEventListener('submit', function(e) {
-                            e.preventDefault();
-
-                            grecaptcha.ready(function() {
-                                grecaptcha.execute('6LdhdR4rAAAAAE8GMt_ToOGXsfqvUe2Mv4lXRpUX', {action: 'signup'})
-                                .then(function(token) {
-                                    // Add token to form
-                                    const input = document.createElement('input');
-                                    input.type = 'hidden';
-                                    input.name = 'recaptcha_response';
-                                    input.value = token;
-                                    signupForm.appendChild(input);
-
-                                    // Submit form
-                                    signupForm.submit();
-                                })
-                                .catch(function(error) {
-                                    console.error('reCAPTCHA error:', error);
-                                    const errorDiv = document.getElementById('err') || document.createElement('div');
-                                    errorDiv.id = 'err';
-                                    errorDiv.style.color = 'red';
-                                    errorDiv.textContent = 'CAPTCHA verification failed. Please try again.';
-                                    signupForm.appendChild(errorDiv);
-                                });
-                            });
+                            const recaptchaResponse = grecaptcha.getResponse();
+                            if (!recaptchaResponse) {
+                                e.preventDefault();
+                                document.getElementById('recaptcha-error-signup').style.display = 'block';
+                            }
                         });
                     }
                 });
-            </script>
+            ]]></script>
         </xpath>
     </template>
 </odoo>
