@@ -69,4 +69,67 @@
             ]]></script>
         </xpath>
     </template>
+
+
+     <!-- ===== PAGE Trade-In Your Device ===== -->
+    <template id="s_website_form" inherit_id="website.s_website_form" name="Trade-In Your Device reCAPTCHA">
+        <xpath expr="//div[contains(@class, 's_website_form_submit')]"
+               position="before">
+            <script src="https://www.google.com/recaptcha/api.js" async="async" defer="defer"/>
+
+            <div class="form-group" style="margin: 15px 0;">
+                <div class="g-recaptcha" data-sitekey="6Lccex4rAAAAAObaQPCJ9ECIoNMdG8yOXJTHXv2x"/>
+                <div id="recaptcha-error-signup" style="color: red; display: none;">
+                    Veuillez cocher la case "Je ne suis pas un robot".
+                </div>
+            </div>
+
+            <script><![CDATA[
+                document.addEventListener('DOMContentLoaded', function() {
+                    const form = document.querySelector('.oe_signup_form');
+                    if (form) {
+                        form.addEventListener('submit', function(e) {
+                            const response = grecaptcha.getResponse();
+                            if (!response) {
+                                e.preventDefault();
+                                document.getElementById('recaptcha-error-signup').style.display = 'block';
+                            }
+                        });
+                    }
+                });
+            ]]></script>
+        </xpath>
+    </template>
+
+
+     <!-- ===== PAGE Product Part Request ===== -->
+    <template id="product_part_request_new" inherit_id="nce_product_part_request.product_part_request_new" name="Product Part Request reCAPTCHA">
+        <xpath expr="//div[contains(@class, 's_website_form_submit')]"
+               position="before">
+            <script src="https://www.google.com/recaptcha/api.js" async="async" defer="defer"/>
+
+            <div class="form-group" style="margin: 15px 0;">
+                <div class="g-recaptcha" data-sitekey="6Lccex4rAAAAAObaQPCJ9ECIoNMdG8yOXJTHXv2x"/>
+                <div id="recaptcha-error-signup" style="color: red; display: none;">
+                    Veuillez cocher la case "Je ne suis pas un robot".
+                </div>
+            </div>
+
+            <script><![CDATA[
+                document.addEventListener('DOMContentLoaded', function() {
+                    const form = document.querySelector('.oe_signup_form');
+                    if (form) {
+                        form.addEventListener('submit', function(e) {
+                            const response = grecaptcha.getResponse();
+                            if (!response) {
+                                e.preventDefault();
+                                document.getElementById('recaptcha-error-signup').style.display = 'block';
+                            }
+                        });
+                    }
+                });
+            ]]></script>
+        </xpath>
+    </template>
+
 </odoo>

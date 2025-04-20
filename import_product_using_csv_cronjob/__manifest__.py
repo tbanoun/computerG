@@ -8,7 +8,7 @@
     'summary': '',
     'description': "",
     'author': 'digitalai_academy',
-    'website': 'https://www.digitalai.academy.com',
+    'website': 'https://www.digitalai.academy',
     'depends': ['base', 'stock', 'account'],
     'data': [
         # security
