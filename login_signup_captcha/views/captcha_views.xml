@@ -1,29 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- ===== LOGIN PAGE ===== -->
-    <template id="login" inherit_id="web.login" name="Login with reCAPTCHA v2">
+    <!-- ===== PAGE DE CONNEXION ===== -->
+    <template id="login" inherit_id="web.login" name="Login with reCAPTCHA">
         <xpath expr="//form" position="after">
-            <!-- Correction : ajout de async="true" defer="true" -->
-            <script src="https://www.google.com/recaptcha/api.js" async="true" defer="true"/>
+            <!-- Intégration reCAPTCHA v2 -->
+            <script src="https://www.google.com/recaptcha/api.js" async="async" defer="defer"/>
 
-            <!-- Widget reCAPTCHA -->
             <div class="form-group" style="margin: 15px 0;">
-                <div class="g-recaptcha" data-sitekey="6LdhdR4rAAAAAE8GMt_ToOGXsfqvUe2Mv4lXRpUX"/>
+                <div class="g-recaptcha" data-sitekey="6Lccex4rAAAAAObaQPCJ9ECIoNMdG8yOXJTHXv2x"/>
                 <div id="recaptcha-error" style="color: red; display: none;">
-                    Veuillez vérifier que vous n'êtes pas un robot.
+                    Veuillez cocher la case "Je ne suis pas un robot".
                 </div>
             </div>
 
-            <!-- Script corrigé pour éviter les erreurs XML -->
             <script><![CDATA[
+                function validateCaptcha() {
+                    const response = grecaptcha.getResponse();
+                    if (!response) {
+                        document.getElementById('recaptcha-error').style.display = 'block';
+                        return false;
+                    }
+                    return true;
+                }
+
                 document.addEventListener('DOMContentLoaded', function() {
-                    const loginForm = document.querySelector('.oe_login_form');
-                    if (loginForm) {
-                        loginForm.addEventListener('submit', function(e) {
-                            const recaptchaResponse = grecaptcha.getResponse();
-                            if (!recaptchaResponse) {
+                    const form = document.querySelector('.oe_login_form');
+                    if (form) {
+                        form.addEventListener('submit', function(e) {
+                            if (!validateCaptcha()) {
                                 e.preventDefault();
-                                document.getElementById('recaptcha-error').style.display = 'block';
                             }
                         });
                     }
@@ -32,25 +37,25 @@
         </xpath>
     </template>
 
-    <!-- ===== SIGNUP PAGE ===== -->
-    <template id="signup" inherit_id="auth_signup.signup" name="Signup with reCAPTCHA v2">
+    <!-- ===== PAGE D'INSCRIPTION ===== -->
+    <template id="signup" inherit_id="auth_signup.signup" name="Signup with reCAPTCHA">
         <xpath expr="//form" position="after">
-            <script src="https://www.google.com/recaptcha/api.js" async="true" defer="true"/>
+            <script src="https://www.google.com/recaptcha/api.js" async="async" defer="defer"/>
 
             <div class="form-group" style="margin: 15px 0;">
-                <div class="g-recaptcha" data-sitekey="6LdhdR4rAAAAAE8GMt_ToOGXsfqvUe2Mv4lXRpUX"/>
+                <div class="g-recaptcha" data-sitekey="6Lccex4rAAAAAObaQPCJ9ECIoNMdG8yOXJTHXv2x"/>
                 <div id="recaptcha-error-signup" style="color: red; display: none;">
-                    Veuillez vérifier que vous n'êtes pas un robot.
+                    Veuillez cocher la case "Je ne suis pas un robot".
                 </div>
             </div>
 
             <script><![CDATA[
                 document.addEventListener('DOMContentLoaded', function() {
-                    const signupForm = document.querySelector('.oe_signup_form');
-                    if (signupForm) {
-                        signupForm.addEventListener('submit', function(e) {
-                            const recaptchaResponse = grecaptcha.getResponse();
-                            if (!recaptchaResponse) {
+                    const form = document.querySelector('.oe_signup_form');
+                    if (form) {
+                        form.addEventListener('submit', function(e) {
+                            const response = grecaptcha.getResponse();
+                            if (!response) {
                                 e.preventDefault();
                                 document.getElementById('recaptcha-error-signup').style.display = 'block';
                             }
