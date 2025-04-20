@@ -10,7 +10,7 @@
             <script src="https://www.google.com/recaptcha/api.js" async="async" defer="defer"/>
 
             <div class="form-group" style="margin: 15px 0;">
-                <div class="g-recaptcha" data-sitekey="6Lccex4rAAAAAObaQPCJ9ECIoNMdG8yOXJTHXv2x"/>
+                <div class="g-recaptcha" data-sitekey="6Le_yh4rAAAAAOB-Zje904Kyj2oRLihpjo8L9anB"/>
                 <div id="recaptcha-error" style="color: red; display: none;">
                     Veuillez cocher la case "Je ne suis pas un robot".
                 </div>
@@ -48,7 +48,7 @@
             <script src="https://www.google.com/recaptcha/api.js" async="async" defer="defer"/>
 
             <div class="form-group" style="margin: 15px 0;">
-                <div class="g-recaptcha" data-sitekey="6Lccex4rAAAAAObaQPCJ9ECIoNMdG8yOXJTHXv2x"/>
+                <div class="g-recaptcha" data-sitekey="6Le_yh4rAAAAAOB-Zje904Kyj2oRLihpjo8L9anB"/>
                 <div id="recaptcha-error-signup" style="color: red; display: none;">
                     Veuillez cocher la case "Je ne suis pas un robot".
                 </div>
@@ -79,7 +79,7 @@
             <script src="https://www.google.com/recaptcha/api.js" async="async" defer="defer"/>
 
             <div class="form-group" style="margin: 15px 0;">
-                <div class="g-recaptcha" data-sitekey="6Lccex4rAAAAAObaQPCJ9ECIoNMdG8yOXJTHXv2x"/>
+                <div class="g-recaptcha" data-sitekey="6Le_yh4rAAAAAOB-Zje904Kyj2oRLihpjo8L9anB"/>
                 <div id="recaptcha-error-signup" style="color: red; display: none;">
                     Veuillez cocher la case "Je ne suis pas un robot".
                 </div>
@@ -111,7 +111,7 @@
             <script src="https://www.google.com/recaptcha/api.js" async="async" defer="defer"/>
 
             <div class="form-group" style="margin: 15px 0;">
-                <div class="g-recaptcha" data-sitekey="6Lccex4rAAAAAObaQPCJ9ECIoNMdG8yOXJTHXv2x"/>
+                <div class="g-recaptcha" data-sitekey="6Le_yh4rAAAAAOB-Zje904Kyj2oRLihpjo8L9anB"/>
                 <div id="recaptcha-error-signup" style="color: red; display: none;">
                     Veuillez cocher la case "Je ne suis pas un robot".
                 </div>
@@ -142,7 +142,7 @@
             <script src="https://www.google.com/recaptcha/api.js" async="async" defer="defer"/>
 
             <div class="form-group ml-4" style="margin: 15px 0;">
-                <div class="g-recaptcha" data-sitekey="6Lccex4rAAAAAObaQPCJ9ECIoNMdG8yOXJTHXv2x"/>
+                <div class="g-recaptcha" data-sitekey="6Le_yh4rAAAAAOB-Zje904Kyj2oRLihpjo8L9anB"/>
                 <div id="recaptcha-error-signup" style="color: red; display: none;">
                     Veuillez cocher la case "Je ne suis pas un robot".
                 </div>
@@ -175,7 +175,7 @@
             <script src="https://www.google.com/recaptcha/api.js" async="async" defer="defer"/>
 
             <div class="form-group ml-4" style="margin: 15px 0;">
-                <div class="g-recaptcha" data-sitekey="6Lccex4rAAAAAObaQPCJ9ECIoNMdG8yOXJTHXv2x"/>
+                <div class="g-recaptcha" data-sitekey="6Le_yh4rAAAAAOB-Zje904Kyj2oRLihpjo8L9anB"/>
                 <div id="recaptcha-error-signup" style="color: red; display: none;">
                     Veuillez cocher la case "Je ne suis pas un robot".
                 </div>
@@ -207,7 +207,7 @@
             <script src="https://www.google.com/recaptcha/api.js" async="async" defer="defer"/>
 
             <div class="form-group ml-4" style="margin: 15px 0;">
-                <div class="g-recaptcha" data-sitekey="6Lccex4rAAAAAObaQPCJ9ECIoNMdG8yOXJTHXv2x"/>
+                <div class="g-recaptcha" data-sitekey="6Le_yh4rAAAAAOB-Zje904Kyj2oRLihpjo8L9anB"/>
                 <div id="recaptcha-error-signup" style="color: red; display: none;">
                     Veuillez cocher la case "Je ne suis pas un robot".
                 </div>
