@@ -7,7 +7,7 @@
     'summary': '',
     'category': 'Theme/eCommerce',
     'version': '16.0.0.0.1',
-    'depends': ['theme_prime'],
+    'depends': ['theme_prime', 'sale', 'import_product_using_csv_cronjob'],
     'license': 'OPL-1',
     'author': 'Tahar BANOUN',
     'company': 'https://digitalai.academy/',

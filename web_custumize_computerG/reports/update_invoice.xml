@@ -3,35 +3,111 @@
     <template id="report_invoice_document" inherit_id="account.report_invoice_document">
         <xpath expr="//td[@name='account_invoice_line_name']" position="replace">
             <td name="account_invoice_line_name">
+                <style>
+                    .cls-sahrane p{
+                    display: contents !important;
+                    }
+                </style>
                 <span t-field="line.name"
                       t-options="{'widget': 'text'}"/>
                 <t t-if="line.product_id.detailed_type != 'service'">
-                    <p style='margin-top: -8px !important;'>
-                        <t t-set="check_qty" t-value="line.product_id.qty_available - line.quantity"/>
-                        <t t-set="check_qty_wt" t-value="line.product_id.qty_available_wt - line.quantity"/>
-                        <t t-if="check_qty > 0">
-                            <span class="text-success">
-                                Ship In 1-2 Days
-                            </span>
+                    <!--1-->
+                    <!--init value-->
+                    <!--set showDelivryMessage-->
+                    <t t-set="showDelivryMessage" t-value="line.product_id.showDelivryMessage"/>
+                    <!--set virtual_available-->
+                    <t t-set="virtual_available" t-value="0"/>
+                    <t t-if="line.product_id.virtual_available > 0">
+                        <t t-set="virtual_available"
+                           t-value="int(line.product_id.virtual_available)"/>
+                    </t>
+                    <!--set qty_available_wt-->
+                    <t t-set="qty_available_wt" t-value="0"/>
+                    <t t-if="line.product_id.qty_available_wt > 0 and showDelivryMessage">
+                        <t t-set="qty_available_wt" t-value="int(line.product_id.qty_available_wt)"/>
+                    </t>
+                    <t t-set="qtyReset" t-value="line.quantity - (virtual_available+qty_available_wt)"/>
+
+
+                    <!--on stock-->
+                    <t t-set="qtyResetOnStock" t-value="line.quantity"/>
+                    <t t-if="qtyResetOnStock >= virtual_available and virtual_available > 0">
+                        <t t-set="virtual_available" t-value="virtual_available"/>
+                        <t t-set="qtyResetOnStock" t-value="qtyResetOnStock - virtual_available"/>
+                    </t>
+                    <t t-elif="virtual_available >= line.quantity">
+                        <t t-set="virtual_available" t-value="qtyResetOnStock"/>
+                        <t t-set="qtyResetOnStock" t-value="0"/>
+                    </t>
+
+                    <!--on remote stock-->
+                    <t t-set="qtyResetOnRemoteStock" t-value="0"/>
+                    <t t-if="qtyResetOnStock > 0">
+                        <t t-if="qtyResetOnStock > qty_available_wt and qty_available_wt > 0">
+                            <t t-set="qty_available_wt" t-value="qty_available_wt"/>
+                            <t t-set="qtyResetOnRemoteStock" t-value="qtyResetOnStock - qty_available_wt"/>
                         </t>
-                        <t t-elif="check_qty_wt + line.product_id.qty_available > 0 and line.product_id.qty_available > 0">
-                            <t t-set="qtyDelivred1" t-value="line.quantity - line.product_id.qty_available"/>
-                            <span class="text-success">
-                                <span t-esc="int(line.product_id.qty_available)"/>
-                                Pcs | Ship In 1-2 Days
-                            </span>
-                            <span class="text-warning"
-                                  style='color: #ff4f0d !important; margin-top: -5px !important; display: block !important;'>
-                                <span t-esc="int(qtyDelivred1)"/>
-                                Pcs | Ship In 4-8 Days
-                            </span>
+                        <t t-elif="qty_available_wt > qtyResetOnStock">
+                            <t t-set="qtyResetOnRemoteStock" t-value="0"/>
+                            <t t-set="qty_available_wt" t-value="qtyResetOnStock"/>
                         </t>
-                        <t t-else="">
-                            <span class="text-warning  mt-1" style="color: #ff4f0d !important;">
-                                Ship in 4-8 days
-                            </span>
-                        </t>
+                    </t>
+                    <t t-if="qtyResetOnRemoteStock > 0">
+                        <t t-set="qtyReset" t-value="qtyResetOnRemoteStock"/>
+                    </t>
+                    <!--show message delivery stock -->
+                    <!--cas 1 virtual_available > 0-->
+                    <p t-if="virtual_available > 0">
+                        <b>
+                            <p>
+                                <span class="cls-sahrane">
+                                    <span class="cls-sahrane" t-esc="int(virtual_available)"/>
+                                    |
+                                </span>
+                                <span class="cls-sahrane" t-esc="line.product_id.messageDelivryTimeStock">
+                                </span>
+                            </p>
+                        </b>
                     </p>
+                    <!--cas 2 qty_available_wt > 0 and line.quantity > virtual_available-->
+                    <!--                        <t t-if="line.quantity > virtual_available and qty_available_wt > 0 ">-->
+                    <!--                            <div class="col-12 mt-3 mb-3">-->
+                    <!--                                <b>-->
+                    <!--                                    <span style="-->
+                    <!--                font-weight: 500 !important;-->
+                    <!--                padding: 0.4rem 0.6rem !important;-->
+                    <!--                width: fit-content !important;-->
+                    <!--                color: #803D19 !important;-->
+                    <!--                "-->
+                    <!--                                          class="ml-2 text-right alert alert-success w-40">-->
+                    <!--                                        <span t-esc="int(qty_available_wt)"/>-->
+                    <!--                                        |-->
+                    <!--                                        <span class="cls-sahrane"-->
+                    <!--                                              t-esc="line.product_id.messageDelivryTimeRemoteStock">-->
+                    <!--                                        </span>-->
+                    <!--                                    </span>-->
+                    <!--                                </b>-->
+                    <!--                            </div>-->
+                    <!--                        </t>-->
+                    <!--cas 3 qtyReset > 0-->
+                    <t t-if="qtyReset > 0">
+                        <p>
+                            <b>
+                                <span style="
+                                                    font-weight: 500 !important;
+                                                    padding: 0.4rem 0.6rem !important;
+                                                    width: fit-content !important;
+                                                    color: #DA020E !important;
+                                                    ">
+                                    <span t-esc="int(qtyReset)"/>
+                                    |
+                                    <span class="cls-sahrane" t-esc="line.product_id.out_of_stock_message">
+                                    </span>
+                                </span>
+                            </b>
+                        </p>
+                    </t>
+
                 </t>
             </td>
         </xpath>
