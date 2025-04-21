@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup as bs
 class ProductTemplate(models.Model):
     _inherit = "product.template"
 
-
+    out_of_stock_message = fields.Char(string="Out-of-Stock Message")
     showDelivryMessage = fields.Boolean(default=True)
     messageDelivryTimeRemoteStock = fields.Char('Delivery Time – Remote Stock Message', default='Ship 4-8 Days')
     messageDelivryTimeStock = fields.Char('Delivery Time – Stock Message', default='Ship 1-2 Days')
@@ -12,7 +12,6 @@ class ProductTemplate(models.Model):
     def _compute_dr_show_out_of_stock(self):
         for product in self:
             product.dr_show_out_of_stock = 'OUT_OF_STOCK'
-
 
     # out_of_stock_message_text = fields.Char(compute='_compute_dr_show_out_of_stock', compute_sudo=True)
     out_of_stock_message_text = fields.Text(compute='_compute_out_of_stock_message_text', string="Out-of-Stock Text Message", default="Ask for Availability",

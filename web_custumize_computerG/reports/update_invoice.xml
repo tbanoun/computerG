@@ -58,51 +58,54 @@
                     <!--show message delivery stock -->
                     <!--cas 1 virtual_available > 0-->
                     <p t-if="virtual_available > 0">
-                        <b>
-                            <p>
+                        <p style="font-weight: 500 !important;
+                width: fit-content !important;
+                color: #067d24 !important;
+                ">
+                            <b>
                                 <span class="cls-sahrane">
                                     <span class="cls-sahrane" t-esc="int(virtual_available)"/>
                                     |
                                 </span>
-                                <span class="cls-sahrane" t-esc="line.product_id.messageDelivryTimeStock">
+                                <span class="cls-sahrane"
+                                      t-esc="line.product_id.product_tmpl_id.messageDelivryTimeStock">
                                 </span>
-                            </p>
-                        </b>
+                            </b>
+                        </p>
                     </p>
-                    <!--cas 2 qty_available_wt > 0 and line.quantity > virtual_available-->
-                    <!--                        <t t-if="line.quantity > virtual_available and qty_available_wt > 0 ">-->
-                    <!--                            <div class="col-12 mt-3 mb-3">-->
-                    <!--                                <b>-->
-                    <!--                                    <span style="-->
-                    <!--                font-weight: 500 !important;-->
-                    <!--                padding: 0.4rem 0.6rem !important;-->
-                    <!--                width: fit-content !important;-->
-                    <!--                color: #803D19 !important;-->
-                    <!--                "-->
-                    <!--                                          class="ml-2 text-right alert alert-success w-40">-->
-                    <!--                                        <span t-esc="int(qty_available_wt)"/>-->
-                    <!--                                        |-->
-                    <!--                                        <span class="cls-sahrane"-->
-                    <!--                                              t-esc="line.product_id.messageDelivryTimeRemoteStock">-->
-                    <!--                                        </span>-->
-                    <!--                                    </span>-->
-                    <!--                                </b>-->
-                    <!--                            </div>-->
-                    <!--                        </t>-->
+                    <!--                    cas 2 qty_available_wt > 0 and line.quantity > virtual_available-->
+                    <t t-if="line.quantity > virtual_available and qty_available_wt > 0 ">
+                        <p style="
+                                    font-weight: 500 !important;
+                                    width: fit-content !important;
+                                    color: #803D19 !important;
+                                    ">
+
+                            <b>
+                                <span>
+                                    <span class="cls-sahrane" t-esc="int(qty_available_wt)"/>
+                                    |
+                                    <span class="cls-sahrane"
+                                          t-esc="line.product_id.messageDelivryTimeRemoteStock">
+                                    </span>
+                                </span>
+                            </b>
+                        </p>
+                    </t>
                     <!--cas 3 qtyReset > 0-->
                     <t t-if="qtyReset > 0">
-                        <p>
-                            <b>
-                                <span style="
+                        <p style="
                                                     font-weight: 500 !important;
-                                                    padding: 0.4rem 0.6rem !important;
                                                     width: fit-content !important;
                                                     color: #DA020E !important;
                                                     ">
-                                    <span t-esc="int(qtyReset)"/>
+                            <b>
+                                <span class="cls-sahrane">
+                                    <span class="cls-sahrane" t-esc="int(qtyReset)"/>
                                     |
-                                    <span class="cls-sahrane" t-esc="line.product_id.out_of_stock_message">
-                                    </span>
+                                </span>
+                                <span class="cls-sahrane"
+                                      t-esc="line.product_id.product_tmpl_id.out_of_stock_message">
                                 </span>
                             </b>
                         </p>
