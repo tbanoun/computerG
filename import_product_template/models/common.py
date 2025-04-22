@@ -60,7 +60,7 @@ def convertXlsOrCsvToDicts(file):
     produits = {}
 
     for _, row in df.iterrows():
-        product_id = row['id']
+        product_id = row['ID']
         if product_id not in produits:
             produit_data = {k: row[k] for k in df.columns if k not in [
                 'Attributes', 'Value', 'Price',
@@ -105,19 +105,19 @@ def convertXlsOrCsvToDicts(file):
                 'currency_id': currency_id,
                 'taxes_ids': taxes_ids,
             }
-            produits[product_id]['vendors'].append(vendor_info)
+            produits[product_id]['Vendor'].append(vendor_info)
 
     # Réorganiser les attributs dans le format demandé
     for produit in produits.values():
         formatted_attributes = []
-        for attr_name, values in produit['attributes'].items():
+        for attr_name, values in produit['Attributes'].items():
             formatted_attributes.append({
                 'attribute': {
                     'name': attr_name,
                     'value': values
                 }
             })
-        produit['attributes'] = formatted_attributes
+        produit['Attributes'] = formatted_attributes
     return list(produits.values())
 
 
@@ -294,8 +294,8 @@ def generateProductVals(self, vals):
 
 def generateExportId(el):
     try:
-        el.export_data(['id'])
-        xml_id = el.export_data(['id']).get('datas')[0][0]
+        el.export_data(['ID'])
+        xml_id = el.export_data(['ID']).get('datas')[0][0]
         xml_id = el.get_metadata()[0].get('xmlid')
         return xml_id
     except Exception: return None

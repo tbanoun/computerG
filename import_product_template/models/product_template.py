@@ -31,7 +31,7 @@ class ImportProduct(models.TransientModel):
         update_index = 0
         error = 0
         for rec in result:
-            product_id = rec.get('id', None)
+            product_id = rec.get('ID', None)
             if not product_id: continue
             created = False
             try:
@@ -44,8 +44,8 @@ class ImportProduct(models.TransientModel):
                 created = True
                 product_template = self.create_product_template(rec)
             if not created: update_index += 1
-            attributes = rec.pop('attributes', None)
-            vendors = rec.pop('vendors', None)
+            attributes = rec.pop('Attributes', None)
+            vendors = rec.pop('Vendor', None)
             if attributes: self.update_attributes(product_template, attributes)
             if vendors: self.update_list_vendors(product_template, vendors)
             self.update_product_template(product_template, rec)
