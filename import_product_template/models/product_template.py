@@ -161,7 +161,7 @@ class ImportProduct(models.TransientModel):
         # manufacturer_id
         manufacturer_id = product_vals.pop('manufacturer_id', None)
         if manufacturer_id: manufacturer_id = selectOneElementDataBase(self, manufacturer_id)
-        manufacturer_id = manufacturer_id.id if manufacturer_id else None
+        manufacturer_id = manufacturer_id if manufacturer_id else 0
         # dr_label_id
         dr_label_id = product_vals.pop('dr_label_id', None)
         if dr_label_id: dr_label_id = selectOneElementDataBase(self, dr_label_id)
@@ -208,7 +208,7 @@ class ImportProduct(models.TransientModel):
         # manufacturer_id
         manufacturer_id = product_vals.pop('manufacturer_id', None)
         if manufacturer_id: manufacturer_id = selectOneElementDataBase(self, manufacturer_id)
-        manufacturer_id = manufacturer_id.id if manufacturer_id else None
+        manufacturer_id = manufacturer_id if manufacturer_id else 0
 
         # dr_label_id
         # dr_label_id
