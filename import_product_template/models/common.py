@@ -36,10 +36,10 @@ def convertXlsOrCsvToDicts(file):
             df = pd.read_csv(fichier_io, sep=',')
         except Exception as e:
             raise ValueError(f"Impossible de lire le fichier fourni : {str(e)}")
-    premiere_valeur_id = df['id'].dropna().iloc[0] if not df['id'].dropna().empty else 0
+    premiere_valeur_id = df['ID'].dropna().iloc[0] if not df['ID'].dropna().empty else 0
 
     # Étape 2 : Remplir les NaN dans 'id' avec cette valeur
-    df['id'] = df['id'].fillna(premiere_valeur_id)
+    df['ID'] = df['ID'].fillna(premiere_valeur_id)
 
     # Étape 3 : Remplacer les autres NaN (dans les autres colonnes) par 0
     colonnes_autres = df.columns.difference(['id'])
@@ -70,8 +70,8 @@ def convertXlsOrCsvToDicts(file):
                 'Vendors/End Date', 'Delivery Lead Time', "Product Variant",
                 "Vendors Currency",
             ]}
-            produit_data['attributes'] = {}
-            produit_data['vendors'] = []
+            produit_data['Attributes'] = {}
+            produit_data['Vendor'] = []
             produits[product_id] = produit_data
         # Gestion des attributs
         attr_name = str(row.get('Attributes', '')).strip()
@@ -79,10 +79,10 @@ def convertXlsOrCsvToDicts(file):
         attr_price = convertStrTofloat(row.get('Price', 0.0))
 
         if attr_name and attr_value:
-            if attr_name not in produits[product_id]['attributes']:
-                produits[product_id]['attributes'][attr_name] = []
+            if attr_name not in produits[product_id]['Attributes']:
+                produits[product_id]['Attributes'][attr_name] = []
 
-            produits[product_id]['attributes'][attr_name].append({
+            produits[product_id]['Attributes'][attr_name].append({
                 'value': attr_value,
                 'price': convertStrTofloat(attr_price)
             })
