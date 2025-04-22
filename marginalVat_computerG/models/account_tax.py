@@ -4,6 +4,24 @@ from odoo import models, fields, api, Command
 class AccountTax(models.Model):
     _inherit = 'account.tax'
 
+    amount_vat_margin = fields.Float(required=True, digits=(16, 4), default=0.0)
+    amount_type = fields.Selection(default='percent', string="Tax Computation", required=True,
+                                   selection=[('group', 'Group of Taxes'), ('fixed', 'Fixed'),
+                                              ('percent', 'Percentage of Price'),
+                                              ('division', 'Percentage of Price Tax Included'),
+                                              ('m_vat', 'Marginal VAT'),
+                                              ],
+                                   help="""
+        - Group of Taxes: The tax is a set of sub taxes.
+        - Fixed: The tax amount stays the same whatever the price.
+        - Percentage of Price: The tax amount is a % of the price:
+            e.g 100 * (1 + 10%) = 110 (not price included)
+            e.g 110 / (1 + 10%) = 100 (price included)
+        - Percentage of Price Tax Included: The tax amount is a division of the price:
+            e.g 180 / (1 - 10%) = 200 (not price included)
+            e.g 200 * (1 - 10%) = 180 (price included)
+            """)
+
     @api.model
     def _compute_taxes_for_single_line(self, base_line, handle_price_include=True, include_caba_tags=False,
                                        early_pay_discount_computation=None, early_pay_discount_percentage=None):
@@ -26,7 +44,7 @@ class AccountTax(models.Model):
                 cost_price = product.standard_price
 
                 # Calculer la marge (prix de vente après remise - coût)
-                margin = max(0, price_unit_after_discount - cost_price)
+                margin = 0
 
                 # Calculer les taxes uniquement sur la marge
                 taxes_res = taxes.with_context(

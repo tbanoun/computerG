@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_account_invoice_form_inherit" model="ir.ui.view">
+            <field name="name">account.tax.form.inherit</field>
+            <field name="model">account.tax</field>
+            <field name="inherit_id" ref="account.view_tax_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='amount']" position="replace">
+                     <field name="amount" class="oe_inline" nolabel="1" on_change="1" modifiers="{&quot;required&quot;: true}"/>
+                     <field name="amount_vat_margin" class="oe_inline" nolabel="1" on_change="1" modifiers="{&quot;required&quot;: true}"/>
+
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
