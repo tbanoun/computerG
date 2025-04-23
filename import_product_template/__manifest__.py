@@ -4,7 +4,7 @@
     'summary': '',
     'category': 'stock/product',
     'version': '16.0.0.0.1',
-    'depends': ['base','stock'],
+    'depends': ['base','stock','sale'],
     'license': 'OPL-1',
     'author': 'Tahar BANOUN',
     'company': 'https://digitalai.academy/',

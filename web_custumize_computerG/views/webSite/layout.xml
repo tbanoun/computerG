@@ -110,7 +110,7 @@
                             </div>
                         </t>
                         <!--cas 3 qtyReset > 0-->
-                        <t t-if="qtyReset > 0">
+                        <t t-if="qtyReset > 0 and line.product_id.continue_seling">
                             <div class="col-12 mt-3 mb-3">
                                 <b>
                                     <span style="
@@ -124,8 +124,8 @@
                                                     "
                                           class="ml-2 text-right alert alert-warning w-40">
 
-                                        <span t-esc="int(qtyReset)"/>
-                                        |
+<!--                                        <span t-esc="int(qtyReset)"/>-->
+<!--                                        |-->
                                         <span class="cls-sahrane" t-esc="line.product_id.out_of_stock_message">
                                         </span>
                                     </span>

@@ -14,17 +14,17 @@
                     <!--1-->
                     <!--init value-->
                     <!--set showDelivryMessage-->
-                    <t t-set="showDelivryMessage" t-value="line.product_id.showDelivryMessage"/>
+                    <t t-set="showDelivryMessage" t-value="line.showDelivryMessage"/>
                     <!--set virtual_available-->
                     <t t-set="virtual_available" t-value="0"/>
-                    <t t-if="line.product_id.virtual_available > 0">
+                    <t t-if="line.qtyWT > 0">
                         <t t-set="virtual_available"
-                           t-value="int(line.product_id.virtual_available)"/>
+                           t-value="int(line.qtyWT)"/>
                     </t>
                     <!--set qty_available_wt-->
                     <t t-set="qty_available_wt" t-value="0"/>
-                    <t t-if="line.product_id.qty_available_wt > 0 and showDelivryMessage">
-                        <t t-set="qty_available_wt" t-value="int(line.product_id.qty_available_wt)"/>
+                    <t t-if="line.qtySu > 0 and showDelivryMessage">
+                        <t t-set="qty_available_wt" t-value="int(line.qtySu)"/>
                     </t>
                     <t t-set="qtyReset" t-value="line.quantity - (virtual_available+qty_available_wt)"/>
 
@@ -93,17 +93,17 @@
                         </p>
                     </t>
                     <!--cas 3 qtyReset > 0-->
-                    <t t-if="qtyReset > 0">
+                    <t t-if="qtyReset > 0 and line.continue_seling">
                         <p style="
                                                     font-weight: 500 !important;
                                                     width: fit-content !important;
                                                     color: #DA020E !important;
                                                     ">
                             <b>
-                                <span class="cls-sahrane">
-                                    <span class="cls-sahrane" t-esc="int(qtyReset)"/>
-                                    |
-                                </span>
+<!--                                <span class="cls-sahrane">-->
+<!--                                    <span class="cls-sahrane" t-esc="int(qtyReset)"/>-->
+<!--                                    |-->
+<!--                                </span>-->
                                 <span class="cls-sahrane"
                                       t-esc="line.product_id.product_tmpl_id.out_of_stock_message">
                                 </span>
@@ -114,11 +114,11 @@
                 </t>
             </td>
         </xpath>
-        <xpath expr="//div[@name='payment_term']" position="replace">
-            <span>
-                <strong>Payment terms:</strong>
-                <span t-esc="o.invoice_payment_term_id.titleDisplayInvoice"/>
-            </span>
-        </xpath>
+<!--        <xpath expr="//div[@name='payment_term']" position="replace">-->
+<!--            <span>-->
+<!--                <strong>Payment terms:</strong>-->
+<!--                <span t-esc="o.invoice_payment_term_id.titleDisplayInvoice"/>-->
+<!--            </span>-->
+<!--        </xpath>-->
     </template>
 </odoo>

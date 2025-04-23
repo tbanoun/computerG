@@ -178,3 +178,11 @@ class ProductTemplateExport(models.Model):
             'url': f'/web/content/{attachment.id}?download=true',
             'target': 'self',
         }
+
+
+class ProductTemplateExport(models.Model):
+    _inherit = "product.product"
+
+
+    def exportData(self):
+        pass
