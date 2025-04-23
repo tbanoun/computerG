@@ -13,8 +13,6 @@ class ProductTemplateExport(models.Model):
     _inherit = "product.template"
 
 
-
-
     def exportData(self):
         # Create a file-like object in memory
         output = io.StringIO()
@@ -60,7 +58,7 @@ class ProductTemplateExport(models.Model):
                 if not rec_xmld_id: continue
                 dr_product_offer_ids += f'{rec_xmld_id},'
             tracking = select_tracking_type_with_key(product.tracking)
-            manufacturer_id = product.manufacturer_id.id if product.manufacturer_id else 0
+            manufacturer_id = product.manufacturer_id if product.manufacturer_id else 0
             # manufacturer_id = 0
             # Get first seller ids
 
@@ -122,7 +120,6 @@ class ProductTemplateExport(models.Model):
                 product_id_xmld_id = generateExportId(rec.product_id)
                 if not product_id_xmld_id: product_id_xmld_id = ''
                 if not start: row = generateNewRow()
-                print(f'\n\n {currency_xmld_id} \n\n')
                 row.append(vendor_xmld_id)
                 row.append(rec.product_name or '')
                 row.append(rec.product_code or '')
