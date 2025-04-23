@@ -259,8 +259,8 @@ def generateProductVals(self, vals):
     show_availability = getValueBool(cleanSentence(vals.get('Show Avil Qty T/F', False)))
     # quantity = convertStrTofloat(cleanSentence(vals.get('Quantity On Hand', False)))
     weight = convertStrTofloat(cleanSentence(vals.get('Weight', 0)))
-    print(f'\n\n weight {weight} \n\n')
-    print(f'\n\n weight2  {vals.get('Weight', 0)} \n\n')
+    # print(f'\n\n weight {weight} \n\n')
+    # print(f'\n\n weight2  {vals.get('Weight', 0)} \n\n')
     product_vals = {
         'name': vals.get('Name', ''),
         'standard_price': vals.get('Cost', 0),
