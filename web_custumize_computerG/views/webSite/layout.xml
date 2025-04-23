@@ -78,7 +78,6 @@
                                               class="ml-2 text-right alert alert-success w-40">
                                             <span class="cls-sahrane">
                                                 <span class="cls-sahrane" t-esc="int(virtual_available)"/>
-                                                |
                                             </span>
                                             <span class="cls-sahrane" t-esc="line.product_id.messageDelivryTimeStock">
                                             </span>
@@ -101,7 +100,6 @@
                 border: 1px solid #803D19; !important"
                                           class="ml-2 text-right alert alert-success w-40">
                                         <span t-esc="int(qty_available_wt)"/>
-                                        |
                                         <span class="cls-sahrane"
                                               t-esc="line.product_id.messageDelivryTimeRemoteStock">
                                         </span>
