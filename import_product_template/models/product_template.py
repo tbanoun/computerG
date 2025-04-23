@@ -168,7 +168,7 @@ class ImportProduct(models.TransientModel):
             pass
 
 
-        product_vals['manufacturer_id'] = manufacturer_id
+        product_vals['manufacturer_id_int'] = manufacturer_id
 
         product_id.sudo().write(
             product_vals
@@ -214,7 +214,7 @@ class ImportProduct(models.TransientModel):
 class TestProductQty(models.Model):
     _inherit = "product.template"
 
-    manufacturer_id = fields.Integer(string='Manufacturer')
+    manufacturer_id_int = fields.Integer(string='Manufacturer')
 
     def updateQtyStockProduct(self):
         """ function to update qty product on supplier wherehouse """

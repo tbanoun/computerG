@@ -58,7 +58,7 @@ class ProductTemplateExport(models.Model):
                 if not rec_xmld_id: continue
                 dr_product_offer_ids += f'{rec_xmld_id},'
             tracking = select_tracking_type_with_key(product.tracking)
-            manufacturer_id = product.manufacturer_id if product.manufacturer_id else 0
+            manufacturer_id = product.manufacturer_id_int if product.manufacturer_id_int else 0
             # manufacturer_id = 0
             # Get first seller ids
 

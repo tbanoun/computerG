@@ -260,7 +260,7 @@ def generateProductVals(self, vals):
         'x_GPU': cleanSentence(vals.get('GPU Bz', '')),
         'x_sreen_size': cleanSentence(vals.get('Sreen Size Bz', '')),
         'x_ram': cleanSentence(vals.get('RAM Bz', '')),
-        'manufacturer_id': cleanSentence(vals.get('manufacturer_id', 0)),
+        'manufacturer_id_int': cleanSentence(vals.get('manufacturer_id', 0)),
         'x_hddtype': cleanSentence(vals.get('Hard Drive Type Bz', '')),
         'x_kind': cleanSentence(vals.get('Hard Drive Type Bz', '')),
         'dr_label_id': cleanSentence(vals.get('Label', '')),
