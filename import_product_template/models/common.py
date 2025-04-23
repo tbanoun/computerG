@@ -275,7 +275,7 @@ def generateProductVals(self, vals):
         'seo_name': cleanSentence(vals.get('SEO Name', '')),
         'website_meta_title': cleanSentence(vals.get('Meta Title', '')),
         'website_meta_description': cleanSentence(vals.get('Meta Description', '')),
-        'quantity': 0,
+        # 'quantity': 0,
         'website_meta_keywords': cleanSentence(vals.get('Meta Keywords', '')),
         'website_description': cleanSentence(vals.get('Website Description html', '')),
         'show_availability': show_availability,
