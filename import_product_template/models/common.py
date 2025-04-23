@@ -10,6 +10,13 @@ def cleanSentence(name):
 
 
 def convertStrTofloat(name):
+    try:
+        num = float(name)
+        return name
+    except Exception as e:
+        print(e)
+        return 0
+
     if isinstance(name, float) or isinstance(name, int):
         return float(name)
     return 0
@@ -251,7 +258,9 @@ def generateProductVals(self, vals):
     showDelivryMessage = getValueBool(cleanSentence(vals.get('Dis/Hide Dliv Mes T/F', False)))
     show_availability = getValueBool(cleanSentence(vals.get('Show Avil Qty T/F', False)))
     # quantity = convertStrTofloat(cleanSentence(vals.get('Quantity On Hand', False)))
-    weight = convertStrTofloat(cleanSentence(vals.get('Weight', False)))
+    weight = convertStrTofloat(cleanSentence(vals.get('Weight', 0)))
+    print(f'\n\n weight {weight} \n\n')
+    print(f'\n\n weight2  {vals.get('Weight', 0)} \n\n')
     product_vals = {
         'name': vals.get('Name', ''),
         'standard_price': vals.get('Cost', 0),
@@ -259,18 +268,18 @@ def generateProductVals(self, vals):
         'default_code': cleanSentence(vals.get('SKU', '')),
         'barcode': cleanSentence(vals.get('Barcode', '')),
         'is_published': is_published,
-        'x_product_website_url': cleanSentence(vals.get('Website URL Bz', '')),
-        'x_condition': cleanSentence(vals.get('Condition Bz', '')),
-        'x_CPU': cleanSentence(vals.get('CPU Bz', '')),
-        'x_': cleanSentence(vals.get('Rubric Bz', '')),
-        'x_GPU': cleanSentence(vals.get('GPU Bz', '')),
-        'x_sreen_size': cleanSentence(vals.get('Sreen Size Bz', '')),
-        'x_ram': cleanSentence(vals.get('RAM Bz', '')),
-        'manufacturer_id_int': cleanSentence(vals.get('manufacturer_id', 0)),
-        'x_hddtype': cleanSentence(vals.get('Hard Drive Type Bz', '')),
-        'x_kind': cleanSentence(vals.get('Hard Drive Type Bz', '')),
-        'dr_label_id': cleanSentence(vals.get('Label', '')),
-        'image_url': cleanSentence(vals.get('Image URL', '')),
+        # 'x_product_website_url': cleanSentence(vals.get('Website URL Bz', '')),
+        # 'x_condition': cleanSentence(vals.get('Condition Bz', '')),
+        # 'x_CPU': cleanSentence(vals.get('CPU Bz', '')),
+        # 'x_': cleanSentence(vals.get('Rubric Bz', '')),
+        # 'x_GPU': cleanSentence(vals.get('GPU Bz', '')),
+        # 'x_sreen_size': cleanSentence(vals.get('Sreen Size Bz', '')),
+        # 'x_ram': cleanSentence(vals.get('RAM Bz', '')),
+        # 'manufacturer_id_int': cleanSentence(vals.get('manufacturer_id', 0)),
+        # 'x_hddtype': cleanSentence(vals.get('Hard Drive Type Bz', '')),
+        # 'x_kind': cleanSentence(vals.get('Hard Drive Type Bz', '')),
+        # 'dr_label_id': cleanSentence(vals.get('Label', '')),
+        # 'image_url': cleanSentence(vals.get('Image URL', '')),
         'description_sale': cleanSentence(vals.get('Sale Description', '')),
         'available_in_pos': available_in_pos,
         'out_of_stock_message': vals.get('Out of Stock Message', ''),
