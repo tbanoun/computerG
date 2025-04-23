@@ -54,17 +54,16 @@ def convertXlsOrCsvToDicts(file):
     pd.set_option('display.width', None)  # Auto-detect terminal width
     pd.set_option('display.max_colwidth', None)  # Show full column content
 
-    print(df)
 
     # Now display the DataFrame
     produits = {}
 
     for _, row in df.iterrows():
+        # print(f'\n\n row {row} \n\n')
         product_id = row['ID']
         if product_id not in produits:
             produit_data = {k: row[k] for k in df.columns if k not in [
                 'Attributes', 'Value', 'Price',
-                'attribute_line_ids/product_template_value_ids/id',
                 'Vendor', 'Vendor Product Name', 'Vendor Product Code',
                 'Vendors/Price', 'Vendors/Quantity', 'Vendors/Start Date',
                 'Vendors/End Date', 'Delivery Lead Time', "Product Variant",
@@ -86,7 +85,6 @@ def convertXlsOrCsvToDicts(file):
                 'value': attr_value,
                 'price': convertStrTofloat(attr_price)
             })
-
         # Gestion des vendors
         vendor_name = cleanSentence(row.get('Vendor', '')).strip()
         currency_id = cleanSentence(row.get('Vendors Currency', '')).strip()
@@ -101,12 +99,11 @@ def convertXlsOrCsvToDicts(file):
                 'qty': convertStrTofloat(row.get('Vendors/Quantity', 0)),
                 'start_date': parse_date(row.get('Vendors/Start Date', '')),
                 'end_date': parse_date(row.get('Vendors/End Date', '')),
-                'time_lead': convertStrTofloat(row.get('Vendors/Delivery Lead Time', 0)),
+                'time_lead': convertStrTofloat(row.get('Delivery Lead Time', 0)),
                 'currency_id': currency_id,
                 'taxes_ids': taxes_ids,
             }
             produits[product_id]['Vendor'].append(vendor_info)
-
     # Réorganiser les attributs dans le format demandé
     for produit in produits.values():
         formatted_attributes = []
@@ -118,6 +115,7 @@ def convertXlsOrCsvToDicts(file):
                 }
             })
         produit['Attributes'] = formatted_attributes
+
     return list(produits.values())
 
 
@@ -255,18 +253,18 @@ def generateProductVals(self, vals):
         'default_code': cleanSentence(vals.get('SKU', '')),
         'barcode': cleanSentence(vals.get('Barcode', '')),
         'is_published': is_published,
-        # 'x_product_website_url': cleanSentence(vals.get('Website URL Bz', '')),
-        # 'x_condition': cleanSentence(vals.get('Condition Bz', '')),
-        # 'x_CPU': cleanSentence(vals.get('CPU Bz', '')),
-        # 'x_': cleanSentence(vals.get('Rubric Bz', '')),
-        # 'x_GPU': cleanSentence(vals.get('GPU Bz', '')),
-        # 'x_sreen_size': cleanSentence(vals.get('Sreen Size Bz', '')),
-        # 'x_ram': cleanSentence(vals.get('RAM Bz', '')),
-        # 'manufacturer_id': cleanSentence(vals.get('manufacturer_id', '')),
-        # 'x_hddtype': cleanSentence(vals.get('Hard Drive Type Bz', '')),
-        # 'x_kind': cleanSentence(vals.get('Hard Drive Type Bz', '')),
-        # 'dr_label_id': cleanSentence(vals.get('Label', '')),
-        # 'image_url': cleanSentence(vals.get('Image URL', '')),
+        'x_product_website_url': cleanSentence(vals.get('Website URL Bz', '')),
+        'x_condition': cleanSentence(vals.get('Condition Bz', '')),
+        'x_CPU': cleanSentence(vals.get('CPU Bz', '')),
+        'x_': cleanSentence(vals.get('Rubric Bz', '')),
+        'x_GPU': cleanSentence(vals.get('GPU Bz', '')),
+        'x_sreen_size': cleanSentence(vals.get('Sreen Size Bz', '')),
+        'x_ram': cleanSentence(vals.get('RAM Bz', '')),
+        'manufacturer_id': cleanSentence(vals.get('manufacturer_id', 0)),
+        'x_hddtype': cleanSentence(vals.get('Hard Drive Type Bz', '')),
+        'x_kind': cleanSentence(vals.get('Hard Drive Type Bz', '')),
+        'dr_label_id': cleanSentence(vals.get('Label', '')),
+        'image_url': cleanSentence(vals.get('Image URL', '')),
         'description_sale': cleanSentence(vals.get('Sale Description', '')),
         'available_in_pos': available_in_pos,
         'out_of_stock_message': vals.get('Out of Stock Message', ''),
@@ -276,6 +274,7 @@ def generateProductVals(self, vals):
         'messageDelivryTimeRemoteStock': vals.get('Remote Stock Message', ''),
         'seo_name': cleanSentence(vals.get('SEO Name', '')),
         'website_meta_title': cleanSentence(vals.get('Meta Title', '')),
+        'website_meta_description': cleanSentence(vals.get('Meta Description', '')),
         'quantity': 0,
         'website_meta_keywords': cleanSentence(vals.get('Meta Keywords', '')),
         'website_description': cleanSentence(vals.get('Website Description html', '')),
@@ -299,3 +298,15 @@ def generateExportId(el):
         xml_id = el.get_metadata()[0].get('xmlid')
         return xml_id
     except Exception: return None
+
+
+def prepareVlasProduct(rec):
+    print(f'\n\n Rec {rec} \n\n')
+    vals = {}
+    vals['is_published'] = rec.get('Is Published', False)
+    vals['name'] = rec.get('Name', '')
+    vals['detailed_type'] = rec.get('Product Type', 'product')
+    vals['standard_price'] = rec.get('Cost', 0)
+    vals['list_price'] = rec.get('Sales Price', 0)
+
+    return vals

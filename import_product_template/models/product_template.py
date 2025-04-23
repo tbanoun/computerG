@@ -36,9 +36,7 @@ class ImportProduct(models.TransientModel):
             created = False
             try:
                 product_template = self.env.ref(product_id)
-                print(f'\n\ product_template {product_template} \n\n')
             except Exception as e:
-                print(f'error! {e}')
                 error += 1
                 # create the product
                 created = True
@@ -203,27 +201,19 @@ class ImportProduct(models.TransientModel):
 
     def create_product_template(self, vals):
         product_vals = generateProductVals(self, vals)
-        product_vals['detailed_type'] = 'product'
-        qty = product_vals.pop('quantity', 0)
-        # manufacturer_id
-        manufacturer_id = product_vals.pop('manufacturer_id', None)
-        if manufacturer_id: manufacturer_id = selectOneElementDataBase(self, manufacturer_id)
-        manufacturer_id = manufacturer_id if manufacturer_id else 0
 
+        product_vals['detailed_type'] = 'product'
         # dr_label_id
         # dr_label_id
         dr_label_id = product_vals.pop('dr_label_id', None)
         if dr_label_id: dr_label_id = selectOneElementDataBase(self, dr_label_id)
 
-        if manufacturer_id:
-            product_vals['manufacturer_id'] = manufacturer_id
         if dr_label_id:
             product_vals['dr_label_id'] = dr_label_id
 
         product_id = self.env['product.template'].sudo().create(
             product_vals
         )
-        # self.updateQtyStockProduct(product_id, qty)
 
         return product_id
 
@@ -244,7 +234,6 @@ class ImportProduct(models.TransientModel):
             "inventory_quantity": availableQuantity,
             "quantity": availableQuantity
         })
-        print(f'The stock {stock_id} has ok')
         stock_id.sudo().action_apply_inventory()
         return True
 
