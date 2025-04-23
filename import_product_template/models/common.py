@@ -1,8 +1,8 @@
 import base64
 import pandas as pd
 import io
-from datetime import datetime
-
+from datetime import datetime, date
+from dateutil.parser import parse
 
 def cleanSentence(name):
     result = str(name).replace('.0', '')
@@ -13,16 +13,6 @@ def convertStrTofloat(name):
     if isinstance(name, float) or isinstance(name, int):
         return float(name)
     return 0
-
-
-def parse_date(value):
-    """Essaye de parser la date au format datetime.date ou retourne une string vide."""
-    if isinstance(value, datetime):
-        return value.date().isoformat()
-    try:
-        return pd.to_datetime(value, dayfirst=True).date().isoformat()
-    except Exception:
-        return ''
 
 
 def convertXlsOrCsvToDicts(file):
@@ -36,32 +26,17 @@ def convertXlsOrCsvToDicts(file):
             df = pd.read_csv(fichier_io, sep=',')
         except Exception as e:
             raise ValueError(f"Impossible de lire le fichier fourni : {str(e)}")
-    premiere_valeur_id = df['ID'].dropna().iloc[0] if not df['ID'].dropna().empty else 0
 
-    # Étape 2 : Remplir les NaN dans 'id' avec cette valeur
-    df['ID'] = df['ID'].fillna(premiere_valeur_id)
-
-    # Étape 3 : Remplacer les autres NaN (dans les autres colonnes) par 0
-    colonnes_autres = df.columns.difference(['id'])
-    df[colonnes_autres] = df[colonnes_autres].fillna('')
-
-    # df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
-    # df.columns = [str(col).strip() for col in df.columns]
-    # df.fillna(method='ffill', inplace=True)
-
-    pd.set_option('display.max_rows', None)  # Show all rows
-    pd.set_option('display.max_columns', None)  # Show all columns
-    pd.set_option('display.width', None)  # Auto-detect terminal width
-    pd.set_option('display.max_colwidth', None)  # Show full column content
-
-
-    # Now display the DataFrame
+    # Nettoyage de base
+    df.fillna('', inplace=True)
     produits = {}
+    last_product_id = None
 
     for _, row in df.iterrows():
-        # print(f'\n\n row {row} \n\n')
-        product_id = row['ID']
-        if product_id not in produits:
+        current_id = row['ID'] if row['ID'] != '' else last_product_id
+
+        if current_id not in produits:
+            # Nouvelle entrée produit
             produit_data = {k: row[k] for k in df.columns if k not in [
                 'Attributes', 'Value', 'Price',
                 'Vendor', 'Vendor Product Name', 'Vendor Product Code',
@@ -71,25 +46,29 @@ def convertXlsOrCsvToDicts(file):
             ]}
             produit_data['Attributes'] = {}
             produit_data['Vendor'] = []
-            produits[product_id] = produit_data
-        # Gestion des attributs
+            produits[current_id] = produit_data
+
+        last_product_id = current_id  # mettre à jour l'ID courant
+
+        # Gestion des Attributs
         attr_name = str(row.get('Attributes', '')).strip()
         attr_value = str(row.get('Value', '')).strip()
         attr_price = convertStrTofloat(row.get('Price', 0.0))
 
         if attr_name and attr_value:
-            if attr_name not in produits[product_id]['Attributes']:
-                produits[product_id]['Attributes'][attr_name] = []
+            if attr_name not in produits[current_id]['Attributes']:
+                produits[current_id]['Attributes'][attr_name] = []
 
-            produits[product_id]['Attributes'][attr_name].append({
+            produits[current_id]['Attributes'][attr_name].append({
                 'value': attr_value,
-                'price': convertStrTofloat(attr_price)
+                'price': attr_price
             })
-        # Gestion des vendors
+
+        # Gestion des Vendors
         vendor_name = cleanSentence(row.get('Vendor', '')).strip()
-        currency_id = cleanSentence(row.get('Vendors Currency', '')).strip()
-        taxes_ids = cleanSentence(row.get('Vendor Taxes', '')).strip()
         if vendor_name:
+            dite = parse_date(row.get('Vendors/Start Date', ''))
+            print(f'\n\n\n Helloo bordel de mered {dite} \n\n\n')
             vendor_info = {
                 'vendor_id': vendor_name,
                 'product_id': cleanSentence(row.get('Product Variant', '')).strip(),
@@ -100,11 +79,11 @@ def convertXlsOrCsvToDicts(file):
                 'start_date': parse_date(row.get('Vendors/Start Date', '')),
                 'end_date': parse_date(row.get('Vendors/End Date', '')),
                 'time_lead': convertStrTofloat(row.get('Delivery Lead Time', 0)),
-                'currency_id': currency_id,
-                'taxes_ids': taxes_ids,
+                'currency_id': cleanSentence(row.get('Vendors Currency', '')).strip(),
+                'taxes_ids': cleanSentence(row.get('Vendor Taxes', '')).strip(),
             }
-            produits[product_id]['Vendor'].append(vendor_info)
-    # Réorganiser les attributs dans le format demandé
+            produits[current_id]['Vendor'].append(vendor_info)
+    # Réorganisation finale des attributs
     for produit in produits.values():
         formatted_attributes = []
         for attr_name, values in produit['Attributes'].items():
@@ -120,14 +99,37 @@ def convertXlsOrCsvToDicts(file):
 
 
 def parse_date(value):
-    """Essaye de parser la date au format datetime.date ou retourne une string vide."""
+    """
+    Parse une date et retourne:
+    - un objet date valide
+    - False si la date est invalide (pour Odoo)
+    - None si la valeur est vide/None
+    """
+    if value is None or value == '':
+        return None
 
-    if isinstance(value, datetime):
-        return value.date().isoformat()
+    # Gestion spécifique des valeurs Pandas NaT
+    if pd.isna(value) or str(value) == 'NaT':
+        return False
+
+    # Si c'est déjà un objet date
+    if isinstance(value, date):
+        return value
+
+    # Si c'est un datetime ou pd.Timestamp
+    if isinstance(value, (datetime, pd.Timestamp)):
+        return value.date()
+
     try:
-        return pd.to_datetime(value, dayfirst=True).date().isoformat()
-    except Exception:
-        return ''
+        # Essai avec pandas
+        dt = pd.to_datetime(value, dayfirst=True, errors='raise')
+        return dt.date()
+    except (ValueError, TypeError):
+        try:
+            # Essai avec dateutil.parser
+            return parse(value, dayfirst=True).date()
+        except (ValueError, TypeError, AttributeError):
+            return False
 
 
 def select_detailed_type(self, name):
@@ -147,6 +149,7 @@ def select_tracking_type(self, name):
     else:
         return 'none'
 
+
 def select_tracking_type_with_key(name):
     if 'serial' == name:
         return 'By Unique Serial Number'
@@ -155,11 +158,13 @@ def select_tracking_type_with_key(name):
     else:
         return 'No Tracking'
 
+
 def generateNewRow():
     result = []
     for i in range(0, 42):
         result.append('')
     return result
+
 
 def generateNewRowAttribute():
     result = []
@@ -229,7 +234,8 @@ def getValueBool(val):
     val = val.strip().upper()
     if val == 'TRUE':
         return True
-    else: return False
+    else:
+        return False
 
     if isinstance(cleanSentence(val), bool):
         return bool(val)
@@ -253,18 +259,18 @@ def generateProductVals(self, vals):
         'default_code': cleanSentence(vals.get('SKU', '')),
         'barcode': cleanSentence(vals.get('Barcode', '')),
         'is_published': is_published,
-        'x_product_website_url': cleanSentence(vals.get('Website URL Bz', '')),
-        'x_condition': cleanSentence(vals.get('Condition Bz', '')),
-        'x_CPU': cleanSentence(vals.get('CPU Bz', '')),
-        'x_': cleanSentence(vals.get('Rubric Bz', '')),
-        'x_GPU': cleanSentence(vals.get('GPU Bz', '')),
-        'x_sreen_size': cleanSentence(vals.get('Sreen Size Bz', '')),
-        'x_ram': cleanSentence(vals.get('RAM Bz', '')),
-        'manufacturer_id_int': cleanSentence(vals.get('manufacturer_id', 0)),
-        'x_hddtype': cleanSentence(vals.get('Hard Drive Type Bz', '')),
-        'x_kind': cleanSentence(vals.get('Hard Drive Type Bz', '')),
-        'dr_label_id': cleanSentence(vals.get('Label', '')),
-        'image_url': cleanSentence(vals.get('Image URL', '')),
+        # 'x_product_website_url': cleanSentence(vals.get('Website URL Bz', '')),
+        # 'x_condition': cleanSentence(vals.get('Condition Bz', '')),
+        # 'x_CPU': cleanSentence(vals.get('CPU Bz', '')),
+        # 'x_': cleanSentence(vals.get('Rubric Bz', '')),
+        # 'x_GPU': cleanSentence(vals.get('GPU Bz', '')),
+        # 'x_sreen_size': cleanSentence(vals.get('Sreen Size Bz', '')),
+        # 'x_ram': cleanSentence(vals.get('RAM Bz', '')),
+        # 'manufacturer_id_int': cleanSentence(vals.get('manufacturer_id', 0)),
+        # 'x_hddtype': cleanSentence(vals.get('Hard Drive Type Bz', '')),
+        # 'x_kind': cleanSentence(vals.get('Hard Drive Type Bz', '')),
+        # 'dr_label_id': cleanSentence(vals.get('Label', '')),
+        # 'image_url': cleanSentence(vals.get('Image URL', '')),
         'description_sale': cleanSentence(vals.get('Sale Description', '')),
         'available_in_pos': available_in_pos,
         'out_of_stock_message': vals.get('Out of Stock Message', ''),
@@ -297,7 +303,8 @@ def generateExportId(el):
         xml_id = el.export_data(['id']).get('datas')[0][0]
         xml_id = el.get_metadata()[0].get('xmlid')
         return xml_id
-    except Exception: return None
+    except Exception:
+        return None
 
 
 def prepareVlasProduct(rec):
