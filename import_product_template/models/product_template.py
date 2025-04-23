@@ -163,7 +163,10 @@ class ImportProduct(models.TransientModel):
         # dr_label_id
         dr_label_id = product_vals.pop('dr_label_id', None)
         if dr_label_id: dr_label_id = selectOneElementDataBase(self, dr_label_id)
-        dr_label_id = dr_label_id.id if dr_label_id else None
+        if dr_label_id:
+            dr_label_id = dr_label_id.id
+        else:
+            dr_label_id =None
         if manufacturer_id:
             product_vals['manufacturer_id'] = manufacturer_id
         if dr_label_id:
@@ -207,14 +210,12 @@ class ImportProduct(models.TransientModel):
         # dr_label_id
         dr_label_id = product_vals.pop('dr_label_id', None)
         if dr_label_id: dr_label_id = selectOneElementDataBase(self, dr_label_id)
-
         if dr_label_id:
             product_vals['dr_label_id'] = dr_label_id
 
         product_id = self.env['product.template'].sudo().create(
             product_vals
         )
-
         return product_id
 
     def updateQtyStockProduct(self, product_id, availableQuantity):
