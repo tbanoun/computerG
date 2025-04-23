@@ -34,6 +34,7 @@ class ImportProduct(models.TransientModel):
             product_id = rec.get('ID', None)
             if not product_id: continue
             created = False
+            print(f'\n\n rec ==> {rec} \n\n')
             try:
                 product_template = self.env.ref(product_id)
             except Exception as e:

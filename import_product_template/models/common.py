@@ -293,8 +293,8 @@ def generateProductVals(self, vals):
 
 def generateExportId(el):
     try:
-        el.export_data(['ID'])
-        xml_id = el.export_data(['ID']).get('datas')[0][0]
+        el.export_data(['id'])
+        xml_id = el.export_data(['id']).get('datas')[0][0]
         xml_id = el.get_metadata()[0].get('xmlid')
         return xml_id
     except Exception: return None

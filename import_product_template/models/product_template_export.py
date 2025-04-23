@@ -38,6 +38,7 @@ class ProductTemplateExport(models.Model):
         all_result = []
         for product in self:
             product_xmld_id = generateExportId(product)
+            print(f'\n\n\ {product_xmld_id} \n\n')
             category_xmld_id = generateExportId(product.categ_id)
             pos_categ_id = generateExportId(product.pos_categ_id)
             supplier_taxes_id = generateExportId(product.supplier_taxes_id)
@@ -109,6 +110,7 @@ class ProductTemplateExport(models.Model):
                 supplier_taxes_id or '',
 
             ]
+            print(f'\n Holla {row} \n')
             start = True
             # export saller ids
             if not product.seller_ids: result.append(row)
