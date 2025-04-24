@@ -12,16 +12,16 @@ class AccountMoveLine(models.Model):
 
 
     def write(self, vals):
-        self._ensure_one()
-        qtyWT = self.product_id.virtual_available or 0
-        qtySu = self.product_id.product_tmpl_id.qty_available_wt or 0
-        showDelivryMessage = self.product_id.product_tmpl_id.showDelivryMessage or False
-        continue_seling = self.product_id.product_tmpl_id.continue_seling or False
-        vals['qtyWT'] = qtyWT
-        vals['qtySu'] = qtySu
-        vals['showDelivryMessage'] = showDelivryMessage
-        vals['continue_seling'] = continue_seling
-        res = super(AccountMoveLine, self).write(vals)
+        for rec in self:
+            qtyWT = rec.product_id.virtual_available or 0
+            qtySu = rec.product_id.product_tmpl_id.qty_available_wt or 0
+            showDelivryMessage = rec.product_id.product_tmpl_id.showDelivryMessage or False
+            continue_seling = rec.product_id.product_tmpl_id.continue_seling or False
+            vals['qtyWT'] = qtyWT
+            vals['qtySu'] = qtySu
+            vals['showDelivryMessage'] = showDelivryMessage
+            vals['continue_seling'] = continue_seling
+            res = super(AccountMoveLine, rec).write(vals)
         return res
 
 
