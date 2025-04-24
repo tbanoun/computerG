@@ -17,7 +17,7 @@
                     <div>
                         <strong t-field="line.name_short"/>
                     </div>
-                        <ul class="list-inline mb-1">
+                    <ul class="list-inline mb-1">
                         <!--1-->
                         <!--init value-->
                         <!--set showDelivryMessage-->
@@ -78,6 +78,7 @@
                                               class="ml-2 text-right alert alert-success w-40">
                                             <span class="cls-sahrane">
                                                 <span class="cls-sahrane" t-esc="int(virtual_available)"/>
+                                                Pcs In Stock
                                             </span>
                                             <span class="cls-sahrane" t-esc="line.product_id.messageDelivryTimeStock">
                                             </span>
@@ -100,6 +101,7 @@
                 border: 1px solid #803D19; !important"
                                           class="ml-2 text-right alert alert-success w-40">
                                         <span t-esc="int(qty_available_wt)"/>
+                                        Pcs In Remote Stock
                                         <span class="cls-sahrane"
                                               t-esc="line.product_id.messageDelivryTimeRemoteStock">
                                         </span>
@@ -121,9 +123,10 @@
                                                     border: 1px solid #DA020E; !important
                                                     "
                                           class="ml-2 text-right alert alert-warning w-40">
-
-<!--                                        <span t-esc="int(qtyReset)"/>-->
-<!--                                        |-->
+                                        <t t-if="line.product_id.continue_seling">
+                                            <span t-esc="int(qtyReset)"/>
+                                            Pcs
+                                        </t>
                                         <span class="cls-sahrane" t-esc="line.product_id.out_of_stock_message">
                                         </span>
                                     </span>
