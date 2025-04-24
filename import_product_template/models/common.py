@@ -74,8 +74,8 @@ def convertXlsOrCsvToDicts(file):
         # Gestion des Vendors
         vendor_name = cleanSentence(row.get('Vendor', '')).strip()
         if vendor_name:
-            dite = parse_date(row.get('Vendors/Start Date', ''))
-            print(f'\n\n\n Helloo bordel de mered {dite} \n\n\n')
+            dite_start = parse_date(row.get('Vendors/Start Date', ''))
+            dite_end = parse_date(row.get('Vendors/End Date', ''))
             vendor_info = {
                 'vendor_id': vendor_name,
                 'product_id': cleanSentence(row.get('Product Variant', '')).strip(),
@@ -83,8 +83,8 @@ def convertXlsOrCsvToDicts(file):
                 'product_code': cleanSentence(row.get('Vendor Product Code', '')).strip(),
                 'price': convertStrTofloat(row.get('Vendors/Price', 0.0)),
                 'qty': convertStrTofloat(row.get('Vendors/Quantity', 0)),
-                'start_date': parse_date(row.get('Vendors/Start Date', '')),
-                'end_date': parse_date(row.get('Vendors/End Date', '')),
+                'date_start': dite_start,
+                'date_end': dite_end,
                 'time_lead': convertStrTofloat(row.get('Delivery Lead Time', 0)),
                 'currency_id': cleanSentence(row.get('Vendors Currency', '')).strip(),
                 'taxes_ids': cleanSentence(row.get('Vendor Taxes', '')).strip(),
@@ -107,34 +107,39 @@ def convertXlsOrCsvToDicts(file):
 
 def parse_date(value):
     """
-    Parse une date et retourne:
-    - un objet date valide
-    - False si la date est invalide (pour Odoo)
-    - None si la valeur est vide/None
+    Tente de parser une date depuis différents formats et retourne :
+    - Un objet datetime.date valide si la conversion réussit
+    - False si la date est invalide (non interprétable)
+    - None si la valeur est vide ou nulle
+
+    Utilisation typique : conversion de dates pour insertion dans Odoo
     """
-    if value is None or value == '':
+
+    # Valeur vide ou None
+    if not value or str(value).strip() == '':
         return None
 
-    # Gestion spécifique des valeurs Pandas NaT
-    if pd.isna(value) or str(value) == 'NaT':
+    # Gestion des valeurs spéciales Pandas (NaT, NaN)
+    if pd.isna(value) or str(value).lower() == 'nat':
         return False
 
-    # Si c'est déjà un objet date
-    if isinstance(value, date):
+    # Déjà un objet date
+    if isinstance(value, date) and not isinstance(value, datetime):
         return value
 
-    # Si c'est un datetime ou pd.Timestamp
+    # Datetime ou Timestamp
     if isinstance(value, (datetime, pd.Timestamp)):
         return value.date()
 
     try:
-        # Essai avec pandas
-        dt = pd.to_datetime(value, dayfirst=True, errors='raise')
-        return dt.date()
+        # Essai de conversion avec pandas
+        parsed = pd.to_datetime(value, dayfirst=True, errors='raise')
+        return parsed.date()
     except (ValueError, TypeError):
         try:
-            # Essai avec dateutil.parser
-            return parse(value, dayfirst=True).date()
+            # Fallback avec dateutil.parser
+            parsed = parse(str(value), dayfirst=True)
+            return parsed.date()
         except (ValueError, TypeError, AttributeError):
             return False
 
@@ -268,18 +273,18 @@ def generateProductVals(self, vals):
         'default_code': cleanSentence(vals.get('SKU', '')),
         'barcode': cleanSentence(vals.get('Barcode', '')),
         'is_published': is_published,
-        'x_product_website_url': cleanSentence(vals.get('Website URL Bz', '')),
-        'x_condition': cleanSentence(vals.get('Condition Bz', '')),
-        'x_CPU': cleanSentence(vals.get('CPU Bz', '')),
-        'x_': cleanSentence(vals.get('Rubric Bz', '')),
-        'x_GPU': cleanSentence(vals.get('GPU Bz', '')),
-        'x_sreen_size': cleanSentence(vals.get('Sreen Size Bz', '')),
-        'x_ram': cleanSentence(vals.get('RAM Bz', '')),
-        'manufacturer_id_int': cleanSentence(vals.get('manufacturer_id', 0)),
-        'x_hddtype': cleanSentence(vals.get('Hard Drive Type Bz', '')),
-        'x_kind': cleanSentence(vals.get('Hard Drive Type Bz', '')),
-        'dr_label_id': cleanSentence(vals.get('Label', '')),
-        'image_url': cleanSentence(vals.get('Image URL', '')),
+        # 'x_product_website_url': cleanSentence(vals.get('Website URL Bz', '')),
+        # 'x_condition': cleanSentence(vals.get('Condition Bz', '')),
+        # 'x_CPU': cleanSentence(vals.get('CPU Bz', '')),
+        # 'x_': cleanSentence(vals.get('Rubric Bz', '')),
+        # 'x_GPU': cleanSentence(vals.get('GPU Bz', '')),
+        # 'x_sreen_size': cleanSentence(vals.get('Sreen Size Bz', '')),
+        # 'x_ram': cleanSentence(vals.get('RAM Bz', '')),
+        # 'manufacturer_id_int': cleanSentence(vals.get('manufacturer_id', 0)),
+        # 'x_hddtype': cleanSentence(vals.get('Hard Drive Type Bz', '')),
+        # 'x_kind': cleanSentence(vals.get('Hard Drive Type Bz', '')),
+        # 'dr_label_id': cleanSentence(vals.get('Label', '')),
+        # 'image_url': cleanSentence(vals.get('Image URL', '')),
         'description_sale': cleanSentence(vals.get('Sale Description', '')),
         'available_in_pos': available_in_pos,
         'out_of_stock_message': vals.get('Out of Stock Message', ''),

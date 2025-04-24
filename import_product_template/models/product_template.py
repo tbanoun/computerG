@@ -135,8 +135,8 @@ class ImportProduct(models.TransientModel):
             product_code = rec.get('product_code', '')
             vendor_price = convertStrTofloat(rec.get('price', 0.0))
             vendor_qty = convertStrTofloat(rec.get('qty', 0.0))
-            date_start = rec.get('start_date', None)
-            date_end = rec.get('end_date', None)
+            date_start = rec.get('date_start', None)
+            date_end = rec.get('date_end', None)
             time_lead = convertStrTofloat(rec.get('time_lead', 0))
             vals = {
                 'product_id': product_id,
@@ -145,8 +145,8 @@ class ImportProduct(models.TransientModel):
                 'delay': time_lead,
                 'product_name': product_name,
                 'product_code': product_code,
-                'date_start': date_start if isinstance(date_start, datetime) else False,
-                'date_end': date_end if isinstance(date_end, datetime) else False,
+                'date_start': date_start,
+                'date_end': date_end,
                 'min_qty': vendor_qty,
                 'product_tmpl_id': product_template.id,
             }
