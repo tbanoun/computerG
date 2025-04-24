@@ -96,7 +96,7 @@
                         </span>
                     </t>
                     <!--cas 3 qtyReset > 0-->
-                    <t t-if="qtyReset > 0 and line.continue_seling">
+                    <t t-if="qtyReset > 0">
                         <t t-if="line.quantity > virtual_available and qty_available_wt > 0 ">
                             <span>,</span>
                         </t>
@@ -109,10 +109,10 @@
                                                     color: #DA020E !important;
                                                     ">
                             <b>
-                                <!--                                <span class="cls-sahrane">-->
-                                <!--                                    <span class="cls-sahrane" t-esc="int(qtyReset)"/>-->
-                                <!--                                    |-->
-                                <!--                                </span>-->
+                                <t t-if="line.continue_seling">
+                                    <span class="cls-sahrane" t-esc="int(qtyReset)"/>
+                                </t>
+
                                 <span class="cls-sahrane"
                                       t-esc="line.product_id.product_tmpl_id.out_of_stock_message">
                                 </span>
