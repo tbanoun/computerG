@@ -10,6 +10,7 @@
                 </style>
                 <span t-field="line.name"
                       t-options="{'widget': 'text'}"/>
+                <br/>
                 <t t-if="line.product_id.detailed_type != 'service'">
                     <!--1-->
                     <!--init value-->
