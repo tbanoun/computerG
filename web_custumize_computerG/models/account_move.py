@@ -9,19 +9,18 @@ class AccountMoveLine(models.Model):
     showDelivryMessage = fields.Boolean()
     continue_seling = fields.Boolean()
 
-
-
     def write(self, vals):
-        qtyWT = self.product_id.virtual_available or 0
-        qtySu = self.product_id.product_tmpl_id.qty_available_wt or 0
-        showDelivryMessage = self.product_id.product_tmpl_id.showDelivryMessage or False
-        continue_seling = self.product_id.product_tmpl_id.continue_seling or False
-        vals['qtyWT'] = qtyWT
-        vals['qtySu'] = qtySu
-        vals['showDelivryMessage'] = showDelivryMessage
-        vals['continue_seling'] = continue_seling
-        res = super(AccountMoveLine, self).write(vals)
-        return res
+        for line in self:
+            if line.product_id:
+                line_vals = vals.copy()
+                line_vals['qtyWT'] = line.product_id.virtual_available or 0
+                line_vals['qtySu'] = line.product_id.product_tmpl_id.qty_available_wt or 0
+                line_vals['showDelivryMessage'] = line.product_id.product_tmpl_id.showDelivryMessage or False
+                line_vals['continue_seling'] = line.product_id.product_tmpl_id.continue_seling or False
+                super(AccountMoveLine, line).write(line_vals)
+            else:
+                super(AccountMoveLine, line).write(vals)
+        return True
 
 
     def create(self, vals_list):
