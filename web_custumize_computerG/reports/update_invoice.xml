@@ -57,8 +57,8 @@
                     </t>
                     <!--show message delivery stock -->
                     <!--cas 1 virtual_available > 0-->
-                    <p t-if="virtual_available > 0">
-                        <p style="font-weight: 500 !important;
+                    <t t-if="virtual_available > 0">
+                        <span style="font-weight: 500 !important;
                 width: fit-content !important;
                 color: #067d24 !important;
                 ">
@@ -71,11 +71,14 @@
                                       t-esc="line.product_id.product_tmpl_id.messageDelivryTimeStock">
                                 </span>
                             </b>
-                        </p>
-                    </p>
+                        </span>
+                    </t>
                     <!--                    cas 2 qty_available_wt > 0 and line.quantity > virtual_available-->
                     <t t-if="line.quantity > virtual_available and qty_available_wt > 0 ">
-                        <p style="
+                        <t t-if="virtual_available > 0">
+                            <span>,</span>
+                        </t>
+                        <span style="
                                     font-weight: 500 !important;
                                     width: fit-content !important;
                                     color: #803D19 !important;
@@ -90,35 +93,41 @@
                                     </span>
                                 </span>
                             </b>
-                        </p>
+                        </span>
                     </t>
                     <!--cas 3 qtyReset > 0-->
                     <t t-if="qtyReset > 0 and line.continue_seling">
-                        <p style="
+                        <t t-if="line.quantity > virtual_available and qty_available_wt > 0 ">
+                            <span>,</span>
+                        </t>
+                        <t t-elif="virtual_available > 0">
+                            <span>,</span>
+                        </t>
+                        <span style="
                                                     font-weight: 500 !important;
                                                     width: fit-content !important;
                                                     color: #DA020E !important;
                                                     ">
                             <b>
-<!--                                <span class="cls-sahrane">-->
-<!--                                    <span class="cls-sahrane" t-esc="int(qtyReset)"/>-->
-<!--                                    |-->
-<!--                                </span>-->
+                                <!--                                <span class="cls-sahrane">-->
+                                <!--                                    <span class="cls-sahrane" t-esc="int(qtyReset)"/>-->
+                                <!--                                    |-->
+                                <!--                                </span>-->
                                 <span class="cls-sahrane"
                                       t-esc="line.product_id.product_tmpl_id.out_of_stock_message">
                                 </span>
                             </b>
-                        </p>
+                        </span>
                     </t>
 
                 </t>
             </td>
         </xpath>
-<!--        <xpath expr="//div[@name='payment_term']" position="replace">-->
-<!--            <span>-->
-<!--                <strong>Payment terms:</strong>-->
-<!--                <span t-esc="o.invoice_payment_term_id.titleDisplayInvoice"/>-->
-<!--            </span>-->
-<!--        </xpath>-->
+        <!--        <xpath expr="//div[@name='payment_term']" position="replace">-->
+        <!--            <span>-->
+        <!--                <strong>Payment terms:</strong>-->
+        <!--                <span t-esc="o.invoice_payment_term_id.titleDisplayInvoice"/>-->
+        <!--            </span>-->
+        <!--        </xpath>-->
     </template>
 </odoo>
