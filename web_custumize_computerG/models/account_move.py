@@ -12,6 +12,7 @@ class AccountMoveLine(models.Model):
 
 
     def write(self, vals):
+        self._ensure_one()
         qtyWT = self.product_id.virtual_available or 0
         qtySu = self.product_id.product_tmpl_id.qty_available_wt or 0
         showDelivryMessage = self.product_id.product_tmpl_id.showDelivryMessage or False
