@@ -7,7 +7,8 @@
     'summary': '',
     'category': 'Theme/eCommerce',
     'version': '16.0.0.0.1',
-    'depends': ['theme_prime', 'sale', 'import_product_using_csv_cronjob'],
+    'depends': ['theme_prime', 'sale', 'import_product_using_csv_cronjob', 'website', 'website_sale',
+                'website_sale_stock'],
     'license': 'OPL-1',
     'author': 'Tahar BANOUN',
     'company': 'https://digitalai.academy/',
@@ -32,5 +33,7 @@
 
         # reports
         'reports/update_invoice.xml',
-    ]
+    ],
+    'installable': True,
+    'application': True,
 }
