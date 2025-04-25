@@ -49,6 +49,10 @@ odoo.define('web_custumize_computerG.VariantMixin', function (require) {
     };
 
     VariantMixin._insertOutOfStockMessageDetailPage = function(productInfo, qty, continue_seling) {
+        const $outOfStockMsg = $('#out_of_stock_message');
+        if ($outOfStockMsg.length) {
+            $outOfStockMsg.remove();
+        }
         if (productInfo.out_of_stock_message) {
             if (continue_seling) {
                 $('#messageQty3').html(`<span>${qty} Pcs</span>`);

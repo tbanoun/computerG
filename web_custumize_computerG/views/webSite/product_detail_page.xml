@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <data>
+
         <template id="product" inherit_id="website_sale.product">
             <xpath expr="." position="inside">
-            <script type="module" src="/web_custumize_computerG/static/src/js/variant_mixin.js"></script>
-        </xpath>
-            <xpath expr="//div[@class='availability_messages o_not_editable']" position="replace">
+                <script type="module" src="/web_custumize_computerG/static/src/js/variant_mixin.js"></script>
             </xpath>
             <xpath expr="//div[@id='o_wsale_cta_wrapper']" position="after">
                 <t t-set="notShowbtn" t-value="True"/>
@@ -52,7 +51,7 @@
                     </div>
 
                     <!-- Bouton wishlist -->
-<!--                    <div class="ms-3 mt-1">-->
+                    <!--                    <div class="ms-3 mt-1">-->
                     <!--                        <t t-set="notShowbtn" t-value="False"/>-->
                     <!--                        <t t-nocache="The wishlist depends on the user and must not be shared with other users. The product come from the controller.">-->
                     <!--                            <t t-set="product_variant"-->
