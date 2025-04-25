@@ -34,6 +34,14 @@
         # reports
         'reports/update_invoice.xml',
     ],
+    'assets': {
+        'web.assets_frontend': [
+            'web_custumize_computerG/static/src/js/variant_mixin.js',
+        ],
+        'web.assets_backend': [
+            'web_custumize_computerG/static/src/js/variant_mixin.js',
+        ],
+    },
     'installable': True,
     'application': True,
 }

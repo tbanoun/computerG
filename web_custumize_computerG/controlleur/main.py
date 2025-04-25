@@ -10,6 +10,7 @@ class ProductInfoController(http.Controller):
         return {
             'id': product.id,
             'virtual_available': product.virtual_available if product.virtual_available else 0 ,
+            'virtual_available_product_tmpl_id': product.product_tmpl_id.virtual_available if product.product_tmpl_id.virtual_available else 0 ,
             'qty_available_wt': product.qty_available_wt if product.qty_available_wt else 0,
             'showDelivryMessage': product.product_tmpl_id.showDelivryMessage if product.product_tmpl_id.showDelivryMessage else False,
             'messageDelivryTimeRemoteStock': product.product_tmpl_id.messageDelivryTimeRemoteStock if product.product_tmpl_id.messageDelivryTimeRemoteStock else '',

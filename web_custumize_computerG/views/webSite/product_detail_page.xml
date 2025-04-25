@@ -2,6 +2,9 @@
 <odoo>
     <data>
         <template id="product" inherit_id="website_sale.product">
+            <xpath expr="." position="inside">
+            <script type="module" src="/web_custumize_computerG/static/src/js/variant_mixin.js"></script>
+        </xpath>
             <xpath expr="//div[@class='availability_messages o_not_editable']" position="replace">
             </xpath>
             <xpath expr="//div[@id='o_wsale_cta_wrapper']" position="after">
@@ -15,7 +18,8 @@
                     <!-- Bloc des 3 messages -->
                     <div class="d-flex flex-column" style="gap: 5px;">
                         <!-- onStock -->
-                        <span style="display : none !important;" id="informationQtyMessageDelivery1" class="alert alert-success py-1 px-2 mb-0">
+                        <span style="display : none !important;" id="informationQtyMessageDelivery1"
+                              class="alert alert-success py-1 px-2 mb-0">
                             <t t-if="request.env.user.property_product_pricelist.showQtyOnStock">
                                 <span id="messageGroup">
                                     <span id="messageQty1"/>
@@ -25,7 +29,8 @@
                         </span>
 
                         <!-- remote stock -->
-                        <span style="display : none !important;" id="informationQtyMessageDelivery2" class="alert alert-success py-1 px-2 mb-0">
+                        <span style="display : none !important;" id="informationQtyMessageDelivery2"
+                              class="alert alert-success py-1 px-2 mb-0">
                             <t t-if="request.env.user.property_product_pricelist.showQtyOnStock">
                                 <span id="messageGroup">
                                     <span id="messageQty2"/>
@@ -35,7 +40,8 @@
                         </span>
 
                         <!-- out of stock -->
-                        <span style="display : none !important;" id="informationQtyMessageDelivery3" class="alert alert-success py-1 px-2 mb-0">
+                        <span style="display : none !important;" id="informationQtyMessageDelivery3"
+                              class="alert alert-success py-1 px-2 mb-0">
                             <t t-if="request.env.user.property_product_pricelist.showQtyOnStock">
                                 <span id="messageGroup">
                                     <span id="messageQty3"/>
