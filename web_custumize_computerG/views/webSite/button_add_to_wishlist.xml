@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="product_add_to_wishlist" inherit_id="website_sale.product" name="Wishlist Button" priority="20">
+        <xpath expr="//button[@class='btn btn-link px-0 pe-3 o_add_wishlist_dyn']" position="replace">
+        </xpath>
+    </template>
+</odoo>
