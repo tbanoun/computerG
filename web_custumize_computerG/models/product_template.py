@@ -1,7 +1,9 @@
 from odoo import fields, models, api
 from bs4 import BeautifulSoup as bs
+import logging
 
 
+_logger = logging.getLogger(__name__)
 class ProductTemplate(models.Model):
     _inherit = "product.template"
 
@@ -12,17 +14,19 @@ class ProductTemplate(models.Model):
 
     def _computeContinueSelling(self):
         for rec in self:
-            if rec.qty_available_wt + rec.virtual_available <= 0 and not rec.continue_seling:
+            qty_available_wt = rec.qty_available_wt if rec.qty_available_wt > 0 else 0
+            virtual_available = rec.virtual_available if rec.virtual_available > 0 else 0
+            if qty_available_wt + virtual_available <= 0 and not rec.continue_seling:
                 rec.allow_out_of_stock_order = False
-            elif rec.virtual_available <= 0 and not rec.showDelivryMessage and not rec.continue_seling:
+            elif virtual_available <= 0 and not rec.showDelivryMessage and not rec.continue_seling:
                 rec.allow_out_of_stock_order = False
             else:
                 rec.allow_out_of_stock_order = True
-            print('qty_available_wt :', rec.virtual_available)
-            print('continue_seling :', rec.continue_seling)
-            print('Product Name :', rec.qty_available_wt)
-            print('Product Name :', rec.name)
-            print('allow_out_of_stock_order :', rec.allow_out_of_stock_order)
+            _logger.warning('qty_available_wt :', virtual_available)
+            _logger.warning('continue_seling :', rec.continue_seling)
+            _logger.warning('Product Name :', qty_available_wt)
+            _logger.warning('Product Name :', rec.name)
+            _logger.warning('allow_out_of_stock_order :', rec.allow_out_of_stock_order)
 
     out_of_stock_message = fields.Char(string="Out-of-Stock Message")
     showDelivryMessage = fields.Boolean(default=True)
