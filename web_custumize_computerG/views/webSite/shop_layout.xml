@@ -2,19 +2,19 @@
 <odoo>
 
     <!--grid view-->
-<!--    <record id="product_item_grid_1_nce2" model="ir.ui.view">-->
-<!--        <field name="name">product_item_grid_1_nce</field>-->
-<!--        <field name="inherit_id" search="[('key', '=', 'theme_prime.product_item_grid_1')]"/>-->
-<!--        <field name="type">qweb</field>-->
-<!--        <field name="key">web_custumize_computerG.product_item_grid_1_nce2</field>-->
-<!--        <field name="arch" type="xml">-->
-<!--            <xpath expr="//a[@t-att-href='product_href']" position="after">-->
-<!--                <t t-call="theme_prime.product_label">-->
-<!--                    <t t-set="label" t-value="product.dr_label_id"/>-->
-<!--                </t>-->
-<!--            </xpath>-->
-<!--        </field>-->
-<!--    </record>-->
+    <!--    <record id="product_item_grid_1_nce2" model="ir.ui.view">-->
+    <!--        <field name="name">product_item_grid_1_nce</field>-->
+    <!--        <field name="inherit_id" search="[('key', '=', 'theme_prime.product_item_grid_1')]"/>-->
+    <!--        <field name="type">qweb</field>-->
+    <!--        <field name="key">web_custumize_computerG.product_item_grid_1_nce2</field>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            <xpath expr="//a[@t-att-href='product_href']" position="after">-->
+    <!--                <t t-call="theme_prime.product_label">-->
+    <!--                    <t t-set="label" t-value="product.dr_label_id"/>-->
+    <!--                </t>-->
+    <!--            </xpath>-->
+    <!--        </field>-->
+    <!--    </record>-->
 
     <!--page grid view product-->
     <!--    <record id="product_item_grid_2_nce2" model="ir.ui.view">-->
@@ -55,34 +55,34 @@
     <!--    </record>-->
 
     <!--list view-->
-<!--    <record id="product_item_list_1" model="ir.ui.view">-->
-<!--        <field name="name">product_item_list_1</field>-->
-<!--        <field name="inherit_id" search="[('key', '=', 'theme_prime.product_item_list_1')]"/>-->
-<!--        <field name="type">qweb</field>-->
-<!--        <field name="key">web_custumize_computerG.product_item_list_1</field>-->
-<!--        <field name="arch" type="xml">-->
-<!--            <xpath expr="//a[@t-att-href='product_href']" position="after">-->
-<!--                <t t-call="theme_prime.product_label">-->
-<!--                    <t t-set="label" t-value="product.dr_label_id"/>-->
-<!--                </t>-->
-<!--            </xpath>-->
-<!--        </field>-->
-<!--    </record>-->
+    <!--    <record id="product_item_list_1" model="ir.ui.view">-->
+    <!--        <field name="name">product_item_list_1</field>-->
+    <!--        <field name="inherit_id" search="[('key', '=', 'theme_prime.product_item_list_1')]"/>-->
+    <!--        <field name="type">qweb</field>-->
+    <!--        <field name="key">web_custumize_computerG.product_item_list_1</field>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            <xpath expr="//a[@t-att-href='product_href']" position="after">-->
+    <!--                <t t-call="theme_prime.product_label">-->
+    <!--                    <t t-set="label" t-value="product.dr_label_id"/>-->
+    <!--                </t>-->
+    <!--            </xpath>-->
+    <!--        </field>-->
+    <!--    </record>-->
 
     <!--page grid view product-->
-<!--    <record id="product_item_grid_1" model="ir.ui.view">-->
-<!--        <field name="name">product_item_grid_1_nce</field>-->
-<!--        <field name="inherit_id" search="[('key', '=', 'theme_prime.product_item_grid_1')]"/>-->
-<!--        <field name="type">qweb</field>-->
-<!--        <field name="key">web_custumize_computerG.product_item_grid_1</field>-->
-<!--        <field name="arch" type="xml">-->
-<!--            <xpath expr="//a[@t-att-href='product_href']" position="after">-->
-<!--                <t t-call="theme_prime.product_label">-->
-<!--                    <t t-set="label" t-value="product.dr_label_id"/>-->
-<!--                </t>-->
-<!--            </xpath>-->
-<!--        </field>-->
-<!--    </record>-->
+    <!--    <record id="product_item_grid_1" model="ir.ui.view">-->
+    <!--        <field name="name">product_item_grid_1_nce</field>-->
+    <!--        <field name="inherit_id" search="[('key', '=', 'theme_prime.product_item_grid_1')]"/>-->
+    <!--        <field name="type">qweb</field>-->
+    <!--        <field name="key">web_custumize_computerG.product_item_grid_1</field>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            <xpath expr="//a[@t-att-href='product_href']" position="after">-->
+    <!--                <t t-call="theme_prime.product_label">-->
+    <!--                    <t t-set="label" t-value="product.dr_label_id"/>-->
+    <!--                </t>-->
+    <!--            </xpath>-->
+    <!--        </field>-->
+    <!--    </record>-->
 
     <record id="product_availability" model="ir.ui.view">
         <field name="name">product_item_grid_1_nce</field>
@@ -91,6 +91,8 @@
         <field name="key">web_custumize_computerG.product_availability</field>
         <field name="arch" type="xml">
             <xpath expr="//div[@id='threshold_message']" position="replace">
+            </xpath>
+            <xpath expr="//div[@id='out_of_stock_message']" position="replace">
             </xpath>
         </field>
     </record>
