@@ -5,8 +5,8 @@
             <xpath expr="." position="inside">
             <script type="module" src="/web_custumize_computerG/static/src/js/variant_mixin.js"></script>
         </xpath>
-<!--            <xpath expr="//div[@class='availability_messages o_not_editable']" position="replace">-->
-<!--            </xpath>-->
+            <xpath expr="//div[@class='availability_messages o_not_editable']" position="replace">
+            </xpath>
             <xpath expr="//div[@id='o_wsale_cta_wrapper']" position="after">
                 <t t-set="notShowbtn" t-value="True"/>
                 <div class="d-flex align-items-start">
