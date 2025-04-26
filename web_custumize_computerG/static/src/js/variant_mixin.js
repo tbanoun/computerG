@@ -150,6 +150,10 @@ odoo.define('web_custumize_computerG.VariantMixin', function (require) {
             }
             const $outOfStockMsg = $('#out_of_stock_message');
             console.log('allQuantity 2', allQuantity)
+       
+            if ($outOfStockMsg.length) {
+                $outOfStockMsg.hide();
+            }
             console.log('$outOfStockMsg', $outOfStockMsg)
             console.log('addQty Jinja', addQty)
             const qtyReset = addQty - (virtual_available + qty_available_wt);
