@@ -63,57 +63,75 @@ class ImportProduct(models.TransientModel):
         return notification
 
     def update_attributes(self, product_template, attributes):
-        # delete attributes product
+        # delete existing attribute lines
         product_template.sudo().attribute_line_ids.unlink()
+
+        # create a dictionary to group values by attribute
+        attributes_dict = {}
+
         for rec in attributes:
             attribute = rec.get('attribute', None)
-            if not attribute: continue
+            if not attribute:
+                continue
+
             attribute_name = attribute.get('name', None)
-            # search attribute if existe:
-            attribute_databse_id = self.env['product.attribute'].sudo().search([('name', 'ilike', attribute_name)],
-                                                                               limit=1)
-            if not attribute_databse_id:
-                attribute_databse_id = self.env['product.attribute'].create(
-                    {
+            values = attribute.get('value', [])
+
+            # if attribute not in dict, initialize it
+            if attribute_name not in attributes_dict:
+                # search or create attribute
+                attribute_databse_id = self.env['product.attribute'].sudo().search(
+                    [('name', 'ilike', attribute_name)], limit=1)
+                if not attribute_databse_id:
+                    attribute_databse_id = self.env['product.attribute'].create({
                         "name": attribute_name
-                    }
-                )
-            # lop values:
-            values = attribute.get('value', None)
-            value_ids = []
-            for val in values:
-                value = self.env['product.attribute.value'].sudo().search(
-                    [('name', '=', val.get('value', '')), ('attribute_id', '=', attribute_databse_id.id)], limit=1)
-                if not value:
-                    value = self.env['product.attribute.value'].create({
-                        'name': val.get('value', ''),
-                        'attribute_id': attribute_databse_id.id
                     })
-                value_ids.append(value.id)
-                # # #
-            vals = {
-                "attribute_id": attribute_databse_id.id,
+
+                attributes_dict[attribute_name] = {
+                    'attribute_id': attribute_databse_id.id,
+                    'values': [],
+                    'price_mapping': {}  # to store value-price mapping
+                }
+
+            # process values
+            for val in values:
+                val_name = val.get('value', '')
+                val_price = val.get('price', 0)
+
+                # check if value already exists for this attribute
+                value_record = self.env['product.attribute.value'].sudo().search([
+                    ('name', '=', val_name),
+                    ('attribute_id', '=', attributes_dict[attribute_name]['attribute_id'])
+                ], limit=1)
+
+                if not value_record:
+                    value_record = self.env['product.attribute.value'].create({
+                        'name': val_name,
+                        'attribute_id': attributes_dict[attribute_name]['attribute_id']
+                    })
+
+                # add to values list if not already there
+                if value_record.id not in attributes_dict[attribute_name]['values']:
+                    attributes_dict[attribute_name]['values'].append(value_record.id)
+
+                # store price mapping
+                attributes_dict[attribute_name]['price_mapping'][val_name] = val_price
+
+        # create attribute lines and configure prices
+        for attr_name, attr_data in attributes_dict.items():
+            # create attribute line
+            attribute_line = self.env['product.template.attribute.line'].sudo().create({
+                "attribute_id": attr_data['attribute_id'],
                 "product_tmpl_id": product_template.id,
-                "value_ids": value_ids
-            }
-            attribute_line_ids = self.env['product.template.attribute.line'].sudo().create(
-                vals
-            )
-            config_lines = self.env['product.template.attribute.value'].sudo().search([
-                ('id', 'in', attribute_line_ids.product_template_value_ids.ids)
-            ])
-            # update price
-            for line in config_lines:
-                price = 0
-                for val in values:
-                    if val.get('value') == line.name:
-                        price = val.get('price')
-                        break
-                line.sudo().write(
-                    {
-                        'price_extra': price
-                    }
-                )
+                "value_ids": [(6, 0, attr_data['values'])]
+            })
+
+            # configure prices
+            for value in attribute_line.product_template_value_ids:
+                price = attr_data['price_mapping'].get(value.name, 0)
+                value.sudo().write({
+                    'price_extra': price
+                })
 
     def update_list_vendors(self, product_template, vendors):
         # delete seller_ids line on product
@@ -168,7 +186,6 @@ class ImportProduct(models.TransientModel):
                 product_vals['dr_label_id'] = dr_label_id
         except Exception:
             pass
-
 
         product_vals['manufacturer_id_int'] = manufacturer_id
 

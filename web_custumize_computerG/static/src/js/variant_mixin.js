@@ -150,7 +150,7 @@ odoo.define('web_custumize_computerG.VariantMixin', function (require) {
             }
             const $outOfStockMsg = $('#out_of_stock_message');
             console.log('allQuantity 2', allQuantity)
-       
+
             if ($outOfStockMsg.length) {
                 $outOfStockMsg.hide();
             }
