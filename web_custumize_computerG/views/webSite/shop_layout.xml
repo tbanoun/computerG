@@ -92,8 +92,10 @@
         <field name="arch" type="xml">
             <xpath expr="//div[@id='threshold_message']" position="replace">
             </xpath>
-            <xpath expr="//div[@id='out_of_stock_message']" position="replace">
-            </xpath>
+            <div id="out_of_stock_message" position="replace">
+            </div>
         </field>
     </record>
+
+
 </odoo>
