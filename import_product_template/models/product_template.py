@@ -63,75 +63,99 @@ class ImportProduct(models.TransientModel):
         return notification
 
     def update_attributes(self, product_template, attributes):
-        # delete existing attribute lines
-        product_template.sudo().attribute_line_ids.unlink()
+        """
+        Update product attributes grouping values by attribute.
+        Handles case sensitivity and duplicates properly.
+        """
+        try:
+            # Delete existing attribute lines in one operation
+            product_template.sudo().attribute_line_ids.unlink()
 
-        # create a dictionary to group values by attribute
-        attributes_dict = {}
+            # Dictionary to store {normalized_attr_name: attr_data}
+            attributes_dict = {}
 
-        for rec in attributes:
-            attribute = rec.get('attribute', None)
-            if not attribute:
-                continue
+            # First pass: collect all attributes and values
+            for rec in attributes:
+                if not rec.get('attribute'):
+                    continue
 
-            attribute_name = attribute.get('name', None)
-            values = attribute.get('value', [])
+                attribute = rec['attribute']
+                attr_name = attribute.get('name', '').strip()
+                if not attr_name:
+                    continue
 
-            # if attribute not in dict, initialize it
-            if attribute_name not in attributes_dict:
-                # search or create attribute
-                attribute_databse_id = self.env['product.attribute'].sudo().search(
-                    [('name', 'ilike', attribute_name)], limit=1)
-                if not attribute_databse_id:
-                    attribute_databse_id = self.env['product.attribute'].create({
-                        "name": attribute_name
-                    })
+                # Normalize for comparison (case insensitive, no extra spaces)
+                norm_attr_name = attr_name.lower().strip()
 
-                attributes_dict[attribute_name] = {
-                    'attribute_id': attribute_databse_id.id,
-                    'values': [],
-                    'price_mapping': {}  # to store value-price mapping
-                }
+                # Initialize attribute data if not exists
+                if norm_attr_name not in attributes_dict:
+                    # Find or create attribute
+                    attribute_id = self.env['product.attribute'].sudo().search(
+                        [('name', '=ilike', norm_attr_name)], limit=1)
 
-            # process values
-            for val in values:
-                val_name = val.get('value', '')
-                val_price = val.get('price', 0)
+                    if not attribute_id:
+                        attribute_id = self.env['product.attribute'].create({
+                            'name': attr_name  # Keep original capitalization
+                        })
 
-                # check if value already exists for this attribute
-                value_record = self.env['product.attribute.value'].sudo().search([
-                    ('name', '=', val_name),
-                    ('attribute_id', '=', attributes_dict[attribute_name]['attribute_id'])
-                ], limit=1)
+                    attributes_dict[norm_attr_name] = {
+                        'attribute_id': attribute_id.id,
+                        'original_name': attr_name,
+                        'values': {},  # {norm_val_name: (val_id, original_name, price)}
+                    }
 
-                if not value_record:
-                    value_record = self.env['product.attribute.value'].create({
-                        'name': val_name,
-                        'attribute_id': attributes_dict[attribute_name]['attribute_id']
-                    })
+                # Process values
+                for val in attribute.get('value', []):
+                    val_name = val.get('value', '').strip()
+                    if not val_name:
+                        continue
 
-                # add to values list if not already there
-                if value_record.id not in attributes_dict[attribute_name]['values']:
-                    attributes_dict[attribute_name]['values'].append(value_record.id)
+                    norm_val_name = val_name.lower().strip()
+                    price = float(val.get('price', 0))
 
-                # store price mapping
-                attributes_dict[attribute_name]['price_mapping'][val_name] = val_price
+                    # Store value if not exists or update price if needed
+                    if norm_val_name not in attributes_dict[norm_attr_name]['values']:
+                        # Find or create value
+                        val_id = self.env['product.attribute.value'].sudo().search([
+                            ('name', '=ilike', norm_val_name),
+                            ('attribute_id', '=', attributes_dict[norm_attr_name]['attribute_id'])
+                        ], limit=1)
 
-        # create attribute lines and configure prices
-        for attr_name, attr_data in attributes_dict.items():
-            # create attribute line
-            attribute_line = self.env['product.template.attribute.line'].sudo().create({
-                "attribute_id": attr_data['attribute_id'],
-                "product_tmpl_id": product_template.id,
-                "value_ids": [(6, 0, attr_data['values'])]
-            })
+                        if not val_id:
+                            val_id = self.env['product.attribute.value'].create({
+                                'name': val_name,
+                                'attribute_id': attributes_dict[norm_attr_name]['attribute_id']
+                            })
 
-            # configure prices
-            for value in attribute_line.product_template_value_ids:
-                price = attr_data['price_mapping'].get(value.name, 0)
-                value.sudo().write({
-                    'price_extra': price
+                        attributes_dict[norm_attr_name]['values'][norm_val_name] = (
+                            val_id.id,
+                            val_name,  # original name
+                            price
+                        )
+
+            # Second pass: create attribute lines and set prices
+            for attr_data in attributes_dict.values():
+                # Create attribute line with all values
+                attribute_line = self.env['product.template.attribute.line'].create({
+                    'attribute_id': attr_data['attribute_id'],
+                    'product_tmpl_id': product_template.id,
+                    'value_ids': [(6, 0, [v[0] for v in attr_data['values'].values()])]
                 })
+
+                # Set prices for each value
+                for ptav in attribute_line.product_template_value_ids:
+                    # Find matching value (case insensitive)
+                    for norm_val, (val_id, orig_name, price) in attr_data['values'].items():
+                        if ptav.product_attribute_value_id.id == val_id:
+                            ptav.sudo().write({'price_extra': price})
+                            break
+
+            return True
+
+        except Exception as e:
+            _logger.error(f"Error updating attributes: {str(e)}")
+            raise
+
 
     def update_list_vendors(self, product_template, vendors):
         # delete seller_ids line on product
