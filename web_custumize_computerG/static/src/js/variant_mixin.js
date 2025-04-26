@@ -5,10 +5,10 @@ odoo.define('web_custumize_computerG.VariantMixin', function (require) {
     var ajax = require('web.ajax');
     var session = require('web.session');
     const $outOfStockMsg = $('#out_of_stock_message');
-        alert('$outOfStockMsg', $outOfStockMsg)
-        if ($outOfStockMsg.length) {
-            $outOfStockMsg.hide();
-        }
+    alert('$outOfStockMsg', $outOfStockMsg)
+    if ($outOfStockMsg.length) {
+        $outOfStockMsg.hide();
+    }
     // Ajout des méthodes personnalisées à VariantMixin
     VariantMixin._insertDelevryRemoteMessageDetailPage = function(productInfo) {
         if (productInfo.messageDelivryTimeRemoteStock) {
@@ -154,6 +154,11 @@ odoo.define('web_custumize_computerG.VariantMixin', function (require) {
             }
 
             console.log('allQuantity', allQuantity)
+             alert('$outOfStockMsg')
+             alert($outOfStockMsg)
+            if ($outOfStockMsg.length) {
+                $outOfStockMsg.hide();
+            }
             console.log('addQty', addQty)
             const qtyReset = addQty - (virtual_available + qty_available_wt);
             console.log('virtual_available', virtual_available)
