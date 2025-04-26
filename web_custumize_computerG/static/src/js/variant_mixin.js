@@ -4,11 +4,7 @@ odoo.define('web_custumize_computerG.VariantMixin', function (require) {
     var VariantMixin = require('sale.VariantMixin');
     var ajax = require('web.ajax');
     var session = require('web.session');
-    const $outOfStockMsg = $('#out_of_stock_message');
-    alert('$outOfStockMsg', $outOfStockMsg)
-    if ($outOfStockMsg.length) {
-        $outOfStockMsg.hide();
-    }
+
     // Ajout des méthodes personnalisées à VariantMixin
     VariantMixin._insertDelevryRemoteMessageDetailPage = function(productInfo) {
         if (productInfo.messageDelivryTimeRemoteStock) {
@@ -152,14 +148,15 @@ odoo.define('web_custumize_computerG.VariantMixin', function (require) {
                 $infoMessage.html(`<span/>`);
                 return;
             }
-
-            console.log('allQuantity', allQuantity)
+            const $outOfStockMsg = $('#out_of_stock_message');
+            console.log('allQuantity 2', allQuantity)
              alert('$outOfStockMsg')
              alert($outOfStockMsg)
             if ($outOfStockMsg.length) {
                 $outOfStockMsg.hide();
             }
-            console.log('addQty', addQty)
+            console.log('$outOfStockMsg', $outOfStockMsg)
+            console.log('addQty Jinja', addQty)
             const qtyReset = addQty - (virtual_available + qty_available_wt);
             console.log('virtual_available', virtual_available)
             console.log('qty_available_wt', qty_available_wt)
