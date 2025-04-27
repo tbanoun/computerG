@@ -20,7 +20,7 @@ class ProductTemplateExport(models.Model):
 
         # Write header row based on your example
         headers = [
-            "Is Published", "ID", "Name", "Product Type", "Cost", "Sales Price",
+            "Is Published", "ID", "Name", "Product Type", "Customer Taxes", "Cost", "Sales Price",
             "Inventory Categ", "SKU", "Barcode", "Website URL Bz", "CPU Bz",
             "Sreen Size Bz", "Hard Drive Type Bz", "RAM Bz", "GPU Bz", "Manufacturer Bz", "Kind Bz",
             "Condition Bz", "Rubric Bz", "Image URL", "Website Categ", "Available in POS T/F",
@@ -62,6 +62,11 @@ class ProductTemplateExport(models.Model):
             manufacturer_id = product.manufacturer_id_int if product.manufacturer_id_int else 0
             # manufacturer_id = 0
             # Get first seller ids
+            taxes_id = ''
+            for rec in product.taxes_id:
+                rec_xmld_id = generateExportId(rec)
+                if not rec_xmld_id: continue
+                taxes_id += f'{rec_xmld_id},'
 
             # Prepare the row data
             result = []
@@ -70,6 +75,7 @@ class ProductTemplateExport(models.Model):
                 product_xmld_id,  # extenal_id
                 product.name,  # product name
                 product.detailed_type,  # detailed_type
+                product.taxes_id,  # taxes_id
                 product.standard_price,  # standard_price
                 product.list_price,  # Sales Price
                 category_xmld_id or '',  # categ_id/id

@@ -284,7 +284,7 @@ def generateProductVals(self, vals):
         'manufacturer_id_int': cleanSentence(vals.get('manufacturer_id', 0)),
         'x_hddtype': cleanSentence(vals.get('Hard Drive Type Bz', '')),
         'x_kind': cleanSentence(vals.get('Hard Drive Type Bz', '')),
-        'dr_label_id': [(6, 0, selectElementDataBase(self, cleanSentence(vals.get('Label', None))))],
+        'dr_label_id': selectOneElementDataBase(self, cleanSentence(vals.get('Label', None))),
         'image_url': cleanSentence(vals.get('Image URL', '')),
         'description_sale': cleanSentence(vals.get('Sale Description', '')),
         'available_in_pos': available_in_pos,
