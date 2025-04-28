@@ -11,6 +11,7 @@ import base64
 import io
 import logging
 import math
+
 _logger = logging.getLogger(__name__)
 
 
@@ -251,7 +252,6 @@ class ImportProductConfig(models.Model):
         if not cron_id.active: return False
         cron_id.startScriptUsingButtonTest()
 
-
     def startScript(self, checkDate=None):
         if not checkDate:
             alpha = self.checkHourStartCron()
@@ -284,7 +284,9 @@ class ImportProductConfig(models.Model):
                 continue
             if category.lower() not in selectCategory: continue
             availableQuantity = row.get('AvailableQuantity')
+            AvailableNextQuantity = row.get('AvailableNextQuantity')
             if not isinstance(availableQuantity, int): continue
+            availableQuantity += AvailableNextQuantity
             if availableQuantity > 0:
                 # select product on table product.template
                 product_id = self.env['product.template'].sudo().search([
@@ -345,8 +347,6 @@ class ImportProductConfig(models.Model):
             stock_id.sudo().action_apply_inventory()
         return True
 
-
-
     def startScriptUsingButtonTest(self):
         if not self.file_csv: return
         if not self.file_csv:
@@ -387,7 +387,9 @@ class ImportProductConfig(models.Model):
                 continue
             if category.lower() not in selectCategory: continue
             availableQuantity = row.get('AvailableQuantity')
+            AvailableNextQuantity = row.get('AvailableNextQuantity')
             if not isinstance(availableQuantity, int): continue
+            availableQuantity += AvailableNextQuantity
             # select product on odoo database
             product_id = self.env['product.template'].sudo().search([
                 ('barcode', 'ilike', manufacturerID)
@@ -396,7 +398,7 @@ class ImportProductConfig(models.Model):
                 categoryCode = product_id.categ_id.categoryCode if product_id.categ_id.categoryCode else ''
                 if categoryCode.lower() not in selectCategory:
                     product_id = None
-            #start the script and logique to update qty and price on wherehouse of supplier
+            # start the script and logique to update qty and price on wherehouse of supplier
             # strp published
             if product_id and not product_id.is_published and availableQuantity > 0:
                 self.createUpdateCsvFile("published", row)
@@ -404,7 +406,7 @@ class ImportProductConfig(models.Model):
             if not product_id:
                 # create a new line on file csv create product
                 self.createUpdateCsvFile("create", row)
-            #step update
+            # step update
             elif product_id and availableQuantity > 0:
                 self.createUpdateCsvFile("update", row)
                 self.updateQtyStockProduct(product_id, availableQuantity)
@@ -417,11 +419,9 @@ class ImportProductConfig(models.Model):
                 product_id.sudo().is_published = False
                 product_id.sudo().standard_price = row.get('NetPrice')
 
-
-            if i >= 1000 or index+1 == self.max_products:
-                self.index = index +1
+            if i >= 1000 or index + 1 == self.max_products:
+                self.index = index + 1
                 break
-
 
 
 class ProductCategory(models.Model):
