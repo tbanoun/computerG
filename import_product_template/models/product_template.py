@@ -203,14 +203,6 @@ class ImportProduct(models.TransientModel):
         # manufacturer_id
         manufacturer_id = product_vals.pop('manufacturer_id', 0)
         # dr_label_id
-        dr_label_id = product_vals.pop('dr_label_id', None)
-        try:
-            dr_label_id = selectOneElementDataBase(self, dr_label_id)
-            if dr_label_id:
-                product_vals['dr_label_id'] = dr_label_id
-        except Exception:
-            pass
-
         product_vals['manufacturer_id_int'] = manufacturer_id
 
         product_id.sudo().write(
@@ -221,13 +213,6 @@ class ImportProduct(models.TransientModel):
         product_vals = generateProductVals(self, vals)
 
         product_vals['detailed_type'] = 'product'
-        # dr_label_id
-        # dr_label_id
-        dr_label_id = product_vals.pop('dr_label_id', None)
-        if dr_label_id: dr_label_id = selectOneElementDataBase(self, dr_label_id)
-        if dr_label_id:
-            product_vals['dr_label_id'] = dr_label_id
-
         product_id = self.env['product.template'].sudo().create(
             product_vals
         )

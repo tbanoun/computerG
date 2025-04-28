@@ -264,6 +264,9 @@ def generateProductVals(self, vals):
     show_availability = getValueBool(cleanSentence(vals.get('Show Avil Qty T/F', False)))
     # quantity = convertStrTofloat(cleanSentence(vals.get('Quantity On Hand', False)))
     weight = convertStrTofloat(cleanSentence(vals.get('Weight', 0)))
+    dr_label_id = selectOneElementDataBase(self, vals.get('Label', None))
+    print('dr_label_id vals',vals.get('Label', None))
+    print('dr_label_id',dr_label_id)
     # print(f'\n\n weight {weight} \n\n')
     # print(f'\n\n weight2  {vals.get('Weight', 0)} \n\n')
     product_vals = {
@@ -284,7 +287,7 @@ def generateProductVals(self, vals):
         'manufacturer_id_int': cleanSentence(vals.get('manufacturer_id', 0)),
         'x_hddtype': cleanSentence(vals.get('Hard Drive Type Bz', '')),
         'x_kind': cleanSentence(vals.get('Hard Drive Type Bz', '')),
-        'dr_label_id': selectOneElementDataBase(self, cleanSentence(vals.get('Label', None))),
+        'dr_label_id': dr_label_id.id if dr_label_id else None,
         'image_url': cleanSentence(vals.get('Image URL', '')),
         'description_sale': cleanSentence(vals.get('Sale Description', '')),
         'available_in_pos': available_in_pos,
@@ -309,6 +312,8 @@ def generateProductVals(self, vals):
         'dr_product_tab_ids': [(6, 0, selectElementDataBase(self, vals.get('Tabs', None)))],
         'supplier_taxes_id': [(6, 0, selectElementDataBase(self, vals.get('Vendor Taxes', None)))],
     }
+
+    print('product_vals', product_vals)
     return product_vals
 
 

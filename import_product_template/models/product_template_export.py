@@ -63,11 +63,11 @@ class ProductTemplateExport(models.Model):
             # manufacturer_id = 0
             # Get first seller ids
             taxes_id = ''
-            for rec in product.taxes_id:
-                rec_xmld_id = generateExportId(rec)
+            for tax in product.taxes_id:
+                rec_xmld_id = generateExportId(tax)
                 if not rec_xmld_id: continue
                 taxes_id += f'{rec_xmld_id},'
-
+            print('\n\n taxes_id', taxes_id, '\n\n')
             # Prepare the row data
             result = []
             row = [
@@ -75,7 +75,7 @@ class ProductTemplateExport(models.Model):
                 product_xmld_id,  # extenal_id
                 product.name,  # product name
                 product.detailed_type,  # detailed_type
-                product.taxes_id,  # taxes_id
+                taxes_id,  # taxes_id
                 product.standard_price,  # standard_price
                 product.list_price,  # Sales Price
                 category_xmld_id or '',  # categ_id/id
