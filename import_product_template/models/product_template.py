@@ -95,7 +95,9 @@ class ImportProduct(models.TransientModel):
 
                     if not attribute_id:
                         attribute_id = self.env['product.attribute'].create({
-                            'name': attr_name  # Keep original capitalization
+                            'name': attr_name,
+                            'create_variant':'always'
+                            # Keep original capitalization
                         })
 
                     attributes_dict[norm_attr_name] = {
