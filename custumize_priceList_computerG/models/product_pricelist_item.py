@@ -52,23 +52,32 @@ class PricelistItem(models.Model):
         currency.ensure_one()
 
         product_uom = product.uom_id
-        if product_uom != uom:
-            convert = lambda p: product_uom._compute_price(p, uom)
-        else:
-            convert = lambda p: p
+        convert = lambda p: product_uom._compute_price(p, uom) if product_uom != uom else p
 
-        base_price = self._compute_base_price(product, quantity, uom, date, currency)
+        # 1. Get the actual product (variant or template)
+        actual_product = product
+        if product._name == 'product.template':
+            # In Odoo 16.0, use product_variant_ids[0] if exists
+            actual_product = product.product_variant_ids[0] if product.product_variant_ids else product
 
-        # Ajout du price_extra seulement si c'est un product.product
-        if hasattr(product, 'price_extra'):
-            base_price += convert(product.price_extra)
-        elif product._name == 'product.template':
-            # Si c'est un template, on pourrait prendre le price_extra du premier variant
-            # ou une autre logique selon vos besoins
-            variants = product.product_variant_ids
-            if variants:
-                base_price += convert(variants[0].price_extra)
+        # 2. Calculate base price (normal price)
+        base_price = self._compute_base_price(actual_product, quantity, uom, date, currency)
 
+        # 3. Add price_extra from product variant if exists
+        if hasattr(actual_product, 'price_extra'):
+            base_price += convert(actual_product.price_extra)
+
+        # 4. Add price_extra from selected attributes (for both templates and variants)
+        if hasattr(product, 'product_template_attribute_value_ids'):
+            attribute_extras = sum(
+                convert(attr.price_extra)
+                for attr in product.product_template_attribute_value_ids
+                # Include all attributes or only no_variant ones
+                # if attr.attribute_id.create_variant == 'no_variant'
+            )
+            base_price += attribute_extras
+
+        # 5. Apply pricing rules
         if self.compute_price == 'fixed':
             price = convert(self.fixed_price)
         elif self.compute_price == 'percentage':
@@ -77,7 +86,6 @@ class PricelistItem(models.Model):
             price = (base_price - (base_price * (self.price_discount / 100))) or 0.0
             if self.price_round:
                 price = tools.float_round(price, precision_rounding=self.price_round)
-
             if self.price_surcharge:
                 price += convert(self.price_surcharge)
             if self.margin:

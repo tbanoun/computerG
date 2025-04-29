@@ -21,5 +21,6 @@
         #views
         'views/product_pricelist_item.xml',
         'views/product_product.xml',
+        # 'views/product_attribute_views.xml',
     ],
 }
