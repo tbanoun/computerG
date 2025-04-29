@@ -20,5 +20,6 @@
 
         #views
         'views/product_pricelist_item.xml',
+        'views/product_product.xml',
     ],
 }

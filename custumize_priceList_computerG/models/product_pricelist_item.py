@@ -6,6 +6,7 @@ import math
 class PricelistItem(models.Model):
     _inherit = "product.pricelist.item"
 
+
     margin = fields.Float(string="Margin (%)", default=0,
                           digits=(16, 2))
 
@@ -44,40 +45,35 @@ class PricelistItem(models.Model):
             )
 
     def _compute_price(self, product, quantity, uom, date, currency=None):
-        """Compute the unit price of a product in the context of a pricelist application.
-
-        :param product: recordset of product (product.product/product.template)
-        :param float qty: quantity of products requested (in given uom)
-        :param uom: unit of measure (uom.uom record)
-        :param datetime date: date to use for price computation and currency conversions
-        :param currency: pricelist currency (for the specific case where self is empty)
-
-        :returns: price according to pricelist rule, expressed in pricelist currency
-        :rtype: float
-        """
         product.ensure_one()
         uom.ensure_one()
 
         currency = currency or self.currency_id
         currency.ensure_one()
 
-        # Pricelist specific values are specified according to product UoM
-        # and must be multiplied according to the factor between uoms
         product_uom = product.uom_id
         if product_uom != uom:
             convert = lambda p: product_uom._compute_price(p, uom)
         else:
             convert = lambda p: p
 
+        base_price = self._compute_base_price(product, quantity, uom, date, currency)
+
+        # Ajout du price_extra seulement si c'est un product.product
+        if hasattr(product, 'price_extra'):
+            base_price += convert(product.price_extra)
+        elif product._name == 'product.template':
+            # Si c'est un template, on pourrait prendre le price_extra du premier variant
+            # ou une autre logique selon vos besoins
+            variants = product.product_variant_ids
+            if variants:
+                base_price += convert(variants[0].price_extra)
+
         if self.compute_price == 'fixed':
             price = convert(self.fixed_price)
         elif self.compute_price == 'percentage':
-            base_price = self._compute_base_price(product, quantity, uom, date, currency)
             price = (base_price - (base_price * (self.percent_price / 100))) or 0.0
         elif self.compute_price == 'formula':
-            base_price = self._compute_base_price(product, quantity, uom, date, currency)
-            # complete formula
-            price_limit = base_price
             price = (base_price - (base_price * (self.price_discount / 100))) or 0.0
             if self.price_round:
                 price = tools.float_round(price, precision_rounding=self.price_round)
@@ -85,8 +81,63 @@ class PricelistItem(models.Model):
             if self.price_surcharge:
                 price += convert(self.price_surcharge)
             if self.margin:
-                # price = price + (convert((self.margin / 100) * base_price))
                 price = math.ceil(price + ((self.margin / 100) * base_price))
-        else:  # empty self, or extended pricelist price computation logic
-            price = self._compute_base_price(product, quantity, uom, date, currency)
+        else:
+            price = base_price
+
         return price
+
+
+
+    def _compute_base_price(self, product, quantity, uom, date, target_currency):
+        """ Compute the base price for a given rule
+
+        :param product: recordset of product (product.product/product.template)
+        :param float qty: quantity of products requested (in given uom)
+        :param uom: unit of measure (uom.uom record)
+        :param datetime date: date to use for price computation and currency conversions
+        :param target_currency: pricelist currency
+
+        :returns: base price, expressed in provided pricelist currency
+        :rtype: float
+        """
+        target_currency.ensure_one()
+
+        rule_base = self.base or 'list_price'
+        if rule_base == 'pricelist' and self.base_pricelist_id:
+            price = self.base_pricelist_id._get_product_price(product, quantity, uom, date)
+            src_currency = self.base_pricelist_id.currency_id
+        elif rule_base == "standard_price":
+            src_currency = product.cost_currency_id
+            price = product.price_compute(rule_base, uom=uom, date=date)[product.id]
+        else: # list_price
+            src_currency = product.currency_id
+            price = product.price_compute(rule_base, uom=uom, date=date)[product.id]
+
+        if src_currency != target_currency:
+            price = src_currency._convert(price, target_currency, self.env.company, date, round=False)
+
+        return price
+
+class ProductProduct(models.Model):
+    _inherit = "product.product"
+
+    standard_price_with_cost = fields.Float(
+            'Sales Price with Cost', compute='_compute_product_standard_price',
+            digits='Product Price',
+            help="The sale price is managed from the product template. Click on the 'Configure Variants' button to set the extra attribute prices.")
+
+    @api.depends('standard_price', 'price_extra')
+    def _compute_product_standard_price(self):
+        print(f'\n\n price_extra \n\n')
+        to_uom = None
+        if 'uom' in self._context:
+            to_uom = self.env['uom.uom'].browse(self._context['uom'])
+
+        for product in self:
+            print(f'\n\n price_extra {product.price_extra} \n\n')
+            if to_uom:
+                standard_price = product.uom_id._compute_price(product.standard_price, to_uom)
+            else:
+                standard_price = product.product_tmpl_id.standard_price
+            product.standard_price_with_cost = standard_price + product.price_extra
