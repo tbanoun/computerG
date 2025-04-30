@@ -45,7 +45,6 @@ class ImportProduct(models.TransientModel):
             if not created: update_index += 1
             attributes = rec.pop('Attributes', None)
             vendors = rec.pop('Vendor', None)
-            print(f'\n\n\n attributes: {attributes}')
             if attributes: self.update_attributes(product_template, attributes)
             if vendors: self.update_list_vendors(product_template, vendors)
             self.update_product_template(product_template, rec)
@@ -96,7 +95,7 @@ class ImportProduct(models.TransientModel):
                     if not attribute_id:
                         attribute_id = self.env['product.attribute'].create({
                             'name': attr_name,
-                            'create_variant':'always'
+                            'create_variant':'no_variant'
                             # Keep original capitalization
                         })
 
