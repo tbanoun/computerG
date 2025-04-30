@@ -61,7 +61,7 @@ class PricelistItem(models.Model):
             actual_product = product.product_variant_ids[0] if product.product_variant_ids else product
 
         # 2. Calculate base price (normal price)
-        base_price = self._compute_base_price(actual_product, quantity, uom, date, currency)
+        base_price, extraPrice = self._compute_base_price_duplicate(actual_product, quantity, uom, date, currency)
 
         # 3. Add price_extra from product variant if exists
         if hasattr(actual_product, 'price_extra'):
@@ -92,12 +92,12 @@ class PricelistItem(models.Model):
                 price = math.ceil(price + ((self.margin / 100) * base_price))
         else:
             price = base_price
-
+        price += extraPrice
         return price
 
 
 
-    def _compute_base_price(self, product, quantity, uom, date, target_currency):
+    def _compute_base_price_duplicate(self, product, quantity, uom, date, target_currency):
         """ Compute the base price for a given rule
 
         :param product: recordset of product (product.product/product.template)
@@ -110,22 +110,24 @@ class PricelistItem(models.Model):
         :rtype: float
         """
         target_currency.ensure_one()
-
+        priceExtra = 0
         rule_base = self.base or 'list_price'
         if rule_base == 'pricelist' and self.base_pricelist_id:
             price = self.base_pricelist_id._get_product_price(product, quantity, uom, date)
             src_currency = self.base_pricelist_id.currency_id
         elif rule_base == "standard_price":
             src_currency = product.cost_currency_id
+            priceObject = product.price_compute(rule_base, uom=uom, date=date)
             price = product.price_compute(rule_base, uom=uom, date=date)[product.id]
+            priceExtra = product.price_compute(rule_base, uom=uom, date=date)['priceExtra']
         else: # list_price
             src_currency = product.currency_id
             price = product.price_compute(rule_base, uom=uom, date=date)[product.id]
-
+            priceObject = product.price_compute(rule_base, uom=uom, date=date)
         if src_currency != target_currency:
             price = src_currency._convert(price, target_currency, self.env.company, date, round=False)
 
-        return price
+        return price, priceExtra
 
 class ProductProduct(models.Model):
     _inherit = "product.product"
@@ -149,3 +151,47 @@ class ProductProduct(models.Model):
             else:
                 standard_price = product.product_tmpl_id.standard_price
             product.standard_price_with_cost = standard_price + product.price_extra
+
+    def price_compute(self, price_type, uom=None, currency=None, company=None, date=False):
+        company = company or self.env.company
+        date = date or fields.Date.context_today(self)
+        # price_type = 'list_price'
+        self = self.with_company(company)
+        # if price_type == 'standard_price':
+        #     # standard_price field can only be seen by users in base.group_user
+        #     # Thus, in order to compute the sale price from the cost for users not in this group
+        #     # We fetch the standard price as the superuser
+        #     self = self.sudo()
+
+        prices = dict.fromkeys(self.ids, 0.0)
+        for product in self:
+            price = product[price_type] or 0.0
+            price_currency = product.currency_id
+            if price_type == 'standard_price':
+                priceExtra = 0
+                price_currency = product.cost_currency_id
+                priceExtra += product.price_extra
+                if self._context.get('no_variant_attributes_price_extra'):
+                    # # we have a list of price_extra that comes from the attribute values, we need to sum all that
+                    # price += sum(self._context.get('no_variant_attributes_price_extra'))
+                    priceExtra += sum(self._context.get('no_variant_attributes_price_extra'))
+            if price_type == 'list_price':
+                price += product.price_extra
+                # we need to add the price from the attributes that do not generate variants
+                # (see field product.attribute create_variant)
+                if self._context.get('no_variant_attributes_price_extra'):
+                    # we have a list of price_extra that comes from the attribute values, we need to sum all that
+                    price += sum(self._context.get('no_variant_attributes_price_extra'))
+            if uom:
+                price = product.uom_id._compute_price(price, uom)
+            # Convert from current user company currency to asked one
+            # This is right cause a field cannot be in more than one currency
+            if currency:
+                price = price_currency._convert(price, currency, company, date)
+
+            prices[product.id] = price
+
+            if price_type == 'standard_price':
+                prices['priceExtra'] = priceExtra
+
+        return prices
