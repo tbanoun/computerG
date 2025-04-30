@@ -15,7 +15,7 @@
         'static/description/icon.png',
     ],
     'data': [
-        # 'reports/sale_order_inherit.xml',
+        'reports/sale_order_inherit.xml',
         'reports/invoice_inherit.xml',
     ],
 }
