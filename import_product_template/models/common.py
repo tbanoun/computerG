@@ -180,7 +180,7 @@ def generateNewRow():
 
 def generateNewRowAttribute():
     result = []
-    for i in range(0, 52):
+    for i in range(0, 53):
         result.append('')
     return result
 
