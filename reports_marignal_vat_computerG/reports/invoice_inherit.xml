@@ -2,17 +2,63 @@
 <odoo>
     <template id="report_invoice_document_marginal_vat">
         <t t-call="web.external_layout">
+
             <t t-set="o" t-value="o.with_context(lang=lang)"/>
-            <t t-set="address">
-                <address t-field="o.partner_id"
-                         t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
-                <div t-if="o.partner_id.vat" class="mt16">
-                    <t t-if="o.company_id.country_id.vat_label" t-esc="o.company_id.country_id.vat_label"
-                       id="inv_tax_id_label"/>
-                    <t t-else="">Tax ID</t>:
-                    <span t-field="o.partner_id.vat"/>
-                </div>
-            </t>
+            <div class="row">
+                <t t-if="o.partner_shipping_id and (o.partner_shipping_id != o.partner_id)">
+                    <div class="col-6">
+                        <t t-set="information_block">
+                            <div groups="account.group_delivery_invoice_address" name="shipping_address_block">
+                                <strong>Shipping Address:</strong>
+                                <div t-field="o.partner_shipping_id"
+                                     t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                            </div>
+                        </t>
+                    </div>
+                    <div class="col-6" name="address_not_same_as_shipping">
+                        <t t-set="address">
+                            <address class="mb-0" t-field="o.partner_id"
+                                     t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                            <div t-if="o.partner_id.vat" id="partner_vat_address_not_same_as_shipping">
+                                <t t-if="o.company_id.account_fiscal_country_id.vat_label"
+                                   t-esc="o.company_id.account_fiscal_country_id.vat_label" id="inv_tax_id_label"/>
+                                <t t-else="">Tax ID</t>:
+                                <span t-field="o.partner_id.vat"/>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+                <t t-elif="o.partner_shipping_id and (o.partner_shipping_id == o.partner_id)">
+                    <div class="offset-col-6 col-6" name="address_same_as_shipping">
+                        <t t-set="address">
+                            <address class="mb-0" t-field="o.partner_id"
+                                     t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                            <div t-if="o.partner_id.vat" id="partner_vat_address_same_as_shipping">
+                                <t t-if="o.company_id.account_fiscal_country_id.vat_label"
+                                   t-esc="o.company_id.account_fiscal_country_id.vat_label" id="inv_tax_id_label"/>
+                                <t t-else="">Tax ID</t>:
+                                <span t-field="o.partner_id.vat"/>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+                <t t-else="">
+                    <div class="offset-col-6 col-6" name="no_shipping">
+                        <t t-set="address">
+                            <address class="mb-0" t-field="o.partner_id"
+                                     t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                            <div t-if="o.partner_id.vat" id="partner_vat_no_shipping">
+                                <t t-if="o.company_id.account_fiscal_country_id.vat_label"
+                                   t-esc="o.company_id.account_fiscal_country_id.vat_label" id="inv_tax_id_label"/>
+                                <t t-else="">Tax ID</t>:
+                                <span t-field="o.partner_id.vat"/>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+            </div>
+
+
             <div class="page">
                 <h2>
                     <span t-if="o.move_type == 'out_invoice' and o.state == 'posted'">Invoice</span>
@@ -65,6 +111,10 @@
                                 t-attf-class="text-right {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
                                 <span>Disc.%</span>
                             </th>
+                            <th name="th_taxes"
+                                t-attf-class="text-start {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
+                                <span>Taxes</span>
+                            </th>
                             <th name="th_subtotal" class="text-end">
                                 <span>Total Price</span>
                             </th>
@@ -72,10 +122,23 @@
                     </thead>
                     <tbody class="invoice_tbody">
                         <t t-set="current_subtotal" t-value="0"/>
+                        <t t-set="taxes_amount"
+                           t-value="0"/>
                         <t t-set="lines"
                            t-value="o.invoice_line_ids.sorted(key=lambda l: (-l.sequence, l.date, l.move_name, -l.id), reverse=True)"/>
 
                         <t t-foreach="lines" t-as="line">
+                            <t t-set="tax_line" t-value="1"/>
+                            <t t-foreach="line.tax_ids" t-as="tax">
+                                <t t-if="tax.showOnInvoice">
+                                    <t t-set="tax_line" t-value="0"/>
+                                </t>
+                            </t>
+                            <t t-if="tax_line == 1">
+                                <!--                                <t t-set="price_tax" t-value="line.price_total - line.price_subtotal"/>-->
+                                <t t-set="taxes_amount"
+                                   t-value="taxes_amount + line.price_tax"/>
+                            </t>
                             <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal"
                                groups="account.group_show_line_subtotals_tax_excluded"/>
                             <t t-set="current_subtotal" t-value="current_subtotal + line.price_total"
@@ -214,6 +277,9 @@
                                         t-attf-class="text-right {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
                                         <span class="text-nowrap" t-field="line.discount"/>
                                     </td>
+                                    <td name="td_taxes">
+                                        <span t-out="taxes" id="line_tax_ids">Tax 15%</span>
+                                    </td>
                                     <td class="text-end o_price_total">
                                         <span class="text-nowrap" t-field="line.price_total"/>
                                     </td>
@@ -241,6 +307,17 @@
                     <div id="total" class="row" name="total">
                         <div t-attf-class="#{'col-6' if report_type != 'html' else 'col-sm-6 col-md-6'} ms-auto">
                             <table class="table table-sm table-borderless">
+                                <tr class="border-black o_total">
+                                    <td>
+                                        <strong>VAT</strong>
+                                    </td>
+                                    <t t-set="taxes"
+                                       t-value="', '.join([(tax.name) for tax in line.tax_ids])"/>
+                                    <td class="text-end">
+                                        <span t-esc="taxes_amount"
+                                              t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                    </td>
+                                </tr>
                                 <tr class="border-black o_total">
                                     <td>
                                         <strong>Total</strong>
@@ -289,6 +366,30 @@
                         <img class="border border-dark rounded" t-att-src="qr_code_urls[o.id]"/>
                     </p>
                 </div>
+
+                <div class="row mt-3">
+                    <div class="col-6">
+                        <strong>Issued By:</strong>
+                    </div>
+                    <div class="col-6">
+                        <strong>Received By:</strong>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        Full Name:
+                        <span t-field="o.invoice_user_id"/>
+                    </div>
+                    <div class="col-6">
+                        Full Name:
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">Signature:</div>
+                    <div class="col-6">Signature:</div>
+                </div>
+
+
             </div>
         </t>
     </template>
