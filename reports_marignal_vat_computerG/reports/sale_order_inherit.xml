@@ -2,6 +2,15 @@
 <odoo>
 
     <template id="document_tax_totals">
+        <!--total amount tax-->
+        <tr class="border-black o_total">
+            <td>
+                <strong>VAT</strong>
+            </td>
+            <td class="text-end">
+                <span t-esc="taxes_amount" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+            </td>
+        </tr>
         <!--Total amount with all taxes-->
         <tr class="border-black o_total">
             <td>
@@ -95,13 +104,15 @@
                             <th name="th_discount" t-if="display_discount" class="text-end">
                                 <span>Disc.%</span>
                             </th>
+                            <th name="th_taxes" class="text-end">Taxes</th>
                             <th name="th_subtotal" class="text-end">
                                 <span>Total Price</span>
                             </th>
                         </tr>
                     </thead>
                     <tbody class="sale_tbody">
-
+                        <t t-set="taxes_amount"
+                           t-value='0'/>
                         <t t-set="current_subtotal" t-value="0"/>
 
                         <t t-foreach="lines_to_report" t-as="line">
@@ -123,8 +134,24 @@
                                     <td t-if="display_discount" class="text-end">
                                         <span t-field="line.discount"/>
                                     </td>
+
+                                    <t t-set="tax_line" t-value="1"/>
+                                    <t t-foreach="line.tax_id" t-as="tax">
+                                        <t t-if="tax.showOnInvoice">
+                                            <t t-set="tax_line" t-value="0"/>
+                                        </t>
+                                    </t>
+                                    <t t-if="tax_line == 1">
+                                        <t t-set="taxes_amount"
+                                           t-value="taxes_amount + line.price_tax"/>
+                                    </t>
+
                                     <t t-set="taxes"
-                                       t-value="', '.join([(tax.description or tax.name) for tax in line.tax_id])"/>
+                                       t-value="', '.join([(tax.name) for tax in line.tax_id])"/>
+                                    <td name="td_taxes"
+                                        t-attf-class="text-end {{ 'text-nowrap' if len(taxes) &lt; 10 else '' }}">
+                                        <span t-out="taxes">Tax 15%</span>
+                                    </td>
                                     <td t-if="not line.is_downpayment" name="td_subtotal"
                                         class="text-end o_price_total">
                                         <span t-field="line.price_total"/>
@@ -169,6 +196,51 @@
                     </div>
                     <div class="offset-8 text-center">
                         <p t-field="doc.signed_by"/>
+                    </div>
+                </div>
+
+                <div t-if="doc.signature" class="mt-4 ml64 mr4" name="signature">
+                    <div class="offset-8">
+                        <strong>Signature</strong>
+                    </div>
+                    <div class="offset-8">
+                        <img t-att-src="image_data_uri(doc.signature)" style="max-height: 4cm; max-width: 8cm;"/>
+                    </div>
+                    <div class="offset-8 text-center">
+                        <p t-field="doc.signed_by"/>
+                    </div>
+                </div>
+
+                <div>
+                    <p t-field="doc.note" name="order_note"/>
+                    <p t-if="not is_html_empty(doc.payment_term_id.note)">
+                        <span t-field="doc.payment_term_id.note"/>
+                    </p>
+                    <p t-if="doc.fiscal_position_id and not is_html_empty(doc.fiscal_position_id.sudo().note)"
+                       id="fiscal_position_remark">
+                        <strong>Fiscal Position Remark:</strong>
+                        <span t-field="doc.fiscal_position_id.sudo().note"/>
+                    </p>
+                    <div class="row mt-3">
+                        <div class="col-6">
+                            <strong>Issued By:</strong>
+                        </div>
+                        <div class="col-6">
+                            <strong>Received By:</strong>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            Full Name:
+                            <span t-field="doc.user_id"/>
+                        </div>
+                        <div class="col-6">
+                            Full Name:
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">Signature:</div>
+                        <div class="col-6">Signature:</div>
                     </div>
                 </div>
             </div>

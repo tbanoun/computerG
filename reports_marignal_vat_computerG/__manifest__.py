@@ -17,5 +17,8 @@
     'data': [
         'reports/sale_order_inherit.xml',
         'reports/invoice_inherit.xml',
+
+        #views
+        'views/account_taxes.xml',
     ],
 }
