@@ -81,6 +81,10 @@
                         <strong>Due Date:</strong>
                         <p class="m-0" t-field="o.invoice_date_due"/>
                     </div>
+                    <div class="col-auto col-3 mw-100 mb-2" name="due_date">
+                        <strong>Invoice Status:</strong>
+                        <p class="m-0" t-field="o.payment_state" widget="badge"/>
+                    </div>
                     <div class="col-auto col-3 mw-100 mb-2" t-if="o.invoice_origin" name="origin">
                         <strong>Source:</strong>
                         <p class="m-0" t-field="o.invoice_origin"/>
