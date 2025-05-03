@@ -131,6 +131,7 @@ class ProductTemplateExport(models.Model):
                 row.append('')
                 row.append('')
                 result.append(row)
+
             for rec in product.seller_ids:
                 vendor_xmld_id = generateExportId(rec.partner_id)
                 if not vendor_xmld_id: continue

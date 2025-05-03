@@ -173,7 +173,7 @@ def select_tracking_type_with_key(name):
 
 def generateNewRow():
     result = []
-    for i in range(0, 42):
+    for i in range(0, 43):
         result.append('')
     return result
 
