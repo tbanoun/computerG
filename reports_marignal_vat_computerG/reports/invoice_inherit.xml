@@ -118,7 +118,7 @@
                     }
 
                 </style>
-                <table class="table table-sm o_main_table" name="invoice_line_table">
+                <table class="table" name="invoice_line_table">
                     <t t-set="tax_totals" t-value="o.tax_totals"/>
                     <thead>
                         <tr>
