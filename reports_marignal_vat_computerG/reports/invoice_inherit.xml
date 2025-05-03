@@ -104,6 +104,12 @@
                     .table{
                     border: none !important;
                     }
+                    .table-sm {
+                    border: none !important;
+                    }
+                    .o_main_table {
+                    border: none !important;
+                    }
                     table[name="invoice_line_table"] {
                     border-collapse: collapse !important; /* Pour éviter l'affichage des bordures sur la table */
                     }
