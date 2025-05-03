@@ -99,9 +99,14 @@
                     <!-- In case we want to repeat the header, remove "display: table-row-group" -->
                     <thead style="display: table-row-group border: none!important; border-bottom: 2px solid black !important;">
                         <tr style="border: none !important; border-bottom: 2px solid black !important;">
-                            <th name="th_description" class="text-start" style="border: none !important;" width="60%">Description</th>
-                            <th name="th_quantity" class="text-end" style="border: none !important;" width="10%">Quantity</th>
-                            <th name="th_discount" t-if="display_discount" class="text-end" width="10%" style="border: none !important;">
+                            <th name="th_description" class="text-start" style="border: none !important;" width="60%">
+                                Description
+                            </th>
+                            <th name="th_quantity" class="text-end" style="border: none !important;" width="10%">
+                                Quantity
+                            </th>
+                            <th name="th_discount" t-if="display_discount" class="text-end" width="10%"
+                                style="border: none !important;">
                                 <span>Disc.%</span>
                             </th>
                             <th name="th_taxes" class="text-end" style="border: none !important;" width="10%">Taxes</th>
@@ -122,7 +127,8 @@
                             <t t-set="current_subtotal" t-value="current_subtotal + line.price_total"
                                groups="account.group_show_line_subtotals_tax_included"/>
 
-                            <tr style="border: none !important;" t-att-class="'bg-200 fw-bold o_line_section' if line.display_type == 'line_section' else 'fst-italic o_line_note' if line.display_type == 'line_note' else ''">
+                            <tr style="border: none !important;"
+                                t-att-class="'bg-200 fw-bold o_line_section' if line.display_type == 'line_section' else 'fst-italic o_line_note' if line.display_type == 'line_note' else ''">
                                 <t t-if="not line.display_type">
                                     <td name="td_name" style="border: none !important;">
                                         <span t-field="line.name"/>
@@ -213,6 +219,11 @@
                 </div>
 
                 <div>
+                    <p>
+                        <strong>Note:</strong>
+                        Marginal VAT – Second-Hand Margin Scheme (SHMS) - Value Added Tax Law N.95(I)/2000 -
+                        VAT not deductible for products invoiced under this scheme.
+                    </p>
                     <p t-field="doc.note" name="order_note"/>
                     <p t-if="not is_html_empty(doc.payment_term_id.note)">
                         <span t-field="doc.payment_term_id.note"/>
