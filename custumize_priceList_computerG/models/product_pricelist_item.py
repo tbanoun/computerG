@@ -124,6 +124,10 @@ class PricelistItem(models.Model):
             src_currency = product.currency_id
             price = product.price_compute(rule_base, uom=uom, date=date)[product.id]
             priceObject = product.price_compute(rule_base, uom=uom, date=date)
+
+            price = product.price_compute(rule_base, uom=uom, date=date)[product.id]
+            priceExtra = product.price_compute(rule_base, uom=uom, date=date)['priceExtra']
+
         if src_currency != target_currency:
             price = src_currency._convert(price, target_currency, self.env.company, date, round=False)
 
@@ -176,12 +180,15 @@ class ProductProduct(models.Model):
                     # price += sum(self._context.get('no_variant_attributes_price_extra'))
                     priceExtra += sum(self._context.get('no_variant_attributes_price_extra'))
             if price_type == 'list_price':
-                price += product.price_extra
+                priceExtra = 0
+                priceExtra += product.price_extra
+
+                # price += product.price_extra
                 # we need to add the price from the attributes that do not generate variants
                 # (see field product.attribute create_variant)
                 if self._context.get('no_variant_attributes_price_extra'):
                     # we have a list of price_extra that comes from the attribute values, we need to sum all that
-                    price += sum(self._context.get('no_variant_attributes_price_extra'))
+                    priceExtra += sum(self._context.get('no_variant_attributes_price_extra'))
             if uom:
                 price = product.uom_id._compute_price(price, uom)
             # Convert from current user company currency to asked one
