@@ -101,19 +101,13 @@
 
                 <t t-set="display_discount" t-value="any(l.discount for l in o.invoice_line_ids)"/>
                 <style>
-                    .table{
-                    border: none !important;
-                    }
-                    .table-sm {
-                    border: none !important;
-                    }
-                    .o_main_table {
-                    border: none !important;
-                    }
+                    /* Supprimer toutes les bordures du tableau principal */
                     table[name="invoice_line_table"] {
-                    border-collapse: collapse !important; /* Pour éviter l'affichage des bordures sur la table */
+                    border: none !important;
+                    border-collapse: collapse !important;
                     }
 
+                    /* Supprimer les bordures sur toutes les cellules */
                     table[name="invoice_line_table"] tr,
                     table[name="invoice_line_table"] td,
                     table[name="invoice_line_table"] th {
@@ -121,13 +115,27 @@
                     background-image: none !important;
                     }
 
-                    /* Ajouter une bordure en bas uniquement sur le thead */
-                    table[name="invoice_line_table"] thead th {
-                    border-bottom: 1px solid #000 !important; /* Modifiez la couleur et l'épaisseur selon vos besoins */
+                    /* Ajouter uniquement la bordure inférieure pour l'en-tête */
+                    table[name="invoice_line_table"] thead tr th {
+                    border-bottom: 1px solid #000 !important;
+                    border-top: none !important;
+                    border-left: none !important;
+                    border-right: none !important;
                     }
 
+                    /* Supprimer les bordures pour le corps du tableau */
+                    table[name="invoice_line_table"] tbody tr,
+                    table[name="invoice_line_table"] tbody td {
+                    border: none !important;
+                    }
+                    .no-border-table,
+                    .no-border-table tr,
+                    .no-border-table td,
+                    .no-border-table th {
+                    border: none !important;
+                    }
                 </style>
-                <table class="table table-sm o_main_table" name="invoice_line_table">
+                <table class="table table-sm o_main_table no-border-table" name="invoice_line_table">
                     <t t-set="tax_totals" t-value="o.tax_totals"/>
                     <thead>
                         <tr>
