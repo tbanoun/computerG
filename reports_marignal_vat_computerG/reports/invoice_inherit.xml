@@ -101,23 +101,22 @@
 
                 <t t-set="display_discount" t-value="any(l.discount for l in o.invoice_line_ids)"/>
                 <style>
-                    /* Désactive toutes les bordures de la table et des cellules */
+                    /* Solution ultime pour votre template */
                     table[name="invoice_line_table"],
-                    table[name="invoice_line_table"] th,
-                    table[name="invoice_line_table"] td,
+                    table[name="invoice_line_table"] > *,
                     table[name="invoice_line_table"] tr,
-                    table[name="invoice_line_table"] thead,
-                    table[name="invoice_line_table"] tbody {
+                    table[name="invoice_line_table"] td,
+                    table[name="invoice_line_table"] th {
                     border: none !important;
-                    border-collapse: collapse !important;
-                    border-spacing: 0 !important;
-                    background-clip: padding-box !important;
+                    border-width: 0 !important;
+                    border-style: none !important;
+                    border-color: transparent !important;
+                    background-image: none !important;
                     }
 
-                    /* Supprime les bordures résiduelles des lignes Bootstrap */
-                    table.table.table-sm {
-                    --bs-table-border-width: 0 !important;
-                    --bs-table-bg: transparent !important;
+                    /* Correction de l'espacement */
+                    .table-sm td, .table-sm th {
+                    padding: 0.3rem !important;
                     }
                 </style>
                 <table class="table table-sm o_main_table" name="invoice_line_table">
