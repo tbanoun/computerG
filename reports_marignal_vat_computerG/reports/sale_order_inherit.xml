@@ -97,20 +97,20 @@
 
                 <table class="table table-sm o_main_table table-borderless mt-4">
                     <!-- In case we want to repeat the header, remove "display: table-row-group" -->
-                    <thead style="display: table-row-group">
-                        <tr>
-                            <th name="th_description" class="text-start">Description</th>
-                            <th name="th_quantity" class="text-end">Quantity</th>
-                            <th name="th_discount" t-if="display_discount" class="text-end">
+                    <thead style="display: table-row-group border: none!important; border-bottom: 2px solid black !important;">
+                        <tr style="border: none !important; border-bottom: 2px solid black !important;">
+                            <th name="th_description" class="text-start" style="border: none !important;" width="60%">Description</th>
+                            <th name="th_quantity" class="text-end" style="border: none !important;" width="10%">Quantity</th>
+                            <th name="th_discount" t-if="display_discount" class="text-end" width="10%" style="border: none !important;">
                                 <span>Disc.%</span>
                             </th>
-                            <th name="th_taxes" class="text-end">Taxes</th>
-                            <th name="th_subtotal" class="text-end">
+                            <th name="th_taxes" class="text-end" style="border: none !important;" width="10%">Taxes</th>
+                            <th name="th_subtotal" class="text-end" style="border: none !important;" width="10%">
                                 <span>Total Price</span>
                             </th>
                         </tr>
                     </thead>
-                    <tbody class="sale_tbody">
+                    <tbody class="sale_tbody" style="border: none !important;">
                         <t t-set="taxes_amount"
                            t-value='0'/>
                         <t t-set="current_subtotal" t-value="0"/>
@@ -122,16 +122,16 @@
                             <t t-set="current_subtotal" t-value="current_subtotal + line.price_total"
                                groups="account.group_show_line_subtotals_tax_included"/>
 
-                            <tr t-att-class="'bg-200 fw-bold o_line_section' if line.display_type == 'line_section' else 'fst-italic o_line_note' if line.display_type == 'line_note' else ''">
+                            <tr style="border: none !important;" t-att-class="'bg-200 fw-bold o_line_section' if line.display_type == 'line_section' else 'fst-italic o_line_note' if line.display_type == 'line_note' else ''">
                                 <t t-if="not line.display_type">
-                                    <td name="td_name">
+                                    <td name="td_name" style="border: none !important;">
                                         <span t-field="line.name"/>
                                     </td>
-                                    <td name="td_quantity" class="text-end">
+                                    <td name="td_quantity" class="text-end" style="border: none !important;">
                                         <span t-field="line.product_uom_qty"/>
                                         <span t-field="line.product_uom"/>
                                     </td>
-                                    <td t-if="display_discount" class="text-end">
+                                    <td t-if="display_discount" class="text-end" style="border: none !important;">
                                         <span t-field="line.discount"/>
                                     </td>
 
@@ -148,11 +148,12 @@
 
                                     <t t-set="taxes"
                                        t-value="', '.join([(tax.name) for tax in line.tax_id])"/>
-                                    <td name="td_taxes"
+                                    <td name="td_taxes" style="border: none !important;"
                                         t-attf-class="text-end {{ 'text-nowrap' if len(taxes) &lt; 10 else '' }}">
                                         <span t-out="taxes">Tax 15%</span>
                                     </td>
                                     <td t-if="not line.is_downpayment" name="td_subtotal"
+                                        style="border: none !important;"
                                         class="text-end o_price_total">
                                         <span t-field="line.price_total"/>
                                     </td>
