@@ -392,6 +392,8 @@
                             </tr>
                         </thead>
                         <tbody class="payment_details_table">
+                            <t t-set="payments_vals"
+                               t-value="o.sudo().invoice_payments_widget and o.sudo().invoice_payments_widget['content'] or []"/>
                             <t t-foreach="payments_vals" t-as="value">
                                 <tr>
                                     <td align="center">
