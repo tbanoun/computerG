@@ -102,7 +102,7 @@
                 <t t-set="display_discount" t-value="any(l.discount for l in o.invoice_line_ids)"/>
                 <style>
                     table[name="invoice_line_table"] {
-                    border: none !important;
+                    border-collapse: collapse; /* Pour éviter l'affichage des bordures sur la table */
                     }
 
                     table[name="invoice_line_table"] tr,
