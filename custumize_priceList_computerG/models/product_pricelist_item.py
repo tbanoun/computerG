@@ -180,15 +180,15 @@ class ProductProduct(models.Model):
                     # price += sum(self._context.get('no_variant_attributes_price_extra'))
                     priceExtra += sum(self._context.get('no_variant_attributes_price_extra'))
             if price_type == 'list_price':
-                priceExtra = 0
-                priceExtra += product.price_extra
+                # priceExtra = 0
+                # priceExtra += product.price_extra
 
-                # price += product.price_extra
+                price += product.price_extra
                 # we need to add the price from the attributes that do not generate variants
                 # (see field product.attribute create_variant)
                 if self._context.get('no_variant_attributes_price_extra'):
                     # we have a list of price_extra that comes from the attribute values, we need to sum all that
-                    priceExtra += sum(self._context.get('no_variant_attributes_price_extra'))
+                    price += sum(self._context.get('no_variant_attributes_price_extra'))
             if uom:
                 price = product.uom_id._compute_price(price, uom)
             # Convert from current user company currency to asked one
