@@ -100,52 +100,7 @@
                 </div>
 
                 <t t-set="display_discount" t-value="any(l.discount for l in o.invoice_line_ids)"/>
-                <style>
-                    /* Suppression totale des bordures pour le tableau principal */
-                    table[name="invoice_line_table"] {
-                    border: none !important;
-                    border-collapse: collapse !important;
-                    border-spacing: 0 !important;
-                    background-image: none !important;
-                    }
-
-                    /* Suppression des bordures pour toutes les cellules */
-                    table[name="invoice_line_table"] tr,
-                    table[name="invoice_line_table"] td,
-                    table[name="invoice_line_table"] th {
-                    border: none !important;
-                    background-image: none !important;
-                    box-shadow: none !important;
-                    }
-
-                    /* Style uniquement pour la ligne d'en-tête */
-                    table[name="invoice_line_table"] thead tr th {
-                    border-bottom: 1px solid #000 !important;
-                    border-top: none !important;
-                    border-left: none !important;
-                    border-right: none !important;
-                    }
-
-                    /* Suppression des bordures pour les lignes du corps */
-                    table[name="invoice_line_table"] tbody tr {
-                    border: none !important;
-                    }
-
-                    /* Style spécifique pour les cellules du corps */
-                    table[name="invoice_line_table"] tbody td {
-                    border: none !important;
-                    padding: 4px 8px !important;
-                    }
-                    .custom-invoice-table,
-                    .custom-invoice-table tr,
-                    .custom-invoice-table td,
-                    .custom-invoice-table th {
-                    -pdf-keep-with-next: false;
-                    -pdf-border-color: none;
-                    -pdf-border-style: none;
-                    }
-                </style>
-                <table class="table table-sm o_main_table no-border-table" name="invoice_line_table">
+                <table class="table table" style="border: none!important;" name="invoice_line_table">
                     <t t-set="tax_totals" t-value="o.tax_totals"/>
                     <thead>
                         <tr>
@@ -168,7 +123,7 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody class="invoice_tbody">
+                    <tbody class="invoice_tbody" style="border: none!important;">
                         <t t-set="current_subtotal" t-value="0"/>
                         <t t-set="taxes_amount"
                            t-value="0"/>
@@ -192,9 +147,9 @@
                             <t t-set="current_subtotal" t-value="current_subtotal + line.price_total"
                                groups="account.group_show_line_subtotals_tax_included"/>
 
-                            <tr t-att-class="'bg-200 fw-bold o_line_section' if line.display_type == 'line_section' else 'fst-italic o_line_note' if line.display_type == 'line_note' else ''">
+                            <tr style="border: none!important;" t-att-class="'bg-200 fw-bold o_line_section' if line.display_type == 'line_section' else 'fst-italic o_line_note' if line.display_type == 'line_note' else ''">
                                 <t t-if="line.display_type == 'product'" name="account_invoice_line_accountable">
-                                    <td class="text-left" name="account_invoice_line_name">
+                                    <td style="border: none!important;" class="text-left" name="account_invoice_line_name">
                                         <style>
                                             .cls-sahrane p{
                                             display: contents !important;
@@ -318,20 +273,20 @@
 
                                         </t>
                                     </td>
-                                    <td class="text-right">
+                                    <td class="text-right" style="border: none!important;">
                                         <span t-field="line.quantity"/>
                                     </td>
-                                    <td t-if="display_discount"
+                                    <td t-if="display_discount" style="border: none!important;"
                                         t-attf-class="text-right {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
                                         <span class="text-nowrap" t-field="line.discount"/>
                                     </td>
                                     <t t-set="taxes"
                                        t-value="', '.join([(tax.name) for tax in line.tax_ids])"/>
-                                    <td name="td_taxes"
+                                    <td name="td_taxes" style="border: none!important;"
                                         t-attf-class="text-start {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }} {{ 'text-nowrap' if len(taxes) &lt; 10 else '' }}">
                                         <span t-out="taxes" id="line_tax_ids">Tax 15%</span>
                                     </td>
-                                    <td class="text-end o_price_total">
+                                    <td class="text-end o_price_total" style="border: none!important;">
                                         <span class="text-nowrap" t-field="line.price_total"/>
                                     </td>
                                 </t>
