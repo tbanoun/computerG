@@ -6,7 +6,6 @@ import math
 class PricelistItem(models.Model):
     _inherit = "product.pricelist.item"
 
-
     margin = fields.Float(string="Margin (%)", default=0,
                           digits=(16, 2))
 
@@ -95,8 +94,6 @@ class PricelistItem(models.Model):
         price += extraPrice
         return price
 
-
-
     def _compute_base_price_duplicate(self, product, quantity, uom, date, target_currency):
         """ Compute the base price for a given rule
 
@@ -119,27 +116,32 @@ class PricelistItem(models.Model):
             src_currency = product.cost_currency_id
             priceObject = product.price_compute(rule_base, uom=uom, date=date)
             price = product.price_compute(rule_base, uom=uom, date=date)[product.id]
-            priceExtra = product.price_compute(rule_base, uom=uom, date=date)['priceExtra']
-        else: # list_price
+            priceExtra = 0
+            if 'priceExtra' in product.price_compute(rule_base, uom=uom, date=date):
+                priceExtra = product.price_compute(rule_base, uom=uom, date=date)['priceExtra']
+
+        else:  # list_price
             src_currency = product.currency_id
             price = product.price_compute(rule_base, uom=uom, date=date)[product.id]
             priceObject = product.price_compute(rule_base, uom=uom, date=date)
 
             price = product.price_compute(rule_base, uom=uom, date=date)[product.id]
-            priceExtra = product.price_compute(rule_base, uom=uom, date=date)['priceExtra']
-
+            priceExtra = 0
+            if 'priceExtra' in product.price_compute(rule_base, uom=uom, date=date):
+                priceExtra = product.price_compute(rule_base, uom=uom, date=date)['priceExtra']
         if src_currency != target_currency:
             price = src_currency._convert(price, target_currency, self.env.company, date, round=False)
 
         return price, priceExtra
 
+
 class ProductProduct(models.Model):
     _inherit = "product.product"
 
     standard_price_with_cost = fields.Float(
-            'Sales Price with Cost', compute='_compute_product_standard_price',
-            digits='Product Price',
-            help="The sale price is managed from the product template. Click on the 'Configure Variants' button to set the extra attribute prices.")
+        'Sales Price with Cost', compute='_compute_product_standard_price',
+        digits='Product Price',
+        help="The sale price is managed from the product template. Click on the 'Configure Variants' button to set the extra attribute prices.")
 
     @api.depends('standard_price', 'price_extra')
     def _compute_product_standard_price(self):
