@@ -119,7 +119,18 @@ class ProductTemplateExport(models.Model):
             print(f'\n Holla {row} \n')
             start = True
             # export saller ids
-            if not product.seller_ids: result.append(row)
+            if not product.seller_ids:
+                row.append('')
+                row.append('')
+                row.append('')
+                row.append('')
+                row.append('')
+                row.append('')
+                row.append('')
+                row.append('')
+                row.append('')
+                row.append('')
+                result.append(row)
             for rec in product.seller_ids:
                 vendor_xmld_id = generateExportId(rec.partner_id)
                 if not vendor_xmld_id: continue
