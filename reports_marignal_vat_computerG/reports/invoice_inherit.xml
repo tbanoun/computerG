@@ -101,10 +101,10 @@
 
                 <t t-set="display_discount" t-value="any(l.discount for l in o.invoice_line_ids)"/>
                 <style>
-                    /* Solution ultime pour votre template */
-                    table[name="invoice_line_table"],
-                    table[name="invoice_line_table"] > *,
-                    table[name="invoice_line_table"] tr,
+                    <!--                    /* Solution ultime pour votre template */-->
+                    <!--                    table[name="invoice_line_table"],-->
+                    <!--                    table[name="invoice_line_table"] > *,-->
+                    <!--                    table[name="invoice_line_table"] tr,-->
                     table[name="invoice_line_table"] td,
                     table[name="invoice_line_table"] th {
                     border: none !important;
@@ -114,10 +114,10 @@
                     background-image: none !important;
                     }
 
-                    /* Correction de l'espacement */
-                    .table-sm td, .table-sm th {
-                    padding: 0.3rem !important;
-                    }
+                    <!--                    /* Correction de l'espacement */-->
+                    <!--                    .table-sm td, .table-sm th {-->
+                    <!--                    padding: 0.3rem !important;-->
+                    <!--                    }-->
                 </style>
                 <table class="table table-sm o_main_table" name="invoice_line_table">
                     <t t-set="tax_totals" t-value="o.tax_totals"/>
