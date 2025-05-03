@@ -11,7 +11,7 @@
                             <div groups="account.group_delivery_invoice_address" name="shipping_address_block">
                                 <strong>Shipping Address:</strong>
                                 <div t-field="o.partner_shipping_id"
-                                     t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                                     t-options='{"widget": "contact", "fields": ["address", "name", "phone", "mobile"], "no_marker": True, "phone_icons": True}'/>
                             </div>
                         </t>
                     </div>
@@ -100,8 +100,15 @@
                 </div>
 
                 <t t-set="display_discount" t-value="any(l.discount for l in o.invoice_line_ids)"/>
-
-                <table class="table table-sm o_main_table" name="invoice_line_table">
+                <style>
+                    .no-border-table,
+                    .no-border-table th,
+                    .no-border-table td,
+                    .no-border-table tr {
+                    border: none !important;
+                    }
+                </style>
+                <table class="table table-sm o_main_table no-border-table" name="invoice_line_table">
                     <t t-set="tax_totals" t-value="o.tax_totals"/>
                     <thead>
                         <tr>
@@ -308,6 +315,8 @@
                         </t>
                     </tbody>
                 </table>
+
+
                 <br/>
                 <br/>
                 <div class="clearfix" name="so_total_summary">
