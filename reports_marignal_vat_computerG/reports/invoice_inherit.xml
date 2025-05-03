@@ -101,21 +101,24 @@
 
                 <t t-set="display_discount" t-value="any(l.discount for l in o.invoice_line_ids)"/>
                 <style>
-                    /* Supprimer toutes les bordures du tableau principal */
+                    /* Suppression totale des bordures pour le tableau principal */
                     table[name="invoice_line_table"] {
                     border: none !important;
                     border-collapse: collapse !important;
+                    border-spacing: 0 !important;
+                    background-image: none !important;
                     }
 
-                    /* Supprimer les bordures sur toutes les cellules */
+                    /* Suppression des bordures pour toutes les cellules */
                     table[name="invoice_line_table"] tr,
                     table[name="invoice_line_table"] td,
                     table[name="invoice_line_table"] th {
                     border: none !important;
                     background-image: none !important;
+                    box-shadow: none !important;
                     }
 
-                    /* Ajouter uniquement la bordure inférieure pour l'en-tête */
+                    /* Style uniquement pour la ligne d'en-tête */
                     table[name="invoice_line_table"] thead tr th {
                     border-bottom: 1px solid #000 !important;
                     border-top: none !important;
@@ -123,16 +126,23 @@
                     border-right: none !important;
                     }
 
-                    /* Supprimer les bordures pour le corps du tableau */
-                    table[name="invoice_line_table"] tbody tr,
-                    table[name="invoice_line_table"] tbody td {
+                    /* Suppression des bordures pour les lignes du corps */
+                    table[name="invoice_line_table"] tbody tr {
                     border: none !important;
                     }
-                    .no-border-table,
-                    .no-border-table tr,
-                    .no-border-table td,
-                    .no-border-table th {
+
+                    /* Style spécifique pour les cellules du corps */
+                    table[name="invoice_line_table"] tbody td {
                     border: none !important;
+                    padding: 4px 8px !important;
+                    }
+                    .custom-invoice-table,
+                    .custom-invoice-table tr,
+                    .custom-invoice-table td,
+                    .custom-invoice-table th {
+                    -pdf-keep-with-next: false;
+                    -pdf-border-color: none;
+                    -pdf-border-style: none;
                     }
                 </style>
                 <table class="table table-sm o_main_table no-border-table" name="invoice_line_table">
