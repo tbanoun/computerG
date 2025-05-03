@@ -101,14 +101,26 @@
 
                 <t t-set="display_discount" t-value="any(l.discount for l in o.invoice_line_ids)"/>
                 <style>
-                    .no-border-table,
-                    .no-border-table th,
-                    .no-border-table td,
-                    .no-border-table tr {
+                    /* Désactive toutes les bordures de la table et des cellules */
+                    table[name="invoice_line_table"],
+                    table[name="invoice_line_table"] th,
+                    table[name="invoice_line_table"] td,
+                    table[name="invoice_line_table"] tr,
+                    table[name="invoice_line_table"] thead,
+                    table[name="invoice_line_table"] tbody {
                     border: none !important;
+                    border-collapse: collapse !important;
+                    border-spacing: 0 !important;
+                    background-clip: padding-box !important;
+                    }
+
+                    /* Supprime les bordures résiduelles des lignes Bootstrap */
+                    table.table.table-sm {
+                    --bs-table-border-width: 0 !important;
+                    --bs-table-bg: transparent !important;
                     }
                 </style>
-                <table class="table table-sm o_main_table no-border-table" name="invoice_line_table">
+                <table class="table table-sm o_main_table" name="invoice_line_table">
                     <t t-set="tax_totals" t-value="o.tax_totals"/>
                     <thead>
                         <tr>
