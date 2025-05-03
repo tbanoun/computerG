@@ -336,6 +336,12 @@
                     </div>
                 </div>
 
+                <p>
+                    <strong>Note:</strong>
+                    Marginal VAT – Second-Hand Margin Scheme (SHMS) - Value Added Tax Law N.95(I)/2000
+                    VAT not deductible for products invoiced under this scheme.
+                </p>
+
                 <p t-if="o.move_type in ('out_invoice', 'in_refund') and o.payment_reference"
                    name="payment_communication">
                     Please use the following communication for your payment :
