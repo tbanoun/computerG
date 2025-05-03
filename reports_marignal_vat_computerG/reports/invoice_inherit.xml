@@ -105,13 +105,13 @@
                     <!--                    table[name="invoice_line_table"],-->
                     <!--                    table[name="invoice_line_table"] > *,-->
                     <!--                    table[name="invoice_line_table"] tr,-->
-                    table[name="invoice_line_table"] td,
-                    table[name="invoice_line_table"] th {
-                    border: none !important;
-                    border-width: 0 !important;
-                    border-style: none !important;
-                    border-color: transparent !important;
-                    background-image: none !important;
+<!--                    table[name="invoice_line_table"] td,-->
+<!--                    table[name="invoice_line_table"] th {-->
+<!--                    border: none !important;-->
+<!--                    border-width: 0 !important;-->
+<!--                    border-style: none !important;-->
+<!--                    border-color: transparent !important;-->
+<!--                    background-image: none !important;-->
                     }
 
                     <!--                    /* Correction de l'espacement */-->
