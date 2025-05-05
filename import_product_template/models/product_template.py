@@ -42,6 +42,7 @@ class ImportProduct(models.TransientModel):
                 # create the product
                 created = True
                 product_template = self.create_product_template(rec)
+            if not product_template: continue
             if not created: update_index += 1
             attributes = rec.pop('Attributes', None)
             vendors = rec.pop('Vendor', None)
@@ -214,6 +215,14 @@ class ImportProduct(models.TransientModel):
         product_vals = generateProductVals(self, vals)
 
         product_vals['detailed_type'] = 'product'
+        product = None
+        if 'product_code' in product_vals:
+            default_code = product_vals['default_code']
+            product = self.env('product.template').sudo().search([('product_code', '=', default_code)])
+        if 'barcode' in product_vals:
+            barcode = product_vals['barcode']
+            product = self.env('product.template').sudo().search([('barcode', '=', barcode)])
+        if product: return None
         product_id = self.env['product.template'].sudo().create(
             product_vals
         )
