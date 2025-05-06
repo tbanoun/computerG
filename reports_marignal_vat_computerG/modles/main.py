@@ -1,5 +1,6 @@
 from odoo import api, models, fields
 from odoo.tools.translate import html_translate
+from bs4 import BeautifulSoup as bs
 
 
 class AccountMoveLine(models.Model):
@@ -35,3 +36,20 @@ class SaleOrderLine(models.Model):
     qtySu = fields.Float()
     showDelivryMessage = fields.Boolean()
     continue_seling = fields.Boolean()
+
+
+class AccountPaymentTerm(models.Model):
+    _inherit = 'account.payment.term'
+
+    titleDisplayInvoice = fields.Char(compute='_computeTitleDisplayTerm')
+
+    def _computeTitleDisplayTerm(self):
+        for rec in self:
+            soup = bs(rec.note, 'html.parser')
+            text = ''
+            if soup:
+                text = soup.get_text()
+            try:
+                rec.titleDisplayInvoice = f'{rec.name} - {text}'
+            except Exception:
+                rec.titleDisplayInvoice = rec.name
