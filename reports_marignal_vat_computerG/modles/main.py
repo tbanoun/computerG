@@ -1,4 +1,5 @@
 from odoo import api, models, fields
+from odoo.tools.translate import html_translate
 
 
 class AccountMoveLine(models.Model):
@@ -13,7 +14,7 @@ class AccountMoveLine(models.Model):
 class ProductTemplate(models.Model):
     _inherit = "product.template"
 
-    out_of_stock_message = fields.Char(string="Out-of-Stock Message")
+    out_of_stock_message = fields.Html(string="Out-of-Stock Message", translate=html_translate)
     showDelivryMessage = fields.Boolean(default=True)
     messageDelivryTimeRemoteStock = fields.Char('Delivery Time – Remote Stock Message')
     messageDelivryTimeStock = fields.Char('Delivery Time – Stock Message')
