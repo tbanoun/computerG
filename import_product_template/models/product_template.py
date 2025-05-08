@@ -218,10 +218,10 @@ class ImportProduct(models.TransientModel):
         product = None
         if 'product_code' in product_vals:
             default_code = product_vals['default_code']
-            product = self.env('product.template').sudo().search([('product_code', '=', default_code)])
+            product = self.env['product.template'].sudo().search([('product_code', '=', default_code)])
         if 'barcode' in product_vals:
             barcode = product_vals['barcode']
-            product = self.env('product.template').sudo().search([('barcode', '=', barcode)])
+            product = self.env['product.template'].sudo().search([('barcode', '=', barcode)])
         if product: return None
         product_id = self.env['product.template'].sudo().create(
             product_vals
