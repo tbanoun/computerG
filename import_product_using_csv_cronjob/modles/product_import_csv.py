@@ -11,6 +11,7 @@ import base64
 import io
 import logging
 import math
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -38,7 +39,14 @@ class ImportProductConfig(models.Model):
         if self.start_update is True:
             return
 
-        res = requests.get(self.csv_url)
+        try:
+            res = requests.get(self.csv_url, timeout=15, headers={"User-Agent": "Mozilla/5.0"})
+            res.raise_for_status()  # Lève une exception si code != 200
+        except requests.exceptions.RequestException as e:
+            _logger.error(f"Erreur lors du téléchargement du fichier CSV : {e}")
+            raise UserError("Impossible de télécharger le fichier CSV. Vérifiez l'URL ou la connexion réseau.")
+
+
         _logger.warning(f"\n\n response: {res} \n\n")
 
         if res.status_code != 200:
