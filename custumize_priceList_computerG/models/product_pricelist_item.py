@@ -63,11 +63,15 @@ class PricelistItem(models.Model):
         base_price, extraPrice = self._compute_base_price_duplicate(actual_product, quantity, uom, date, currency)
 
         # 3. Add price_extra from product variant if exists
-        if hasattr(actual_product, 'price_extra'):
+        if hasattr(actual_product, 'price_extra') and self.compute_price != 'formula':
             base_price += convert(actual_product.price_extra)
+        elif hasattr(actual_product, 'price_extra') and self.compute_price == 'formula':
+            # extraPrice += convert(actual_product.price_extra)
+            pass
+        print('SAMIA', base_price)
 
         # 4. Add price_extra from selected attributes (for both templates and variants)
-        if hasattr(product, 'product_template_attribute_value_ids'):
+        if hasattr(product, 'product_template_attribute_value_ids') and self.compute_price != 'formula':
             attribute_extras = sum(
                 convert(attr.price_extra)
                 for attr in product.product_template_attribute_value_ids
@@ -75,6 +79,18 @@ class PricelistItem(models.Model):
                 # if attr.attribute_id.create_variant == 'no_variant'
             )
             base_price += attribute_extras
+        elif hasattr(product, 'product_template_attribute_value_ids') and self.compute_price == 'formula':
+            attribute_extras = sum(
+                convert(attr.price_extra)
+                for attr in product.product_template_attribute_value_ids
+                # Include all attributes or only no_variant ones
+                # if attr.attribute_id.create_variant == 'no_variant'
+            )
+            print('HELLOOO extraPrice 1', extraPrice)
+            # base_price += attribute_extras
+            print('HELLOOO attribute_extras', extraPrice)
+            print('HELLOOO extraPrice 2', extraPrice)
+
 
         # 5. Apply pricing rules
         if self.compute_price == 'fixed':
@@ -82,6 +98,7 @@ class PricelistItem(models.Model):
         elif self.compute_price == 'percentage':
             price = (base_price - (base_price * (self.percent_price / 100))) or 0.0
         elif self.compute_price == 'formula':
+            print(f'The Bingo price {base_price}')
             price = (base_price - (base_price * (self.price_discount / 100))) or 0.0
             if self.price_round:
                 price = tools.float_round(price, precision_rounding=self.price_round)
@@ -91,6 +108,8 @@ class PricelistItem(models.Model):
                 price = math.ceil(price + ((self.margin / 100) * base_price))
         else:
             price = base_price
+        print(f'The tartaga price {price}')
+        print(f'The tartaga extraPrice {extraPrice}')
         price += extraPrice
         return price
 
@@ -114,24 +133,29 @@ class PricelistItem(models.Model):
             src_currency = self.base_pricelist_id.currency_id
         elif rule_base == "standard_price":
             src_currency = product.cost_currency_id
-            priceObject = product.price_compute(rule_base, uom=uom, date=date)
-            price = product.price_compute(rule_base, uom=uom, date=date)[product.id]
+            priceObject = product.price_computeGostumize(rule_base, uom=uom, date=date)
+            price = product.price_computeGostumize(rule_base, uom=uom, date=date)[product.id]
             priceExtra = 0
-            if 'priceExtra' in product.price_compute(rule_base, uom=uom, date=date):
-                priceExtra = product.price_compute(rule_base, uom=uom, date=date)['priceExtra']
+            if 'priceExtra' in product.price_computeGostumize(rule_base, uom=uom, date=date):
+                priceExtra = product.price_computeGostumize(rule_base, uom=uom, date=date)['priceExtra']
 
         else:  # list_price
             src_currency = product.currency_id
-            price = product.price_compute(rule_base, uom=uom, date=date)[product.id]
-            priceObject = product.price_compute(rule_base, uom=uom, date=date)
+            price = product.price_computeGostumize(rule_base, uom=uom, date=date)[product.id]
+            priceObject = product.price_computeGostumize(rule_base, uom=uom, date=date)
 
-            price = product.price_compute(rule_base, uom=uom, date=date)[product.id]
+            price = product.price_computeGostumize(rule_base, uom=uom, date=date)[product.id]
+            print(f'Price Samsung {price}')
             priceExtra = 0
-            if 'priceExtra' in product.price_compute(rule_base, uom=uom, date=date):
-                priceExtra = product.price_compute(rule_base, uom=uom, date=date)['priceExtra']
+            if 'priceExtra' in product.price_computeGostumize(rule_base, uom=uom, date=date):
+                priceExtra = product.price_computeGostumize(rule_base, uom=uom, date=date)['priceExtra']
         if src_currency != target_currency:
             price = src_currency._convert(price, target_currency, self.env.company, date, round=False)
-
+        print('______________________')
+        print('\n Title \n')
+        print(f'Price: {price}')
+        print(f'priceExtra: {priceExtra}')
+        print('______________________')
         return price, priceExtra
 
 
@@ -158,7 +182,7 @@ class ProductProduct(models.Model):
                 standard_price = product.product_tmpl_id.standard_price
             product.standard_price_with_cost = standard_price + product.price_extra
 
-    def price_compute(self, price_type, uom=None, currency=None, company=None, date=False):
+    def price_computeGostumize(self, price_type, uom=None, currency=None, company=None, date=False):
         company = company or self.env.company
         date = date or fields.Date.context_today(self)
         # price_type = 'list_price'
@@ -182,15 +206,15 @@ class ProductProduct(models.Model):
                     # price += sum(self._context.get('no_variant_attributes_price_extra'))
                     priceExtra += sum(self._context.get('no_variant_attributes_price_extra'))
             if price_type == 'list_price':
-                # priceExtra = 0
-                # priceExtra += product.price_extra
+                priceExtra = 0
+                priceExtra += product.price_extra
 
-                price += product.price_extra
+                # price += product.price_extra
                 # we need to add the price from the attributes that do not generate variants
                 # (see field product.attribute create_variant)
                 if self._context.get('no_variant_attributes_price_extra'):
                     # we have a list of price_extra that comes from the attribute values, we need to sum all that
-                    price += sum(self._context.get('no_variant_attributes_price_extra'))
+                    priceExtra += sum(self._context.get('no_variant_attributes_price_extra'))
             if uom:
                 price = product.uom_id._compute_price(price, uom)
             # Convert from current user company currency to asked one
@@ -199,8 +223,8 @@ class ProductProduct(models.Model):
                 price = price_currency._convert(price, currency, company, date)
 
             prices[product.id] = price
-
-            if price_type == 'standard_price':
+            print('Samir nasri', priceExtra)
+            if price_type in ['standard_price', 'list_price']:
                 prices['priceExtra'] = priceExtra
 
         return prices
