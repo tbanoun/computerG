@@ -16,6 +16,7 @@ from odoo.exceptions import UserError
 _logger = logging.getLogger(__name__)
 
 
+
 class ImportProductConfig(models.Model):
     _name = "product.import.csv"
     _rec_name = "stock_id"
@@ -53,7 +54,17 @@ class ImportProductConfig(models.Model):
             return
 
         csv_data = StringIO(res.text)
-        df = pd.read_csv(csv_data, sep=',', quotechar='"', on_bad_lines='warn', low_memory=False)
+        separators = [',', ';', '\t', '|']
+        for sep in separators:
+            try:
+                df = pd.read_csv(csv_data, sep=sep, quotechar='"', on_bad_lines='warn', low_memory=False)
+                # df = pd.read_csv('path/to/your/file.csv', sep=sep)
+                print(f"Chargé avec succès avec le séparateur '{sep}'")
+                print(df.head())  # Affiche les premières lignes pour vérifier
+                break
+            except Exception as e:
+                print(f"Échec avec le séparateur '{sep}': {e}")
+                df = pd.read_csv(csv_data, sep=',', quotechar='"', on_bad_lines='warn', low_memory=False)
         _logger.warning(f"\n\n Colonnes lues depuis le CSV: {df.columns.tolist()} \n\n")
 
         # Définition des catégories à conserver
