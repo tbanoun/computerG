@@ -45,7 +45,8 @@ class ImportProductConfig(models.Model):
             return
 
         csv_data = StringIO(res.text)
-        df = pd.read_csv(csv_data, sep=';', low_memory=False)
+        df = pd.read_csv(csv_data, sep=',', quotechar='"', on_bad_lines='warn', low_memory=False)
+        _logger.warning(f"\n\n Colonnes lues depuis le CSV: {df.columns.tolist()} \n\n")
 
         # Définition des catégories à conserver
         selectCategoryName = self.selectCategoryName()
