@@ -203,7 +203,7 @@ class ImportProduct(models.TransientModel):
     def update_product_template(self, product_id, vals):
         product_vals = generateProductVals(self, vals)
         # manufacturer_id
-        manufacturer_id = product_vals.pop('manufacturer_id', 0)
+        manufacturer_id = product_vals.pop('manufacturer_id_int', 0)
         # dr_label_id
         product_vals['manufacturer_id_int'] = manufacturer_id
 
