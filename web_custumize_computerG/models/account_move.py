@@ -10,33 +10,46 @@ class AccountMoveLine(models.Model):
     continue_seling = fields.Boolean()
 
     def write(self, vals):
+        res = super().write(vals)
+
+        update_vals = []
         for line in self:
             if line.product_id:
-                line_vals = vals.copy()
-                line_vals['qtyWT'] = line.product_id.virtual_available or 0
-                line_vals['qtySu'] = line.product_id.product_tmpl_id.qty_available_wt or 0
-                line_vals['showDelivryMessage'] = line.product_id.product_tmpl_id.showDelivryMessage or False
-                line_vals['continue_seling'] = line.product_id.product_tmpl_id.continue_seling or False
-                super(AccountMoveLine, line).write(line_vals)
-            else:
-                super(AccountMoveLine, line).write(vals)
-        return True
+                update_vals.append((
+                    line.id,
+                    {
+                        'qtyWT': line.product_id.virtual_available or 0,
+                        'qtySu': line.product_id.product_tmpl_id.qty_available_wt or 0,
+                        'showDelivryMessage': line.product_id.product_tmpl_id.showDelivryMessage or False,
+                        'continue_seling': line.product_id.product_tmpl_id.continue_seling or False,
+                    }
+                ))
 
+        for line_id, vals_to_update in update_vals:
+            self.browse(line_id).sudo().write(vals_to_update)
+
+        return res
 
     def create(self, vals_list):
         res = super(AccountMoveLine, self).create(vals_list)
-        qtyWT = res.product_id.virtual_available or 0
-        qtySu = res.product_id.product_tmpl_id.qty_available_wt or 0
-        showDelivryMessage = res.product_id.product_tmpl_id.showDelivryMessage or False
-        continue_seling = res.product_id.product_tmpl_id.continue_seling or False
-        res.sudo().write(
-            {
+
+        for line in res:
+            product = line.product_id
+            template = product.product_tmpl_id
+
+            qtyWT = product.virtual_available or 0
+            qtySu = template.qty_available_wt or 0
+            showDelivryMessage = template.showDelivryMessage or False
+            continue_seling = template.continue_seling or False
+
+            line.sudo().write({
                 'qtyWT': qtyWT,
                 'qtySu': qtySu,
                 'showDelivryMessage': showDelivryMessage,
                 'continue_seling': continue_seling,
-            }
-        )
-        print('qtySu', qtySu)
-        print('qtyWT', qtyWT)
+            })
+
+            print('qtySu', qtySu)
+            print('qtyWT', qtyWT)
+
         return res
