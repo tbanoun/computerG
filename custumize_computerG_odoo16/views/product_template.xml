@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <!--Tree view-->
+
+        <record id="view_stock_product_template_tree" model="ir.ui.view">
+            <field name="name">product.template.stock.tree.inherit</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_tree_view"/>
+            <field name="arch" type="xml">
+                <field name="virtual_available" position="after">
+                    <field name="out_of_stock_message" optional="show"/>
+                    <field name="messageDelivryTimeRemoteStock" string="Delivery Time – Remote Stock Message"
+                           optional="show"/>
+                    <field name="public_categ_ids" widget="many2many_tags" optional="show"/>
+                </field>
+            </field>
+        </record>
+
+        <!--Search view-->
+
+        <record id="product_template_search_form_view_stock_inherit" model="ir.ui.view">
+            <field name="name">product.template.search.stock.form</field>
+            <field name="model">product.template</field>
+<!--            <field name="mode">primary</field>-->
+            <field name="inherit_id" ref="product.product_template_search_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='attribute_line_ids']" position="after">
+                    <separator/>
+                    <field name="name" string="Product"
+                           filter_domain="['|', '|', ('default_code', 'ilike', self), ('name', 'ilike', self), ('barcode', 'ilike', self)]"/>
+
+                    <field name="out_of_stock_message" filter_domain="[('out_of_stock_message', 'ilike', self)]"/>
+                    <field name="messageDelivryTimeRemoteStock" filter_domain="[('messageDelivryTimeRemoteStock', 'ilike', self)]"/>
+                    <field name="public_categ_ids" filter_domain="[('public_categ_ids', 'ilike', self)]"/>
+                    <separator/>
+                    <filter name="out_of_stock_message" string="Out-of-Stock Message"
+                            context="{'group_by':'out_of_stock_message'}"/>
+                    <filter name="messageDelivryTimeRemoteStock" string="Delivery Time – Remote Stock Message"
+                            context="{'group_by':'messageDelivryTimeRemoteStock'}"/>
+                    <filter name="public_categ_ids" string="Website Product Category"
+                            context="{'group_by':'public_categ_ids'}"/>
+
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
