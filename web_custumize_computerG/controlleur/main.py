@@ -18,4 +18,5 @@ class ProductInfoController(http.Controller):
             'out_of_stock_message': product.product_tmpl_id.out_of_stock_message if product.product_tmpl_id.out_of_stock_message else '',
             'allow_out_of_stock_order': product.product_tmpl_id.allow_out_of_stock_order if product.product_tmpl_id.allow_out_of_stock_order else '',
             'continue_seling': product.product_tmpl_id.continue_seling if product.product_tmpl_id.continue_seling else False,
+            'show_qty': product.product_tmpl_id.show_availability if product.product_tmpl_id.show_availability else False,
         }
