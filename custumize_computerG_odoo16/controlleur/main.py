@@ -2,59 +2,39 @@ from odoo import http
 from odoo.http import request
 from odoo.addons.payment.controllers import portal as payment_portal
 from odoo.osv import expression
+from odoo.addons.website_sale.controllers.main import WebsiteSale
 
-class WebsiteSale(payment_portal.PaymentPortal):
 
-    def _get_search_options(
-            self, category=None, attrib_values=None, tags=None, min_price=0.0, max_price=0.0,
-            conversion_rate=1, **post
-    ):
-        return {
-            'displayDescription': True,
-            'displayDetail': True,
-            'displayExtraDetail': True,
-            'displayExtraLink': True,
-            'displayImage': True,
-            'allowFuzzy': not post.get('noFuzzy'),
-            'category': str(category.id) if category else None,
-            'tags': tags,
-            'min_price': min_price / conversion_rate,
-            'max_price': max_price / conversion_rate,
-            'attrib_values': attrib_values,
-            'display_currency': post.get('display_currency'),
-        }
-
+class WebsiteSale(WebsiteSale):
 
     def _shop_lookup_products(self, attrib_set, options, post, search, website):
-        Product = request.env['product.template']
-        domain = options.get('domain', [])
+        ProductTemplate = request.env['product.template'].with_context(bin_size=True)
 
+        # Recherche initiale via fuzzy
+        product_count, details, fuzzy_search_term = website._search_with_fuzzy(
+            "products_only", search,
+            limit=None,
+            order=self._get_search_order(post),
+            options=options
+        )
+
+        search_result = details[0].get('results', ProductTemplate)
+
+        # Recherche complémentaire via code-barres
         if search:
-            # Recherche sur name, description ET barcode
-            search_domain = [
-                '|', '|', '|',
-                ('name', 'ilike', search),
-                ('description', 'ilike', search),
-                ('description_sale', 'ilike', search),
-                ('barcode', 'ilike', search),  # Ajout du barcode
-            ]
-            domain = expression.AND([domain, search_domain])
+            barcode_products = ProductTemplate.search([('barcode', 'ilike', search)])
+            # Fusionner et supprimer les doublons
+            combined_ids = list(set((search_result | barcode_products).ids))
+            search_result = ProductTemplate.browse(combined_ids)
 
-        # ... (le reste de la méthode) ...
-        products = Product.search(domain, limit=website.shop_products_limit)
-        return search, len(products), products
+        return fuzzy_search_term, product_count, search_result
 
-
-class WebsiteSale(payment_portal.PaymentPortal):
-
-    def _get_shop_domain(self, search, category, attrib_values, search_in_description=True):
-        print('Hello world')
+    def _get_search_domain(self, search, category, attrib_values, search_in_description=True):
         domains = [request.website.sale_product_domain()]
         if search:
             for srch in search.split(" "):
                 subdomains = [
-                    [('name', 'ilike', srch)],
-                    [('barcode', 'ilike', srch)],
+                    [('product_variant_ids.barcode', 'ilike', srch)],
                     [('product_variant_ids.default_code', 'ilike', srch)]
                 ]
                 if search_in_description:
