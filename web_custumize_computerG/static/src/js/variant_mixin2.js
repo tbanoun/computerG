@@ -8,7 +8,10 @@ odoo.define('web_custumize_computerG.VariantMixin', function (require) {
     // Ajout des méthodes personnalisées à VariantMixin
     VariantMixin._insertDelevryRemoteMessageDetailPage = function(productInfo) {
         if (productInfo.messageDelivryTimeRemoteStock) {
-            $('#messageQty2').html(`<span>${productInfo.qty_available_wt} Pcs In Remote Stock</span>`);
+            if (productInfo.show_qty) {
+                $('#messageQty2').html(`<span>${productInfo.qty_available_wt} Pcs In Remote Stock</span>`);
+            }
+
             $('#messageDelevryTime2').html(`<span>${productInfo.messageDelivryTimeRemoteStock}</span>`);
 
             const $infoMessage = $('#informationQtyMessageDelivery2');
@@ -29,7 +32,10 @@ odoo.define('web_custumize_computerG.VariantMixin', function (require) {
 
     VariantMixin._insertDelevryMessageDetailPage = function(productInfo) {
         if (productInfo.messageDelivryTimeStock) {
-            $('#messageQty1').html(`<span>${productInfo.virtual_available} Pcs In Stock</span>`);
+        console.log('show_qty =>', productInfo.show_qty)
+            if (productInfo.show_qty) {
+                $('#messageQty1').html(`<span>${productInfo.virtual_available} Pcs In Stock</span>`);
+            }
             $('#messageDelevryTime1').html(`<span>${productInfo.messageDelivryTimeStock}</span>`);
 
             const $infoMessage = $('#informationQtyMessageDelivery1');

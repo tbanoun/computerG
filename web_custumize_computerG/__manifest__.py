@@ -7,7 +7,7 @@
     'summary': '',
     'category': 'Theme/eCommerce',
     'version': '16.0.0.0.1',
-    'depends': ['theme_prime', 'sale', 'import_product_using_csv_cronjob', 'website', 'website_sale',
+    'depends': ['web','theme_prime', 'sale', 'import_product_using_csv_cronjob', 'website', 'website_sale',
                 'website_sale_stock'],
     'license': 'OPL-1',
     'author': 'Tahar BANOUN',
@@ -36,10 +36,10 @@
     ],
     'assets': {
         'web.assets_frontend': [
-            'web_custumize_computerG/static/src/js/variant_mixin.js',
+            'web_custumize_computerG/static/src/js/variant_mixin2.js',
         ],
         'web.assets_backend': [
-            'web_custumize_computerG/static/src/js/variant_mixin.js',
+            'web_custumize_computerG/static/src/js/variant_mixin2.js',
         ],
     },
     'installable': True,

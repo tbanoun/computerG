@@ -9,9 +9,14 @@ class ProductTemplate(models.Model):
     _inherit = "product.template"
 
     continue_seling = fields.Boolean(default=True)
+    barcode2 = fields.Char(related="barcode")
 
     allow_out_of_stock_order = fields.Boolean(string='Continue selling when out-of-stock',
                                               compute="_computeContinueSelling")
+    @api.depends('barcode')
+    def _computeBarcode(self):
+        for rec in self:
+            rec.barcode2 = rec.barcode or ''
 
     def _computeContinueSelling(self):
         for rec in self:
@@ -80,3 +85,61 @@ class ProductProduct(models.Model):
     showDelivryMessage = fields.Boolean(related='product_tmpl_id.showDelivryMessage')
     messageDelivryTimeRemoteStock = fields.Char(related='product_tmpl_id.messageDelivryTimeRemoteStock')
     messageDelivryTimeStock = fields.Char(related='product_tmpl_id.messageDelivryTimeStock')
+
+class Website(models.Model):
+    _inherit = "website"
+
+    def _search_exact(self, search_details, search, limit, order):
+        """
+        Performs a search with a search text
+
+        :param search_details: see :meth:`_search_get_details`
+        :param search: text against which to match results
+        :param limit: maximum number of results per model type involved in the result
+        :param order: order on which to sort results within a model type
+
+        :return: tuple containing:
+            - total number of results across all involved models
+            - list of results per model made of:
+                - initial search_detail for the model
+                - count: number of results for the model
+                - results: model list equivalent to a `model.search()`
+        """
+        all_results = []
+        total_count = 0
+        search_details.append(
+            {'model': 'product.template', 'base_domain': [
+                ['|','&', ('sale_ok', '=', True), ('barcode2', 'ilike', search), ('website_id', 'in', (False, 2))]],
+             'search_fields': ['name', 'barcode2', 'default_code', 'product_variant_ids.default_code', 'description',
+                               'description_sale'],
+             'fetch_fields': ['id', 'name', 'website_url', 'description', 'description_sale'],
+             'mapping': {'name': {'name': 'name', 'type': 'text', 'match': True},
+                         'default_code': {'name': 'default_code', 'type': 'text', 'match': True},
+                         'product_variant_ids.default_code': {'name': 'product_variant_ids.default_code',
+                                                              'type': 'text',
+                                                              'match': True},
+                         'website_url': {'name': 'website_url', 'type': 'text', 'truncate': False},
+                         'image_url': {'name': 'image_url', 'type': 'html'},
+                         'description': {'name': 'description_sale', 'type': 'text', 'match': True},
+                         'extra_link': {'name': 'category', 'type': 'html'}}, 'icon': 'fa-shopping-cart'}
+
+            # {'model': 'product.template', 'base_domain': [['&', ('sale_ok', '=', True), ('barcode2', 'ilike', search)]],
+            #      'search_fields': ['barcode2'], 'fetch_fields': ['id', 'barcode2'],
+            #      'mapping': {'name': {'name': 'name', 'type': 'text', 'match': True},
+            #                  'website_url': {'name': 'url', 'type': 'text', 'truncate': False},
+            #                  'image_url': {'name': 'image_url', 'type': 'html'}}, 'icon': 'fa-folder-o',
+            #      'order': 'name asc, id desc'}
+
+        )
+        for search_detail in search_details:
+            print("Brayane", search_detail)
+            model = self.env[search_detail['model']]
+            results, count = model._search_fetch(search_detail, search, limit, order)
+            search_detail['results'] = results
+            total_count += count
+            search_detail['count'] = count
+            all_results.append(search_detail)
+
+        print(f'\n\n\n results => {all_results} \n\n\n')
+        print(f'\n\n\n count => {total_count} \n\n\n')
+        return total_count, all_results
