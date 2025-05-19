@@ -105,8 +105,38 @@ class Website(models.Model):
                 - count: number of results for the model
                 - results: model list equivalent to a `model.search()`
         """
+        user = self.env.user
+        currency = user.company_id.currency_id
+        print(f'\n\n\n HII user {user}')
+        print(f'\n\n\n HII currency {currency}')
         all_results = []
         total_count = 0
+        search_details_copy = []
+        for val in search_details:
+            model = val.get('val')
+            if model == 'product.template': continue
+            search_details_copy.append(
+                val
+            )
+        search_details_copy.append(
+            {'model': 'product.template',
+             'base_domain': [['|','&', ('sale_ok', '=', True), ('barcode2', 'ilike', search), ('website_id', 'in', (False, 2))]],
+             'search_fields': ['name', 'barcode2','default_code', 'product_variant_ids.default_code', 'description',
+                               'description_sale'],
+             'fetch_fields': ['id', 'name', 'website_url', 'description', 'description_sale'],
+             'mapping': {'name': {'name': 'name', 'type': 'text', 'match': True},
+                         'default_code': {'name': 'default_code', 'type': 'text', 'match': True},
+                         'product_variant_ids.default_code': {'name': 'product_variant_ids.default_code',
+                                                              'type': 'text',
+                                                              'match': True},
+                         'website_url': {'name': 'website_url', 'type': 'text', 'truncate': False},
+                         'image_url': {'name': 'image_url', 'type': 'html'},
+                         'description': {'name': 'description_sale', 'type': 'text', 'match': True},
+                         'detail': {'name': 'price', 'type': 'html', 'display_currency': currency},
+                         'detail_strike': {'name': 'list_price', 'type': 'html', 'display_currency': currency},
+                         'extra_link': {'name': 'category', 'type': 'html'}}, 'icon': 'fa-shopping-cart'}
+        )
+
         search_details.append(
             {'model': 'product.template', 'base_domain': [
                 ['|','&', ('sale_ok', '=', True), ('barcode2', 'ilike', search), ('website_id', 'in', (False, 2))]],
@@ -131,7 +161,7 @@ class Website(models.Model):
             #      'order': 'name asc, id desc'}
 
         )
-        for search_detail in search_details:
+        for search_detail in search_details_copy:
             print("Brayane", search_detail)
             model = self.env[search_detail['model']]
             results, count = model._search_fetch(search_detail, search, limit, order)
