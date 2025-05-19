@@ -113,7 +113,7 @@ class Website(models.Model):
         total_count = 0
         search_details_copy = []
         for val in search_details:
-            model = val.get('val')
+            model = val.get('model')
             if model == 'product.template': continue
             search_details_copy.append(
                 val
