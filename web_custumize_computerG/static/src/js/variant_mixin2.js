@@ -9,7 +9,7 @@ odoo.define('web_custumize_computerG.VariantMixin', function (require) {
     VariantMixin._insertDelevryRemoteMessageDetailPage = function(productInfo) {
         if (productInfo.messageDelivryTimeRemoteStock) {
             if (productInfo.show_qty) {
-                $('#messageQty2').html(`<span>${productInfo.qty_available_wt} Pcs In Remote Stock</span>`);
+                $('#messageQty2').html(`<span>${productInfo.qty_available_wt} Unités In Remote Stock</span>`);
             }
 
             $('#messageDelevryTime2').html(`<span>${productInfo.messageDelivryTimeRemoteStock}</span>`);
@@ -32,9 +32,8 @@ odoo.define('web_custumize_computerG.VariantMixin', function (require) {
 
     VariantMixin._insertDelevryMessageDetailPage = function(productInfo) {
         if (productInfo.messageDelivryTimeStock) {
-        console.log('show_qty =>', productInfo.show_qty)
             if (productInfo.show_qty) {
-                $('#messageQty1').html(`<span>${productInfo.virtual_available} Pcs In Stock</span>`);
+                $('#messageQty1').html(`<span>${productInfo.virtual_available} Unités In Stock</span>`);
             }
             $('#messageDelevryTime1').html(`<span>${productInfo.messageDelivryTimeStock}</span>`);
 
@@ -57,7 +56,9 @@ odoo.define('web_custumize_computerG.VariantMixin', function (require) {
     VariantMixin._insertOutOfStockMessageDetailPage = function(productInfo, qty, continue_seling) {
         if (productInfo.out_of_stock_message) {
             if (continue_seling) {
-                $('#messageQty3').html(`<span>${qty} Pcs</span>`);
+            if (productInfo.show_qty) {
+                $('#messageQty3').html(`<span>${qty} Unités</span>`);
+                }
             }
             $('#messageDelevryTime3').html(`<span class='cls-sahrane'>${productInfo.out_of_stock_message}</span>`);
 
@@ -155,10 +156,13 @@ odoo.define('web_custumize_computerG.VariantMixin', function (require) {
                 return;
             }
             const $outOfStockMsg = $('#out_of_stock_message');
-            console.log('allQuantity 2', allQuantity)
+            const $threshold_message = $('#threshold_message');
 
             if ($outOfStockMsg.length) {
                 $outOfStockMsg.hide();
+            }
+            if ($threshold_message.length) {
+                $threshold_message.hide();
             }
             console.log('$outOfStockMsg', $outOfStockMsg)
             console.log('addQty Jinja', addQty)
@@ -169,21 +173,22 @@ odoo.define('web_custumize_computerG.VariantMixin', function (require) {
             infoMessageEl1.style.setProperty('display', 'none', 'important');
             infoMessageEl2.style.setProperty('display', 'none', 'important');
             infoMessageEl3.style.setProperty('display', 'none', 'important');
+            var checkShowDeliveryMessage = false
             if (virtual_available > 0) {
                 this._insertDelevryMessageDetailPage(productInfo);
-                if (qty_available_wt > 0) {
-                    this._insertDelevryRemoteMessageDetailPage(productInfo);
-                    if (qtyReset > 0) {
-                        this._insertOutOfStockMessageDetailPage(productInfo, qtyReset, continue_seling);
-                    }
-                }else if(addQty > virtual_available){
-                    this._insertOutOfStockMessageDetailPage(productInfo, qtyReset, continue_seling);
-                }
+//                if (qty_available_wt > 0) {
+//                    this._insertDelevryRemoteMessageDetailPage(productInfo);
+//                    if (qtyReset > 0) {
+//                        this._insertOutOfStockMessageDetailPage(productInfo, qtyReset, continue_seling);
+//                    }
+//                }else if(addQty > virtual_available){
+//                    this._insertOutOfStockMessageDetailPage(productInfo, qtyReset, continue_seling);
+//                }
             }else if (qty_available_wt > 0 && virtual_available <= 0) {
                 this._insertDelevryRemoteMessageDetailPage(productInfo);
-                if (addQty > (virtual_available + qty_available_wt)) {
-                    this._insertOutOfStockMessageDetailPage(productInfo, qtyReset, continue_seling);
-                }
+//                if (addQty > (virtual_available + qty_available_wt)) {
+//                    this._insertOutOfStockMessageDetailPage(productInfo, qtyReset, continue_seling);
+//                }
             }
             else {
                 this._insertOutOfStockMessageDetailPage(productInfo, qtyReset, continue_seling);
