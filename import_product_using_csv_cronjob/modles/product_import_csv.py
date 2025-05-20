@@ -33,16 +33,22 @@ class ImportProductConfig(models.Model):
     csv_url = fields.Char()
     file_csv = fields.Binary()
     category_ids = fields.Many2many("product.category")
-    stock_id = fields.Many2one("stock.location")
+    stock_id = fields.Many2one("stock.location", compute="_camputeStockLocation")
     index = fields.Integer()
     max_products = fields.Integer()
     active = fields.Boolean(default=True)
     start_update = fields.Boolean(default=False)
 
-    def downoladCsvFile(self):
-        _logger.warning(f"\n\n CSV URL: {self.csv_url} \n\n")
-        _logger.warning(f"\n\n CSV URL: {self.start_update} \n\n")
+    def _camputeStockLocation(self):
+        stock_location_id = self.env['ir.config_parameter'].sudo().get_param(
+            'config_supplier_csv_cronjob.stock_supplier_id')
+        if stock_location_id:
+            self.stock_id = int(stock_location_id)
+        else:
+            self.stock_id = stock_location_id
+        return stock_location_id
 
+    def downoladCsvFile(self):
         if self.start_update:
             self.start_update = False
         if self.start_update is True:
@@ -113,8 +119,13 @@ class ImportProductConfig(models.Model):
     def selectCategoryName(self):
         result = []
         for rec in self.category_ids:
-            if not rec.categoryCode or rec.categoryCode in result: continue
-            result.append(rec.categoryCode.lower())
+            if not rec.categoryCode: continue
+            categoryCodeSplit = rec.categoryCode.split(',')
+            for category in categoryCodeSplit:
+                category = category.strip()
+                category = category.lower()
+                if not category or category in result: continue
+                result.append(category.lower())
         return result
 
     def actionCreateCsvFile(self, row, date_now):
