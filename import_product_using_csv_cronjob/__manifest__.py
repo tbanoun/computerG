@@ -9,7 +9,7 @@
     'description': "",
     'author': 'digitalai_academy',
     'website': 'https://www.digitalai.academy',
-    'depends': ['base', 'stock', 'account'],
+    'depends': ['base', 'stock', 'account', 'config_supplier_csv_cronjob'],
     'data': [
         # security
         'security/ir.model.access.csv',
