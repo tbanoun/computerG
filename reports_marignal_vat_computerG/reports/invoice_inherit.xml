@@ -218,7 +218,7 @@
                                                     <b>
                                                         <span class="cls-sahrane">
                                                             <span class="cls-sahrane" t-esc="int(virtual_available)"/>
-                                                            |
+                                                            Units |
                                                         </span>
                                                         <span class="cls-sahrane"
                                                               t-esc="line.product_id.product_tmpl_id.messageDelivryTimeStock">
@@ -240,7 +240,7 @@
                                                     <b>
                                                         <span>
                                                             <span class="cls-sahrane" t-esc="int(qty_available_wt)"/>
-                                                            |
+                                                            Units |
                                                             <span class="cls-sahrane"
                                                                   t-esc="line.product_id.messageDelivryTimeRemoteStock">
                                                             </span>
@@ -265,7 +265,7 @@
                                                         <t t-if="line.continue_seling">
                                                             <span class="cls-sahrane" t-esc="int(qtyReset)"/>
                                                         </t>
-
+                                                        Units |
                                                         <span class="cls-sahrane"
                                                               t-esc="line.product_id.product_tmpl_id.out_of_stock_message">
                                                         </span>
