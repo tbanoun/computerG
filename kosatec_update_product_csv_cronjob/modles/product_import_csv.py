@@ -17,6 +17,39 @@ import csv
 _logger = logging.getLogger(__name__)
 
 
+def convert_comma_decimal_to_float(value):
+    """
+    Convertit une chaîne avec virgule décimale en float
+    Exemples:
+        '138,04' → 138.04
+        '1.234,56' → 1234.56 (gère aussi les séparateurs de milliers)
+    """
+    if isinstance(value, (int, float)):
+        return float(value)
+    if not isinstance(value, str):
+        return 0.0
+
+    # Nettoyage de la chaîne
+    cleaned = value.strip().replace(' ', '')
+
+    # Si vide, retourne 0
+    if not cleaned:
+        return 0.0
+
+    # Remplace les séparateurs de milliers et la virgule décimale
+    if '.' in cleaned and ',' in cleaned:
+        # Format comme 1.234,56 → 1234.56
+        cleaned = cleaned.replace('.', '').replace(',', '.')
+    elif ',' in cleaned:
+        # Format comme 138,04 → 138.04
+        cleaned = cleaned.replace(',', '.')
+
+    try:
+        return float(cleaned)
+    except ValueError:
+        return 0.0
+
+
 def detect_separator(csv_file):
     csv_file.seek(0)
     sample = csv_file.read(1024)
@@ -40,12 +73,14 @@ class ImportProductConfig(models.Model):
     start_update = fields.Boolean(default=False)
 
     def _camputeStockLocation(self):
-        configCronjob_id = self.env['cronjob.csv.settings'].search([('id', '=', 1)], limit=1)
-        for rec in self:
-            if not configCronjob_id:
-                rec.stock_id = None
-                return
-            rec.stock_id = configCronjob_id.stock_id.id
+        stock_location_id = self.env['ir.config_parameter'].sudo().get_param(
+            'config_supplier_csv_cronjob.stock_supplier_id')
+        if stock_location_id:
+            self.stock_id = int(stock_location_id)
+        else:
+            self.stock_id = stock_location_id
+        return stock_location_id
+
 
     def downoladCsvFile(self):
         _logger.warning(f"\n\n CSV URL: {self.csv_url} \n\n")
@@ -82,10 +117,10 @@ class ImportProductConfig(models.Model):
 
         # Définition des catégories à conserver
         selectCategoryName = self.selectCategoryName()
-        df['Category1'] = df['Category1'].str.lower()
+        df['kat2'] = df['kat2'].str.lower()
         selectCategoryName = [cat.lower() for cat in selectCategoryName]
         # df = df[df['Category1'].isin(selectCategoryName)]
-        df = df[df['Category1'].isin(selectCategoryName) & df['EAN'].notna() & (df['EAN'] != "")]
+        df = df[df['kat2'].isin(selectCategoryName) & df['ean'].notna() & (df['ean'] != "")]
 
         # Sauvegarde le CSV en mémoire (binaire)
         buffer = BytesIO()
@@ -123,6 +158,8 @@ class ImportProductConfig(models.Model):
             if not rec.categoryCode: continue
             categoryCodeSplit = rec.categoryCode.split(',')
             for category in categoryCodeSplit:
+                category = category.strip()
+                category = category.lower()
                 if not category or category in result: continue
                 result.append(category.lower())
         return result
@@ -388,7 +425,7 @@ class ImportProductConfig(models.Model):
         if not self.file_csv:
             _logger.warning("Aucun fichier CSV n'est disponible pour le traitement.")
             return
-
+        print('Start')
         # Décodage du fichier CSV en base64
         try:
             fichier_decoded = base64.b64decode(self.file_csv)
@@ -402,6 +439,7 @@ class ImportProductConfig(models.Model):
         except Exception as e:
             _logger.error(f"Erreur lors de la lecture du fichier CSV : {e}")
             return
+        print('Start END')
         index = self.index if self.index else 0
         df_filtered = df.loc[index:]
         i = 0
@@ -409,7 +447,7 @@ class ImportProductConfig(models.Model):
         for index, row in df_filtered.iterrows():
             # print(f"Index: {index}, ProductID: {row['ProductID']}, ManufacturerID: {row['ManufacturerID']}")
             i += 1
-            manufacturerID = row.get('EAN')
+            manufacturerID = row.get('ean')
             if not manufacturerID: continue
             if manufacturerID is None or math.isnan(manufacturerID):
                 manufacturerID = 0  # Remplacez NaN par une valeur par défaut
@@ -418,13 +456,19 @@ class ImportProductConfig(models.Model):
 
             manufacturerID = str(manufacturerID).replace(".0", "").replace(".00", "")
             if not manufacturerID or manufacturerID == '': continue
-            category = row.get('Category1')
+            category = row.get('kat2')
+            print("manufacturerID", manufacturerID)
+            print("category", category)
+            print("category type", type(category))
             if not isinstance(category, str):
                 continue
             if category.lower() not in selectCategory: continue
-            availableQuantity = row.get('AvailableQuantity')
-            AvailableNextQuantity = row.get('AvailableNextQuantity')
+            availableQuantity = row.get('menge')
+            print("availableQuantity", availableQuantity)
+            AvailableNextQuantity = 0
             if not isinstance(availableQuantity, int): continue
+            print("availableQuantity", availableQuantity)
+            print("selectCategory", selectCategory)
             availableQuantity += AvailableNextQuantity
             # select product on odoo database
             product_id = self.env['product.template'].sudo().search([
@@ -439,6 +483,7 @@ class ImportProductConfig(models.Model):
             if product_id and not product_id.is_published and availableQuantity > 0:
                 self.createUpdateCsvFile("published", row)
             # step create
+            print('PRICE =>', convert_comma_decimal_to_float(row.get('vkbrutto')))
             if not product_id:
                 # create a new line on file csv create product
                 self.createUpdateCsvFile("create", row)
@@ -447,13 +492,13 @@ class ImportProductConfig(models.Model):
                 self.createUpdateCsvFile("update", row)
                 self.updateQtyStockProduct(product_id, availableQuantity)
                 product_id.sudo().is_published = True
-                product_id.sudo().standard_price = row.get('NetPrice')
+                product_id.sudo().standard_price = convert_comma_decimal_to_float(row.get('vkbrutto'))
             # step unpublished
             elif availableQuantity <= 0 and product_id and product_id.qty_available <= 0:
                 self.createUpdateCsvFile("delete", row)
                 self.updateQtyStockProduct(product_id, availableQuantity)
                 product_id.sudo().is_published = False
-                product_id.sudo().standard_price = row.get('NetPrice')
+                product_id.sudo().standard_price = convert_comma_decimal_to_float(row.get('vkbrutto'))
 
             if i >= 1000 or index + 1 == self.max_products:
                 self.index = index + 1

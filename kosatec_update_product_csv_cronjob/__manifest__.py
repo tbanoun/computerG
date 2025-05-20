@@ -21,7 +21,6 @@
         'views/product_import_csv.xml',
         'views/product_import_history.xml',
         'views/stock_quant.xml',
-        'views/product_product.xml',
     ],
     'qweb': [
     ],
