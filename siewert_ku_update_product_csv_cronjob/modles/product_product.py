@@ -29,7 +29,7 @@ class ProductTemplate(models.Model):
             'name': _('Inventory Adjustments'),
             'view_mode': 'list',
             'view_id': self.env.ref(
-                'import_product_using_csv_cronjob.view_stock_quant_tree_inventory_supplier_inherit_stock_account').id,
+                'siewert_ku_update_product_csv_cronjob.view_stock_quant_tree_inventory_supplier_inherit_stock_account').id,
             'res_model': 'stock.quant',
             'type': 'ir.actions.act_window',
             'domain': [

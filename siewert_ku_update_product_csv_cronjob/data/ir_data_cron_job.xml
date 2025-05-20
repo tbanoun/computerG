@@ -4,7 +4,7 @@
 
         <record id="start_cron_job_update_qty_price_with_csv_file1" model="ir.cron">
             <field name="name">CronJob Update products using csv file</field>
-            <field name="model_id" ref="import_product_using_csv_cronjob.model_product_import_csv"/>
+            <field name="model_id" ref="siewert_ku_update_product_csv_cronjob.model_product_import_csv"/>
             <field name="state">code</field>
             <field name="code">model.startCronJob()</field>
             <field name="interval_number">3</field>
@@ -16,7 +16,7 @@
 
         <record id="download_file_csv_by_hours" model="ir.cron">
             <field name="name">Download File Csv spllier</field>
-            <field name="model_id" ref="import_product_using_csv_cronjob.model_product_import_csv"/>
+            <field name="model_id" ref="siewert_ku_update_product_csv_cronjob.model_product_import_csv"/>
             <field name="state">code</field>
             <field name="code">model.checkStartCron()</field>
             <field name="interval_number">1</field>
@@ -27,7 +27,7 @@
 
         <record id="cronJob_clean_history_file" model="ir.cron">
             <field name="name">Clean History File</field>
-            <field name="model_id" ref="import_product_using_csv_cronjob.model_product_import_history"/>
+            <field name="model_id" ref="siewert_ku_update_product_csv_cronjob.model_product_import_history"/>
             <field name="state">code</field>
             <field name="code">model.cleanHistoryFile()</field>
             <field name="interval_number">1</field>

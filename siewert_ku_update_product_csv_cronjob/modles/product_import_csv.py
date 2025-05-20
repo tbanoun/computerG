@@ -102,7 +102,7 @@ class ImportProductConfig(models.Model):
 
     def openViewImportProductHistory(self):
         action = self.env['ir.actions.act_window']._for_xml_id(
-            'import_product_using_csv_cronjob.action_open_history_action')
+            'siewert_ku_update_product_csv_cronjob.action_open_history_action')
         action['res_id'] = 1
         action['target'] = 'current'
         return action
@@ -371,8 +371,9 @@ class ImportProductConfig(models.Model):
             ("product_id", "=", product_id.product_variant_id.id),
         ], limit=1)
         if stock_id:
+            qty = stock_id.quantity + availableQuantity
             stock_id.sudo().write({
-                "inventory_quantity": availableQuantity
+                "inventory_quantity": qty
             })
             stock_id.sudo().action_apply_inventory()
         else:
@@ -448,13 +449,15 @@ class ImportProductConfig(models.Model):
                 self.createUpdateCsvFile("update", row)
                 self.updateQtyStockProduct(product_id, availableQuantity)
                 product_id.sudo().is_published = True
-                product_id.sudo().standard_price = row.get('NetPrice')
+                if product_id.sudo().standard_price > row.get('NetPrice'):
+                    product_id.sudo().standard_price = row.get('NetPrice')
             # step unpublished
             elif availableQuantity <= 0 and product_id and product_id.qty_available <= 0:
                 self.createUpdateCsvFile("delete", row)
                 self.updateQtyStockProduct(product_id, availableQuantity)
                 product_id.sudo().is_published = False
-                product_id.sudo().standard_price = row.get('NetPrice')
+                if product_id.sudo().standard_price > row.get('NetPrice'):
+                    product_id.sudo().standard_price = row.get('NetPrice')
 
             if i >= 1000 or index + 1 == self.max_products:
                 self.index = index + 1

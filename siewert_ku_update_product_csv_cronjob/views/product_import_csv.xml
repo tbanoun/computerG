@@ -75,6 +75,6 @@
                 name="Siewert-kau config cronJob (csv file)"
                 parent="config_supplier_csv_cronjob.config_stock_supplier_cronJob_csv"
                 id="menu_import_update_product_csv_file"
-                action="import_product_using_csv_cronjob.config_cron_action"/>
+                action="siewert_ku_update_product_csv_cronjob.config_cron_action"/>
     </data>
 </odoo>

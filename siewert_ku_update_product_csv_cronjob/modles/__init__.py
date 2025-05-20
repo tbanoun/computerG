@@ -1,3 +1,3 @@
 from . import product_import_csv
 from . import history_actions
-from . import product_product
+# from . import product_product
