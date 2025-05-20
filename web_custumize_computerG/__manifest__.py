@@ -33,6 +33,7 @@
 
         # reports
         'reports/update_invoice.xml',
+        'reports/update_delivery_note.xml',
     ],
     'assets': {
         'web.assets_frontend': [
