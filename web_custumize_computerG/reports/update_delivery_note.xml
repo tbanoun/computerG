@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="report_saleorder_document" inherit_id="sale.report_saleorder_document">
+            <td name="td_name" position="replace">
+                <td name="td_name">
+                    <span t-field="line.name"/>
+                    <t t-if="line.product_id.detailed_type != 'service'">
+                        <br/>
+                        <!--1-->
+                        <!--init value-->
+                        <!--set showDelivryMessage-->
+                        <t t-set="showDelivryMessage" t-value="line.showDelivryMessage"/>
+                        <!--set virtual_available-->
+                        <t t-set="virtual_available" t-value="0"/>
+                        <t t-if="line.qtyWT > 0">
+                            <t t-set="virtual_available"
+                               t-value="int(line.qtyWT)"/>
+                        </t>
+                        <!--set qty_available_wt-->
+                        <t t-set="qty_available_wt" t-value="0"/>
+                        <t t-if="line.qtySu > 0 and showDelivryMessage">
+                            <t t-set="qty_available_wt" t-value="int(line.qtySu)"/>
+                        </t>
+                        <t t-set="qtyReset" t-value="line.product_uom_qty - (virtual_available+qty_available_wt)"/>
+
+
+                        <!--on stock-->
+                        <t t-set="qtyResetOnStock" t-value="line.product_uom_qty"/>
+                        <t t-if="qtyResetOnStock >= virtual_available and virtual_available > 0">
+                            <t t-set="virtual_available" t-value="virtual_available"/>
+                            <t t-set="qtyResetOnStock" t-value="qtyResetOnStock - virtual_available"/>
+                        </t>
+                        <t t-elif="virtual_available >= line.product_uom_qty">
+                            <t t-set="virtual_available" t-value="qtyResetOnStock"/>
+                            <t t-set="qtyResetOnStock" t-value="0"/>
+                        </t>
+
+                        <!--on remote stock-->
+                        <t t-set="qtyResetOnRemoteStock" t-value="0"/>
+                        <t t-if="qtyResetOnStock > 0">
+                            <t t-if="qtyResetOnStock > qty_available_wt and qty_available_wt > 0">
+                                <t t-set="qty_available_wt" t-value="qty_available_wt"/>
+                                <t t-set="qtyResetOnRemoteStock" t-value="qtyResetOnStock - qty_available_wt"/>
+                            </t>
+                            <t t-elif="qty_available_wt > qtyResetOnStock">
+                                <t t-set="qtyResetOnRemoteStock" t-value="0"/>
+                                <t t-set="qty_available_wt" t-value="qtyResetOnStock"/>
+                            </t>
+                        </t>
+                        <t t-if="qtyResetOnRemoteStock > 0">
+                            <t t-set="qtyReset" t-value="qtyResetOnRemoteStock"/>
+                        </t>
+                        <!--show message delivery stock -->
+                        <!--cas 1 virtual_available > 0-->
+                        <t t-if="virtual_available > 0">
+                            <span style="font-weight: 500 !important;
+                width: fit-content !important;
+                color: #067d24 !important;
+                ">
+                                <b>
+                                    <span class="cls-sahrane">
+                                        <span class="cls-sahrane" t-esc="int(virtual_available)"/>
+                                        |
+                                    </span>
+                                    <span class="cls-sahrane"
+                                          t-esc="line.product_id.product_tmpl_id.messageDelivryTimeStock">
+                                    </span>
+                                </b>
+                            </span>
+                        </t>
+                        <!--                    cas 2 qty_available_wt > 0 and line.quantity > virtual_available-->
+                        <t t-if="line.product_uom_qty > virtual_available and qty_available_wt > 0 ">
+                            <t t-if="virtual_available > 0">
+                                <span>,</span>
+                            </t>
+                            <span style="
+                                    font-weight: 500 !important;
+                                    width: fit-content !important;
+                                    color: #803D19 !important;
+                                    ">
+
+                                <b>
+                                    <span>
+                                        <span class="cls-sahrane" t-esc="int(qty_available_wt)"/>
+                                        |
+                                        <span class="cls-sahrane"
+                                              t-esc="line.product_id.messageDelivryTimeRemoteStock">
+                                        </span>
+                                    </span>
+                                </b>
+                            </span>
+                        </t>
+                        <!--cas 3 qtyReset > 0-->
+                        <t t-if="qtyReset > 0">
+                            <t t-if="line.product_uom_qty > virtual_available and qty_available_wt > 0 ">
+                                <span>,</span>
+                            </t>
+                            <t t-elif="virtual_available > 0">
+                                <span>,</span>
+                            </t>
+                            <span style="
+                                                    font-weight: 500 !important;
+                                                    width: fit-content !important;
+                                                    color: #DA020E !important;
+                                                    ">
+                                <b>
+                                    <t t-if="line.continue_seling">
+                                        <span class="cls-sahrane" t-esc="int(qtyReset)"/>
+                                    </t>
+
+                                    <span class="cls-sahrane"
+                                          t-esc="line.product_id.product_tmpl_id.out_of_stock_message">
+                                    </span>
+                                </b>
+                            </span>
+                        </t>
+
+                    </t>
+                </td>
+            </td>
+        </template>
+
+
+    </data>
+</odoo>
