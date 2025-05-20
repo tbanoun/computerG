@@ -18,6 +18,7 @@
         'views/product_category.xml',
         'views/stock_quant.xml',
         'views/product_product.xml',
+        'views/res_config_setting_views.xml',
     ],
     'qweb': [
     ],
