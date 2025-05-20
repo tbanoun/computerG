@@ -19,20 +19,25 @@ class SaleOrderLine(models.Model):
         return res
 
     def create(self, vals_list):
-        res = True
+        # S'assurer que c'est une liste
+        if isinstance(vals_list, dict):
+            vals_list = [vals_list]
+
+        new_vals_list = []
         for vals in vals_list:
             try:
                 product_id = vals.get('product_template_id')
                 product = self.env['product.template'].sudo().browse(int(product_id))
                 vals['qtyWT'] = product.virtual_available
-                vals['qtySu'] =product.qty_available_wt
+                vals['qtySu'] = product.qty_available_wt
                 vals['showDelivryMessage'] = product.showDelivryMessage
-                vals['continue_seling'] =  product.continue_seling
+                vals['continue_seling'] = product.continue_seling
             except Exception as e:
-                print(e)
+                _logger.warning(f"Erreur lors de la récupération des champs produit : {e}")
 
-            res = super(SaleOrderLine, self).create(vals)
-        return  res
+            new_vals_list.append(vals)
+
+        return super(SaleOrderLine, self).create(new_vals_list)
 
     def _prepare_invoice_line(self, **optional_values):
         """Prepare the values to create the new invoice line for a sales order line.

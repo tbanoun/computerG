@@ -2,8 +2,8 @@
 # Part of BrowseInfo. See LICENSE file for full copyright and licensing details.
 
 {
-    'name': 'Update and Import Product using csv url and cronJob',
-    'version': '16.0.0.1',
+    'name': 'Siewert-kau Update Product With Csv File And Cronjob',
+    'version': '16.0.0.2',
     'category': 'Tools',
     'summary': '',
     'description': "",
@@ -20,9 +20,6 @@
         # views
         'views/product_import_csv.xml',
         'views/product_import_history.xml',
-        'views/product_category.xml',
-        'views/stock_quant.xml',
-        'views/product_product.xml',
     ],
     'qweb': [
     ],
