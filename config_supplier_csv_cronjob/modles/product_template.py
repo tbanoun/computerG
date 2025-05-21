@@ -1,4 +1,4 @@
-from odoo import api, models, fields
+from odoo import api, models, fields, _
 
 class ProductCategory(models.Model):
     _inherit = "product.category"
