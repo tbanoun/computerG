@@ -27,13 +27,15 @@ class SaleOrderLine(models.Model):
 
         new_vals_list = []
         for vals in vals_list:
-            product_id = vals.get('product_template_id')
-            product = self.env['product.template'].sudo().browse(int(product_id))
-            vals['qtyWT'] = product.virtual_available
-            vals['qtySu'] = product.qty_available_wt
-            vals['showDelivryMessage'] = product.showDelivryMessage
-            vals['continue_seling'] = product.continue_seling
-
+            product_id = vals.get('product_id')
+            if product_id:
+                product_product_id = self.env['product.product'].sudo().browse(int(product_id))
+                if product_product_id:
+                    vals['qtyWT'] = product_product_id.product_tmpl_id.virtual_available
+                    vals['qtySu'] = product_product_id.product_tmpl_id.qty_available_wt
+                    vals['showDelivryMessage'] = product_product_id.product_tmpl_id.showDelivryMessage
+                    vals['continue_seling'] = product_product_id.product_tmpl_id.continue_seling
+                print(vals)
             new_vals_list.append(vals)
 
         return super(SaleOrderLine, self).create(new_vals_list)
