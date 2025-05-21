@@ -191,7 +191,7 @@ class ImportProductConfig(models.Model):
             self.env['kosatec.history.create.action'].create({
                 'file': new_csv_encoded,
                 'file_name': f"File_create_{str(date_now).replace('-', '_')}.csv",
-                'kosatec_history_action_id': 6,
+                'kosatec_history_action_id': 1,
                 'date': date_now
 
             })
