@@ -223,7 +223,7 @@ class ImportProductConfig(models.Model):
             self.env['kosatec.history.deleted.action'].create({
                 'file': new_csv_encoded,
                 'file_name': f"File_unpublished_{str(date_now).replace('-', '_')}.csv",
-                'kosatec_history_action_id': 6,
+                'kosatec_history_action_id': 1,
                 'date': date_now
 
             })
@@ -255,7 +255,7 @@ class ImportProductConfig(models.Model):
             self.env['kosatec.history.updated.action'].create({
                 'file': new_csv_encoded,
                 'file_name': f"File_update_{str(date_now).replace('-', '_')}.csv",
-                'kosatec_history_action_id': 6,
+                'kosatec_history_action_id': 1,
                 'date': date_now
 
             })
@@ -287,7 +287,7 @@ class ImportProductConfig(models.Model):
             self.env['kosatec.history.published.action'].create({
                 'file': new_csv_encoded,
                 'file_name': f"File_published_{str(date_now).replace('-', '_')}.csv",
-                'kosatec_history_action_id': 6,
+                'kosatec_history_action_id': 1,
                 'date': date_now
 
             })
@@ -429,7 +429,6 @@ class ImportProductConfig(models.Model):
         if not self.file_csv:
             _logger.warning("Aucun fichier CSV n'est disponible pour le traitement.")
             return
-        print('Start')
         # Décodage du fichier CSV en base64
         try:
             fichier_decoded = base64.b64decode(self.file_csv)
@@ -439,11 +438,10 @@ class ImportProductConfig(models.Model):
             return
         # Lire le CSV
         try:
-            df = pd.read_csv(fichier_io, delimiter=';', encoding='utf-8', low_memory=False)
+            df = pd.read_csv(fichier_io, delimiter=';', encoding='utf-8', low_memory=False, dtype={'ean': str})
         except Exception as e:
             _logger.error(f"Erreur lors de la lecture du fichier CSV : {e}")
             return
-        print('Start END')
         index = self.index if self.index else 0
         df_filtered = df.loc[index:]
         i = 0
@@ -452,18 +450,9 @@ class ImportProductConfig(models.Model):
             # print(f"Index: {index}, ProductID: {row['ProductID']}, ManufacturerID: {row['ManufacturerID']}")
             i += 1
             manufacturerID = row.get('ean')
-            if not manufacturerID: continue
-            if manufacturerID is None or math.isnan(manufacturerID):
-                manufacturerID = 0  # Remplacez NaN par une valeur par défaut
-            else:
-                manufacturerID = int(manufacturerID)
-
             manufacturerID = str(manufacturerID).replace(".0", "").replace(".00", "")
             if not manufacturerID or manufacturerID == '': continue
             category = row.get('kat2')
-            print("manufacturerID", manufacturerID)
-            print("category", category)
-            print("category type", type(category))
             if not isinstance(category, str):
                 continue
             if category.lower() not in selectCategory: continue
@@ -484,7 +473,6 @@ class ImportProductConfig(models.Model):
             if product_id and not product_id.is_published and availableQuantity > 0:
                 self.createUpdateCsvFile("published", row)
             # step create
-            print('PRICE =>', convert_comma_decimal_to_float(row.get('vkbrutto')))
             if not product_id:
                 # create a new line on file csv create product
                 self.createUpdateCsvFile("create", row)
