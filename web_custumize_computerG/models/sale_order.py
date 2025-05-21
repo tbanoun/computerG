@@ -22,20 +22,17 @@ class SaleOrderLine(models.Model):
 
     def create(self, vals_list):
         # S'assurer que c'est une liste
-        if isinstance(vals_list, dict):
+        if not isinstance(vals_list, list):
             vals_list = [vals_list]
 
         new_vals_list = []
         for vals in vals_list:
-            try:
-                product_id = vals.get('product_template_id')
-                product = self.env['product.template'].sudo().browse(int(product_id))
-                vals['qtyWT'] = product.virtual_available
-                vals['qtySu'] = product.qty_available_wt
-                vals['showDelivryMessage'] = product.showDelivryMessage
-                vals['continue_seling'] = product.continue_seling
-            except Exception as e:
-                _logger.warning(f"Erreur lors de la récupération des champs produit : {e}")
+            product_id = vals.get('product_template_id')
+            product = self.env['product.template'].sudo().browse(int(product_id))
+            vals['qtyWT'] = product.virtual_available
+            vals['qtySu'] = product.qty_available_wt
+            vals['showDelivryMessage'] = product.showDelivryMessage
+            vals['continue_seling'] = product.continue_seling
 
             new_vals_list.append(vals)
 
