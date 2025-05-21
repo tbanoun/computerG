@@ -75,7 +75,7 @@
             <field name="res_model">kosatec.product.import.history</field>
             <field name="view_mode">form</field>
             <field name="view_id" ref="kosatec_update_product_csv_cronjob.view_form_history_action"/>
-            <field name="res_id">6</field>
+            <field name="res_id">1</field>
         </record>
     </data>
 </odoo>

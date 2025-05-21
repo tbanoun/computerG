@@ -139,7 +139,7 @@ class ImportProductConfig(models.Model):
     def openViewImportProductHistory(self):
         action = self.env['ir.actions.act_window']._for_xml_id(
             'kosatec_update_product_csv_cronjob.action_open_history_action')
-        action['res_id'] = 6
+        action['res_id'] = 1
         action['target'] = 'current'
         return action
 
