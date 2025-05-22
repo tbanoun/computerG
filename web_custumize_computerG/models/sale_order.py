@@ -17,9 +17,9 @@ class SaleOrderLine(models.Model):
     def computeStateOrder(self):
         for rec in self:
             if rec.state in ['done', 'cancel', 'sale']:
-                rec.status = False
-            else:
                 rec.status = True
+            else:
+                rec.status = False
 
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'

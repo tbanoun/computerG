@@ -14,7 +14,7 @@
                     }
                 </style>
                 <!--11-->
-                <t t-if="line.order_id.status">
+                <t t-if="not line.order_id.status">
                     <ul class="list-inline mb-1">
                         <!--1-->
                         <!--init value-->
