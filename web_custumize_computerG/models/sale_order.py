@@ -9,12 +9,34 @@ _logger = logging.getLogger(__name__)
 
 
 class SaleOrderLine(models.Model):
+    _inherit = 'sale.order'
+
+    status = fields.Boolean(
+        compute="computeStateOrder", store=True)
+
+    def computeStateOrder(self):
+        for rec in self:
+            if rec.state in ['done', 'cancel', 'sale']:
+                rec.status = False
+            else:
+                rec.status = True
+
+class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
     qtyWT = fields.Float()
     qtySu = fields.Float()
     showDelivryMessage = fields.Boolean()
     continue_seling = fields.Boolean()
+    status = fields.Boolean(
+        compute="computeStateOrder", store=True)
+
+    def computeStateOrder(self):
+        for rec in self:
+            if rec.state in ['done', 'cancel', 'sale']:
+                rec.status = False
+            else:
+                rec.status = True
 
     def write(self, vals):
         res = super(SaleOrderLine, self).write(vals)

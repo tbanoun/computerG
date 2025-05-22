@@ -18,11 +18,11 @@
                         <strong t-field="line.name_short"/>
                         <span>
                             Sate:
-                            <strong t-field="line.state"/>
+                            <strong t-field="line.status"/>
                         </span>
 
                     </div>
-                    <t t-if="line.order_id.state not in ['done', 'cancel']">
+                    <t t-if="line.order_id.status">
                         <ul class="list-inline mb-1">
                             <!--1-->
                             <!--init value-->
