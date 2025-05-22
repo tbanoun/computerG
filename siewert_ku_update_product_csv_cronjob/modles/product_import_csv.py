@@ -380,7 +380,8 @@ class ImportProductConfig(models.Model):
             stock_id = self.env['stock.quant'].sudo().create({
                 "location_id": self.stock_id.id,
                 "product_id": product_id.product_variant_id.id,
-                "inventory_quantity": availableQuantity
+                "inventory_quantity": availableQuantity,
+                "quantity": availableQuantity
             })
             stock_id.sudo().action_apply_inventory()
         return True
