@@ -9,6 +9,11 @@
             <xpath expr="//table[@id='cart_products']//tbody//td[@class='td-product_name']" position="replace">
                 <td class='td-product_name'>
                     <style>
+                        @media (min-width: 1200px) {
+                        .oe_website_sale .toggle_summary_div {
+                        max-width: 900px !important;
+                        }
+                        }
                         .cls-sahrane p{
                         display: contents !important;
                         font-size: 7pt !important;
@@ -17,7 +22,10 @@
                     <div>
                         <strong t-field="line.name_short"/>
                         <br/>
-                        <span><strong>SKU: </strong><strong t-field="line.product_id.default_code"/></span>
+                        <span>
+                            <strong>SKU:</strong>
+                            <strong t-field="line.product_id.default_code"/>
+                        </span>
                     </div>
                     <t t-if="line.state in ('draft', 'sent')">
                         <ul class="list-inline mb-1">

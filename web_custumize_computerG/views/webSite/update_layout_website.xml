@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="payment" inherit_id="website_sale.payment" name="Payment">
+        <div class="col-12 col-xl-auto order-xl-2" position="replace">
+            <div class="col-12 col-xl order-xl-2">
+                <t t-call="website_sale.cart_summary"/>
+            </div>
+        </div>
+    </template>
+</odoo>
