@@ -16,6 +16,10 @@
                         <a class="tp-link-dark" t-att-href="line.product_id.website_url">
                             <span t-out="line.product_id.display_name"/>
                         </a>
+                        <span>
+                            Sate:
+                            <strong t-field="line.state"/>
+                        </span>
                     </div>
                     <t t-if="line.order_id.state not in ['done', 'cancel']">
                         <ul class="list-inline mb-1">
