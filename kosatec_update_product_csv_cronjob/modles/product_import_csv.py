@@ -412,7 +412,8 @@ class ImportProductConfig(models.Model):
             qty = stock_id.quantity +availableQuantity
             print('THE QTY', qty)
             stock_id.sudo().write({
-                "inventory_quantity": qty
+                "inventory_quantity": qty,
+                "quantity": availableQuantity
             })
             stock_id.sudo().action_apply_inventory()
         else:
