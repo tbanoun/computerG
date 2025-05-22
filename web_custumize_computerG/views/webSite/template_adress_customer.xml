@@ -16,13 +16,8 @@
                     </style>
                     <div>
                         <strong t-field="line.name_short"/>
-                        <span>
-                            Sate:
-                            <strong t-field="line.status"/>
-                        </span>
-
                     </div>
-                    <t t-if="not line.order_id.status">
+                    <t t-if="line.state in ('draft', 'sent')">
                         <ul class="list-inline mb-1">
                             <!--1-->
                             <!--init value-->

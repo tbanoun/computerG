@@ -11,15 +11,18 @@ _logger = logging.getLogger(__name__)
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order'
 
-    status = fields.Boolean(
-        compute="computeStateOrder", store=True)
+    status = fields.Boolean()
 
-    def computeStateOrder(self):
+    @api.onchange('state')
+    def _computeStateOrder(self):
         for rec in self:
             if rec.state in ['done', 'cancel', 'sale']:
                 rec.status = True
             else:
                 rec.status = False
+            print('______________')
+            print('status :',rec.status)
+            print('______________')
 
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
@@ -29,14 +32,19 @@ class SaleOrderLine(models.Model):
     showDelivryMessage = fields.Boolean()
     continue_seling = fields.Boolean()
     status = fields.Boolean(
-        compute="computeStateOrder", store=True)
+        compute="_computeStateOrder", store=True)
 
-    def computeStateOrder(self):
+
+    @api.onchange('state')
+    def _computeStateOrder(self):
         for rec in self:
             if rec.state in ['done', 'cancel', 'sale']:
                 rec.status = False
             else:
                 rec.status = True
+            print('______________')
+            print('status 2:', rec.status)
+            print('______________')
 
     def write(self, vals):
         res = super(SaleOrderLine, self).write(vals)

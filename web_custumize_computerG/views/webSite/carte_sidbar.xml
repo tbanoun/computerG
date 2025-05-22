@@ -14,7 +14,7 @@
                     }
                 </style>
                 <!--11-->
-                <t t-if="not line.order_id.status">
+                <t t-if="line.state in ('draft', 'sent')">
                     <ul class="list-inline mb-1">
                         <!--1-->
                         <!--init value-->
