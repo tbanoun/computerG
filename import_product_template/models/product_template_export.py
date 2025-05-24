@@ -81,20 +81,20 @@ class ProductTemplateExport(models.Model):
                 category_xmld_id or '',  # categ_id/id
                 product.default_code or "",  # default_code
                 product.barcode or "",  # barcode
-                product.x_product_website_url or "",  # x_product_website_url (empty in example)
-                product.x_CPU or "",  # x_CPU (empty in example)
-                product.x_sreen_size or "",  # x_sreen_size (empty in example)
-                product.x_hddtype or "",  # x_hddtype (empty in example)
-                product.x_ram or "",  # x_ram (empty in example)
-                product.x_GPU or "",  # x_GPU (empty in example)
-                manufacturer_id or "", # f"__export__.res_partner_{product.manufacturer.id}_{product.manufacturer.id}" if product.manufacturer else "",
-                product.x_kind or "",  # x_kind (empty in example)
-                product.x_condition or "",  # x_condition (empty in example)
-                product.x_ or "",  # x_ (empty in example)
-                product.image_url or "",  # image_url (you can add product.image_1920 URL here)
-                public_categ_ids or '', # public_categ_ids/id
-                product.available_in_pos or '', # available_in_pos
-                pos_categ_id or '', # pos_categ_id/id
+                # product.x_product_website_url or "",  # x_product_website_url (empty in example)
+                # product.x_CPU or "",  # x_CPU (empty in example)
+                # product.x_sreen_size or "",  # x_sreen_size (empty in example)
+                # product.x_hddtype or "",  # x_hddtype (empty in example)
+                # product.x_ram or "",  # x_ram (empty in example)
+                # product.x_GPU or "",  # x_GPU (empty in example)
+                # manufacturer_id or "", # f"__export__.res_partner_{product.manufacturer.id}_{product.manufacturer.id}" if product.manufacturer else "",
+                # product.x_kind or "",  # x_kind (empty in example)
+                # product.x_condition or "",  # x_condition (empty in example)
+                # product.x_ or "",  # x_ (empty in example)
+                # product.image_url or "",  # image_url (you can add product.image_1920 URL here)
+                # public_categ_ids or '', # public_categ_ids/id
+                # product.available_in_pos or '', # available_in_pos
+                # pos_categ_id or '', # pos_categ_id/id
                 product.allow_out_of_stock_order or False,  # allow_out_of_stock_order
                 product.show_availability or False,  # show_availability
                 product.out_of_stock_message or '',  # out_of_stock_message
