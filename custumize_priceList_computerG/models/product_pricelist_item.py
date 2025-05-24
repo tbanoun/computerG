@@ -44,7 +44,9 @@ class PricelistItem(models.Model):
             )
 
     def _compute_price(self, product, quantity, uom, date, currency=None):
-        print('\n\n\n JSK \n\n\n ')
+        user = self.env.user
+        print('\n\n\n _compute_price \n')
+        print(f"Utilisateur connecté : {user.name} (ID: {user.id})\n\n\n")
         product.ensure_one()
         uom.ensure_one()
 
@@ -62,15 +64,12 @@ class PricelistItem(models.Model):
 
         # 2. Calculate base price (normal price)
         base_price, extraPrice = self._compute_base_price_duplicate(actual_product, quantity, uom, date, currency)
-        print(f'\n\n JINJA base_price {base_price}, extra_price {extraPrice}')
         # 3. Add price_extra from product variant if exists
         # if hasattr(actual_product, 'price_extra') and self.compute_price != 'formula':
         #     base_price += convert(actual_product.price_extra)
         # elif hasattr(actual_product, 'price_extra') and self.compute_price == 'formula':
         #     # extraPrice += convert(actual_product.price_extra)
         #     pass
-        print('SAMIA', base_price)
-        print('SAMIA', extraPrice)
 
         # 4. Add price_extra from selected attributes (for both templates and variants)
         # if hasattr(product, 'product_template_attribute_value_ids') and self.compute_price != 'formula':
@@ -94,7 +93,6 @@ class PricelistItem(models.Model):
         #     print('HELLOOO extraPrice 2', extraPrice)
 
         # print('SAMIA attribute_extras', attribute_extras)
-        print('SAMIA base_price', base_price)
         # 5. Apply pricing rules
         if self.compute_price == 'fixed':
             price = convert(self.fixed_price)
@@ -111,9 +109,6 @@ class PricelistItem(models.Model):
                 price = math.ceil(price + ((self.margin / 100) * base_price))
         else:
             price = base_price
-        print(f'The tartaga price {price}')
-        print(f'The tartaga extraPrice {extraPrice}')
-        print('SAMIA base_price', base_price)
         # if  self.compute_price == 'formula':
         price += extraPrice
         return price
