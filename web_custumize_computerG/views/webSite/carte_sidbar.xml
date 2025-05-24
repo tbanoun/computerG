@@ -7,7 +7,6 @@
         <field name="key">web_custumize_computerG.cart_sidebar</field>
         <field name="arch" type="xml">
             <xpath expr="//h6" position="after">
-                <br/>
                 <span>
                     <strong>SKU:</strong>
                     <strong t-field="line.product_id.default_code"/>
@@ -76,6 +75,7 @@
                 width: fit-content !important;
                 border-radius: 0.2rem !important;
                 color: #067d24 !important;
+                font-size: 10pt !important;
                 border: 1px solid #19a22f; !important"
                                               class="ml-2 text-right alert alert-success w-40">
                                             <span class="cls-sahrane">
@@ -100,6 +100,7 @@
                 width: fit-content !important;
                 border-radius: 0.2rem !important;
                 color: #803D19 !important;
+                font-size: 10pt !important;
                 border: 1px solid #803D19; !important"
                                           class="ml-2 text-right alert alert-success w-40">
                                         <span t-esc="int(qty_available_wt)"/>
@@ -122,6 +123,7 @@
                                                     width: fit-content !important;
                                                     border-radius: 0.2rem !important;
                                                     color: #DA020E !important;
+                                                    font-size: 10pt !important;
                                                     border: 1px solid #DA020E; !important
                                                     "
                                           class="ml-2 text-right alert alert-warning w-40">
