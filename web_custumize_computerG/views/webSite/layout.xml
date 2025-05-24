@@ -17,11 +17,6 @@
                             <span t-out="line.product_id.display_name"/>
                         </a>
                         <span>
-                            <br/>
-                            <strong>SKU:</strong>
-                            <a class="tp-link-dark" t-att-href="line.product_id.website_url">
-                                <strong t-field="line.product_id.default_code"/>
-                            </a>
                         </span>
                     </div>
                     <ul class="list-inline mb-1">

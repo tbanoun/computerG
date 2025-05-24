@@ -8,6 +8,10 @@
         <field name="arch" type="xml">
             <xpath expr="//h6" position="after">
                 <br/>
+                <span>
+                    <strong>SKU:</strong>
+                    <strong t-field="line.product_id.default_code"/>
+                </span>
                 <style>
                     .cls-sahrane p{
                     display: contents !important;
