@@ -468,8 +468,13 @@ class ImportProductConfig(models.Model):
             ], limit=1)
             if product_id and product_id.categ_id:
                 categoryCode = product_id.categ_id.categoryCode if product_id.categ_id.categoryCode else ''
-                if categoryCode.lower() not in selectCategory:
-                    product_id = None
+                category_split = categoryCode.split(',')
+                find = False
+                for cat in category_split:
+                    if cat.lower() in selectCategory:
+                        find = True
+                        break
+                if not find: product_id = None
             # start the script and logique to update qty and price on wherehouse of supplier
             # strp published
             if product_id and not product_id.is_published and availableQuantity > 0:
