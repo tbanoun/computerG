@@ -2,8 +2,8 @@
 # Part of BrowseInfo. See LICENSE file for full copyright and licensing details.
 
 {
-    'name': 'Kosatec Update Product With Csv File And Cronjob',
-    'version': '16.0.0.2',
+    'name': 'Google Sheet Update Product Csv Cronjob',
+    'version': '16.0.0.1',
     'category': 'Tools',
     'summary': '',
     'description': "",
@@ -19,8 +19,7 @@
 
         # views
         'views/product_import_csv.xml',
-        'views/product_import_history.xml',
-        'views/stock_quant.xml',
+        'views/product_import_history.xml'
     ],
     'qweb': [
     ],

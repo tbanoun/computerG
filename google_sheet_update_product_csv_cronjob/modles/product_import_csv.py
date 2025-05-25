@@ -59,7 +59,7 @@ def detect_separator(csv_file):
 
 
 class ImportProductConfig(models.Model):
-    _name = "kosatec.product.import.csv"
+    _name = "google.product.import.csv"
     _rec_name = "stock_id"
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
@@ -138,16 +138,16 @@ class ImportProductConfig(models.Model):
 
     def openViewImportProductHistory(self):
         action = self.env['ir.actions.act_window']._for_xml_id(
-            'kosatec_update_product_csv_cronjob.action_open_history_action')
-        action['res_id'] = 6
+            'google_sheet_update_product_csv_cronjob.action_open_history_action')
+        action['res_id'] = 1
         action['target'] = 'current'
         return action
 
     def deleteHistoryFile(self):
-        create_ids = self.env['kosatec.history.create.action'].sudo().search([]).unlink()
-        delete_ids = self.env['kosatec.history.deleted.action'].sudo().search([]).unlink()
-        update_ids = self.env['kosatec.history.updated.action'].sudo().search([]).unlink()
-        update_ids = self.env['kosatec.history.published.action'].sudo().search([]).unlink()
+        create_ids = self.env['google.history.create.action'].sudo().search([]).unlink()
+        delete_ids = self.env['google.history.deleted.action'].sudo().search([]).unlink()
+        update_ids = self.env['google.history.updated.action'].sudo().search([]).unlink()
+        update_ids = self.env['google.history.published.action'].sudo().search([]).unlink()
 
     def resetIndex(self):
         self.index = 0
@@ -165,7 +165,7 @@ class ImportProductConfig(models.Model):
         return result
 
     def actionCreateCsvFile(self, row, date_now):
-        historyCreate = self.env['kosatec.history.create.action'].search([
+        historyCreate = self.env['google.history.create.action'].search([
             ('date', "=", date_now)
         ], limit=1)
         if historyCreate:
@@ -188,16 +188,16 @@ class ImportProductConfig(models.Model):
             df = pd.DataFrame([row])
             new_csv = df.to_csv(index=False)
             new_csv_encoded = base64.b64encode(new_csv.encode('utf-8'))
-            self.env['kosatec.history.create.action'].create({
+            self.env['google.history.create.action'].create({
                 'file': new_csv_encoded,
                 'file_name': f"File_create_{str(date_now).replace('-', '_')}.csv",
-                'kosatec_history_action_id': 6,
+                'google_history_action_id': 1,
                 'date': date_now
 
             })
 
     def actionDeleteCsvFile(self, row, date_now):
-        historyCreate = self.env['kosatec.history.deleted.action'].search([
+        historyCreate = self.env['google.history.deleted.action'].search([
             ('date', "=", date_now)
         ], limit=1)
         if historyCreate:
@@ -220,16 +220,16 @@ class ImportProductConfig(models.Model):
             df = pd.DataFrame([row])
             new_csv = df.to_csv(index=False)
             new_csv_encoded = base64.b64encode(new_csv.encode('utf-8'))
-            self.env['kosatec.history.deleted.action'].create({
+            self.env['google.history.deleted.action'].create({
                 'file': new_csv_encoded,
                 'file_name': f"File_unpublished_{str(date_now).replace('-', '_')}.csv",
-                'kosatec_history_action_id': 6,
+                'google_history_action_id': 1,
                 'date': date_now
 
             })
 
     def actionUpdateCsvFile(self, row, date_now):
-        historyCreate = self.env['kosatec.history.updated.action'].search([
+        historyCreate = self.env['google.history.updated.action'].search([
             ('date', "=", date_now)
         ], limit=1)
         if historyCreate:
@@ -252,16 +252,16 @@ class ImportProductConfig(models.Model):
             df = pd.DataFrame([row])
             new_csv = df.to_csv(index=False)
             new_csv_encoded = base64.b64encode(new_csv.encode('utf-8'))
-            self.env['kosatec.history.updated.action'].create({
+            self.env['google.history.updated.action'].create({
                 'file': new_csv_encoded,
                 'file_name': f"File_update_{str(date_now).replace('-', '_')}.csv",
-                'kosatec_history_action_id': 6,
+                'google_history_action_id': 1,
                 'date': date_now
 
             })
 
     def actionPublishedCsvFile(self, row, date_now):
-        historyCreate = self.env['kosatec.history.published.action'].search([
+        historyCreate = self.env['google.history.published.action'].search([
             ('date', "=", date_now)
         ], limit=1)
         if historyCreate:
@@ -284,10 +284,10 @@ class ImportProductConfig(models.Model):
             df = pd.DataFrame([row])
             new_csv = df.to_csv(index=False)
             new_csv_encoded = base64.b64encode(new_csv.encode('utf-8'))
-            self.env['kosatec.history.published.action'].create({
+            self.env['google.history.published.action'].create({
                 'file': new_csv_encoded,
                 'file_name': f"File_published_{str(date_now).replace('-', '_')}.csv",
-                'kosatec_history_action_id': 6,
+                'google_history_action_id': 1,
                 'date': date_now
 
             })
@@ -306,7 +306,7 @@ class ImportProductConfig(models.Model):
     def checkStartCron(self):
         datetime_now = datetime.now()
         if not (3 <= datetime_now.hour < 5): return False
-        cron_id = self.env['kosatec.product.import.csv'].sudo().browse(1)
+        cron_id = self.env['google.product.import.csv'].sudo().browse(1)
         if not cron_id.active: return False
         time.sleep(2)
         cron_id.downoladCsvFile()
@@ -321,7 +321,7 @@ class ImportProductConfig(models.Model):
     def startCronJob(self):
         datetime_now = datetime.now()
         if not (5 <= datetime_now.hour < 7): return False
-        cron_id = self.env['kosatec.product.import.csv'].sudo().browse(1)
+        cron_id = self.env['google.product.import.csv'].sudo().browse(1)
         if not cron_id.active: return False
         cron_id.startScriptUsingButtonTest()
 

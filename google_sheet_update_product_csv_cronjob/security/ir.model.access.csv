@@ -1,8 +1,8 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_kosatec_product_import_csv,kosatec.product.import.csv,model_kosatec_product_import_csv,,1,1,1,1
-access_kosatec_product_import_history,kosatec.product.import.history,model_kosatec_product_import_history,,1,1,1,1
-access_kosatec_history_updated_action,kosatec.history.updated.action,model_kosatec_history_updated_action,,1,1,1,1
-access_kosatec_history_deleted_action,kosatec.history.deleted.action,model_kosatec_history_deleted_action,,1,1,1,1
-access_kosatec_history_create_action,kosatec.history.create.action,model_kosatec_history_create_action,,1,1,1,1
-access_kosatec_history_published_action,kosatec.history.published.action,model_kosatec_history_published_action,,1,1,1,1
-access_kosatec_product_import_csv,kosatec.product.import.csv,model_kosatec_product_import_csv,base.group_system,1,1,1,1
+access_google_product_import_csv,google.product.import.csv,model_google_product_import_csv,,1,1,1,1
+access_google_product_import_history,google.product.import.history,model_google_product_import_history,,1,1,1,1
+access_google_history_updated_action,google.history.updated.action,model_google_history_updated_action,,1,1,1,1
+access_google_history_deleted_action,google.history.deleted.action,model_google_history_deleted_action,,1,1,1,1
+access_google_history_create_action,google.history.create.action,model_google_history_create_action,,1,1,1,1
+access_google_history_published_action,google.history.published.action,model_google_history_published_action,,1,1,1,1
+access_google_product_import_csv,google.product.import.csv,model_google_product_import_csv,base.group_system,1,1,1,1

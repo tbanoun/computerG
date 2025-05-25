@@ -2,8 +2,8 @@
 <odoo>
     <data>
         <record model="ir.ui.view" id="view_form_config_import_csv_file">
-            <field name="name">Import and update warehouse product using csv file kosatec</field>
-            <field name="model">kosatec.product.import.csv</field>
+            <field name="name">Import and update warehouse product using csv file google</field>
+            <field name="model">google.product.import.csv</field>
             <field name="arch" type="xml">
                 <form create="0" delete="0">
                     <header>
@@ -65,18 +65,18 @@
 
 
         <record id="config_cron_action" model="ir.actions.act_window">
-            <field name="name">Import product config kosatec</field>
+            <field name="name">Import product config google</field>
             <field name="type">ir.actions.act_window</field>
-            <field name="res_model">kosatec.product.import.csv</field>
+            <field name="res_model">google.product.import.csv</field>
             <field name="view_mode">form</field>
-            <field name="res_id">6</field>
+            <field name="res_id">1</field>
         </record>
 
         <menuitem
-                name="Kosatec config cronJob (csv file)"
+                name="Google config cronJob (csv file)"
                 parent="config_supplier_csv_cronjob.config_stock_supplier_cronJob_csv"
-                id="Kosatec_menu_import_update_product_csv_file"
-                action="kosatec_update_product_csv_cronjob.config_cron_action"/>
+                id="google_menu_import_update_product_csv_file"
+                action="google_sheet_update_product_csv_cronjob.config_cron_action"/>
 
 
     </data>
