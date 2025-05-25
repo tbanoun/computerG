@@ -493,6 +493,9 @@ class ImportProductConfig(models.Model):
                 print('NetPrice : ', row.get('NetPrice'))
                 self.createUpdateCsvFile("update", row)
                 self.updateQtyStockProduct(product_id, availableQuantity)
+                supplier_id = row.get('Supplier')
+                if supplier_id:
+                    product_id.sudo().supplier_id = supplier_id.lower()
                 product_id.sudo().is_published = True
                 if product_id.sudo().standard_price > convert_comma_decimal_to_float(row.get('NetPrice')):
                     product_id.sudo().standard_price = convert_comma_decimal_to_float(row.get('NetPrice'))

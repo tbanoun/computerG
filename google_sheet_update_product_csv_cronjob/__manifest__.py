@@ -19,7 +19,8 @@
 
         # views
         'views/product_import_csv.xml',
-        'views/product_import_history.xml'
+        'views/product_import_history.xml',
+        'views/product_template.xml'
     ],
     'qweb': [
     ],
