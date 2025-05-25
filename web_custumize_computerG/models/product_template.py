@@ -162,7 +162,6 @@ class Website(models.Model):
 
         )
         for search_detail in search_details_copy:
-            print("Brayane", search_detail)
             model = self.env[search_detail['model']]
             results, count = model._search_fetch(search_detail, search, limit, order)
             search_detail['results'] = results

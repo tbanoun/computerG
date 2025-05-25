@@ -139,7 +139,7 @@ class ImportProductConfig(models.Model):
     def openViewImportProductHistory(self):
         action = self.env['ir.actions.act_window']._for_xml_id(
             'kosatec_update_product_csv_cronjob.action_open_history_action')
-        action['res_id'] = 1
+        action['res_id'] = 6
         action['target'] = 'current'
         return action
 
@@ -191,7 +191,7 @@ class ImportProductConfig(models.Model):
             self.env['kosatec.history.create.action'].create({
                 'file': new_csv_encoded,
                 'file_name': f"File_create_{str(date_now).replace('-', '_')}.csv",
-                'kosatec_history_action_id': 1,
+                'kosatec_history_action_id': 6,
                 'date': date_now
 
             })
@@ -223,7 +223,7 @@ class ImportProductConfig(models.Model):
             self.env['kosatec.history.deleted.action'].create({
                 'file': new_csv_encoded,
                 'file_name': f"File_unpublished_{str(date_now).replace('-', '_')}.csv",
-                'kosatec_history_action_id': 1,
+                'kosatec_history_action_id': 6,
                 'date': date_now
 
             })
@@ -255,7 +255,7 @@ class ImportProductConfig(models.Model):
             self.env['kosatec.history.updated.action'].create({
                 'file': new_csv_encoded,
                 'file_name': f"File_update_{str(date_now).replace('-', '_')}.csv",
-                'kosatec_history_action_id': 1,
+                'kosatec_history_action_id': 6,
                 'date': date_now
 
             })
@@ -287,7 +287,7 @@ class ImportProductConfig(models.Model):
             self.env['kosatec.history.published.action'].create({
                 'file': new_csv_encoded,
                 'file_name': f"File_published_{str(date_now).replace('-', '_')}.csv",
-                'kosatec_history_action_id': 1,
+                'kosatec_history_action_id': 6,
                 'date': date_now
 
             })

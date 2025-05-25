@@ -223,7 +223,6 @@ class ProductProduct(models.Model):
                 price = price_currency._convert(price, currency, company, date)
 
             prices[product.id] = price
-            print('Samir nasri', priceExtra)
             if price_type in ['standard_price', 'list_price']:
                 prices['priceExtra'] = priceExtra
 
