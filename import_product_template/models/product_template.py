@@ -66,101 +66,111 @@ class ImportProduct(models.TransientModel):
 
     def update_attributes(self, product_template, attributes):
         """
-        Update product attributes grouping values by attribute.
-        Handles case sensitivity and duplicates properly.
+        Optimized: Update product attributes by grouping values by attribute.
+        Handles case insensitivity, minimizes SQL calls, and improves speed.
         """
         try:
-            # Delete existing attribute lines in one operation
-            product_template.sudo().attribute_line_ids.unlink()
+            ProductAttribute = self.env['product.attribute']
+            ProductAttributeValue = self.env['product.attribute.value']
+            TemplateAttributeLine = self.env['product.template.attribute.line']
 
-            # Dictionary to store {normalized_attr_name: attr_data}
-            attributes_dict = {}
+            # 1. Supprimer les lignes existantes en un seul appel
+            product_template.attribute_line_ids.unlink()
 
-            # First pass: collect all attributes and values
+            # 2. Préparation des données normalisées
+            attr_name_map = {}
+            attr_value_map = {}
+
             for rec in attributes:
-                if not rec.get('attribute'):
+                attr = rec.get("attribute")
+                if not attr:
                     continue
 
-                attribute = rec['attribute']
-                attr_name = attribute.get('name', '').strip()
+                attr_name = attr.get("name", "").strip()
                 if not attr_name:
                     continue
 
-                # Normalize for comparison (case insensitive, no extra spaces)
-                norm_attr_name = attr_name.lower().strip()
+                norm_attr = attr_name.lower()
+                if norm_attr not in attr_name_map:
+                    attr_name_map[norm_attr] = attr_name
 
-                # Initialize attribute data if not exists
-                if norm_attr_name not in attributes_dict:
-                    # Find or create attribute
-                    attribute_id = self.env['product.attribute'].sudo().search(
-                        [('name', 'ilike', norm_attr_name)], limit=1)
-
-                    if not attribute_id:
-                        attribute_id = self.env['product.attribute'].create({
-                            'name': attr_name,
-                            'create_variant':'no_variant'
-                            # Keep original capitalization
-                        })
-
-                    attributes_dict[norm_attr_name] = {
-                        'attribute_id': attribute_id.id,
-                        'original_name': attr_name,
-                        'values': {},  # {norm_val_name: (val_id, original_name, price)}
-                    }
-
-                # Process values
-                for val in attribute.get('value', []):
-                    val_name = val.get('value', '').strip()
+                for val in attr.get("value", []):
+                    val_name = val.get("value", "").strip()
                     if not val_name:
                         continue
+                    norm_val = val_name.lower()
+                    attr_value_map.setdefault(norm_attr, {})[norm_val] = {
+                        "name": val_name,
+                        "price": float(val.get("price", 0))
+                    }
 
-                    norm_val_name = val_name.lower().strip()
-                    price = float(val.get('price', 0))
+            # 3. Recherche en batch des attributs existants
+            attr_objs = ProductAttribute.sudo().search([('name', 'ilike', list(attr_name_map.values()))])
+            attr_dict = {a.name.lower(): a for a in attr_objs}
 
-                    # Store value if not exists or update price if needed
-                    if norm_val_name not in attributes_dict[norm_attr_name]['values']:
-                        # Find or create value
-                        val_id = self.env['product.attribute.value'].sudo().search([
-                            ('name', 'ilike', norm_val_name),
-                            ('attribute_id', '=', attributes_dict[norm_attr_name]['attribute_id'])
-                        ], limit=1)
+            # 4. Création des attributs manquants
+            for norm_attr, orig_name in attr_name_map.items():
+                if norm_attr not in attr_dict:
+                    attr_dict[norm_attr] = ProductAttribute.sudo().create({
+                        'name': orig_name,
+                        'create_variant': 'dynamic'
+                    })
 
-                        if not val_id:
-                            pass
-                            # val_id = self.env['product.attribute.value'].create({
-                            #     'name': val_name,
-                            #     'attribute_id': attributes_dict[norm_attr_name]['attribute_id']
-                            # })
-                        if val_id:
-                            attributes_dict[norm_attr_name]['values'][norm_val_name] = (
-                                val_id.id,
-                                val_name,  # original name
-                                price
-                            )
+            # 5. Recherche en batch des valeurs existantes
+            all_attr_ids = [attr.id for attr in attr_dict.values()]
+            val_objs = ProductAttributeValue.sudo().search([
+                ('attribute_id', 'in', all_attr_ids)
+            ])
+            val_dict = {}  # { (attr_id, norm_val_name): val }
+            for v in val_objs:
+                val_dict[(v.attribute_id.id, v.name.lower())] = v
 
-            # Second pass: create attribute lines and set prices
-            for attr_data in attributes_dict.values():
-                # Create attribute line with all values
-                attribute_line = self.env['product.template.attribute.line'].create({
-                    'attribute_id': attr_data['attribute_id'],
-                    'product_tmpl_id': product_template.id,
-                    'value_ids': [(6, 0, [v[0] for v in attr_data['values'].values()])]
+            # 6. Création et regroupement des valeurs manquantes
+            line_data = []
+            ptav_price_map = {}
+
+            for norm_attr, values in attr_value_map.items():
+                attr = attr_dict[norm_attr]
+                value_ids = []
+
+                for norm_val, val_info in values.items():
+                    key = (attr.id, norm_val)
+                    val_obj = val_dict.get(key)
+
+                    if not val_obj:
+                        val_obj = ProductAttributeValue.sudo().create({
+                            'name': val_info['name'],
+                            'attribute_id': attr.id
+                        })
+                        val_dict[key] = val_obj
+
+                    value_ids.append(val_obj.id)
+                    ptav_price_map[val_obj.id] = val_info['price']
+
+                line_data.append((0, 0, {
+                    'attribute_id': attr.id,
+                    'value_ids': [(6, 0, value_ids)],
+                }))
+
+            # 7. Création des lignes d'attributs groupées
+            if line_data:
+                product_template.write({
+                    'attribute_line_ids': line_data
                 })
 
-                # Set prices for each value
-                for ptav in attribute_line.product_template_value_ids:
-                    # Find matching value (case insensitive)
-                    for norm_val, (val_id, orig_name, price) in attr_data['values'].items():
-                        if ptav.product_attribute_value_id.id == val_id:
-                            ptav.sudo().write({'price_extra': price})
-                            break
+            # 8. Mise à jour des prix des variantes
+            for line in product_template.attribute_line_ids:
+                for ptav in line.product_template_value_ids:
+                    val_id = ptav.product_attribute_value_id.id
+                    price = ptav_price_map.get(val_id)
+                    if price is not None:
+                        ptav.price_extra = price
 
             return True
 
         except Exception as e:
-            _logger.error(f"Error updating attributes: {str(e)}")
+            _logger.exception("Error updating attributes")
             raise
-
 
     def update_list_vendors(self, product_template, vendors):
         # delete seller_ids line on product
