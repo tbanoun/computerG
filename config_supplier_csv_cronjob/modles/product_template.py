@@ -15,14 +15,13 @@ class ProductTemplate(models.Model):
     stockQuant = fields.Many2one('stock.location', compute='calculateSuplierWherhouse')
 
     def calculateSuplierWherhouse(self):
-        cron_id = self.env['product.import.csv'].sudo().search([('id', '=', 1)], limit=1)
-        for rec in self:
-            if cron_id:
-                if cron_id.stock_id:
-                    rec.stockQuant = cron_id.stock_id
-                    print(rec.stockQuant)
-                    continue
-            rec.stockQuant = None
+        stock_location_id = self.env['ir.config_parameter'].sudo().get_param(
+            'config_supplier_csv_cronjob.stock_supplier_id')
+        if stock_location_id:
+            self.stockQuant = int(stock_location_id)
+        else:
+            self.stockQuant = stock_location_id
+        return stock_location_id
 
 
     def unpublishedProduct(self):
