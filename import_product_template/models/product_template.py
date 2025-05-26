@@ -126,16 +126,17 @@ class ImportProduct(models.TransientModel):
                         ], limit=1)
 
                         if not val_id:
-                            val_id = self.env['product.attribute.value'].create({
-                                'name': val_name,
-                                'attribute_id': attributes_dict[norm_attr_name]['attribute_id']
-                            })
-
-                        attributes_dict[norm_attr_name]['values'][norm_val_name] = (
-                            val_id.id,
-                            val_name,  # original name
-                            price
-                        )
+                            pass
+                            # val_id = self.env['product.attribute.value'].create({
+                            #     'name': val_name,
+                            #     'attribute_id': attributes_dict[norm_attr_name]['attribute_id']
+                            # })
+                        if val_id:
+                            attributes_dict[norm_attr_name]['values'][norm_val_name] = (
+                                val_id.id,
+                                val_name,  # original name
+                                price
+                            )
 
             # Second pass: create attribute lines and set prices
             for attr_data in attributes_dict.values():
