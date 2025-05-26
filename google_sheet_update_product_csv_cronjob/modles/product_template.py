@@ -1,5 +1,8 @@
 from odoo import api, fields, models
-
+import requests
+from io import StringIO, BytesIO
+import csv
+import pandas as pd
 
 class ProductTemplate(models.Model):
     _inherit = 'product.template'

@@ -12,6 +12,7 @@
                         <h2>Config Supplier CronJob Csv</h2>
                         <group>
                             <field name="stock_supplier_id" string="Stock Supplier"/>
+                            <button class="btn-primary" name="resetProductInformation" type="object" string="Reset Product Information"/>
                         </group>
                     </div>
                 </div>
