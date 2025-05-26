@@ -116,10 +116,10 @@ class ImportProductConfig(models.Model):
 
         # Définition des catégories à conserver
         selectCategoryName = self.selectCategoryName()
-        df['Category2'] = df['Category2'].str.lower()
+        df['Category1'] = df['Category1'].str.lower()
         selectCategoryName = [cat.lower() for cat in selectCategoryName]
         # df = df[df['Category1'].isin(selectCategoryName)]
-        df = df[df['Category2'].isin(selectCategoryName) & df['EAN'].notna() & (df['EAN'] != "")]
+        df = df[df['Category1'].isin(selectCategoryName) & df['EAN'].notna() & (df['EAN'] != "")]
 
         # Sauvegarde le CSV en mémoire (binaire)
         buffer = BytesIO()
@@ -455,7 +455,7 @@ class ImportProductConfig(models.Model):
             manufacturerID = row.get('EAN')
             manufacturerID = str(manufacturerID).replace(".0", "").replace(".00", "")
             if not manufacturerID or manufacturerID == '': continue
-            category = row.get('Category2')
+            category = row.get('Category1')
             if not isinstance(category, str):
                 continue
             if category.lower() not in selectCategory: continue
@@ -486,11 +486,6 @@ class ImportProductConfig(models.Model):
                 self.createUpdateCsvFile("create", row)
             # step update
             elif product_id and availableQuantity > 0:
-                print(f'manufacturerID', manufacturerID)
-                print(f'availableQuantity', availableQuantity)
-                print('product: ', product_id)
-                print('product name: ', product_id.name)
-                print('NetPrice : ', row.get('NetPrice'))
                 self.createUpdateCsvFile("update", row)
                 self.updateQtyStockProduct(product_id, availableQuantity)
                 supplier_id = row.get('Supplier')
