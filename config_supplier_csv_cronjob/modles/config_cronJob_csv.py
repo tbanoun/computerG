@@ -1,4 +1,4 @@
-from odoo import api, models, fields
+from odoo import api, models, fields, _
 import requests
 from io import StringIO, BytesIO
 import csv
@@ -263,3 +263,14 @@ class ResConfigSettings(models.TransientModel):
                 product.sudo().is_published = True
             product.sudo().standard_price = 0
             self.updateQtyStockProduct(product, 0)
+        notification = {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': _('Succès'),
+                'type': 'info',
+                'message': f"The operation was successful!",
+                'sticky': False,
+            }
+        }
+        return notification
