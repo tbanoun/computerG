@@ -38,10 +38,12 @@ class ImportProduct(models.TransientModel):
             try:
                 product_template = self.env.ref(product_id)
             except Exception as e:
-                error += 1
                 # create the product
                 created = True
                 product_template = self.create_product_template(rec)
+                if product_template:
+                    print('TEST ME',product_template.name)
+                    error += 1
             if not product_template: continue
             if not created: update_index += 1
             attributes = rec.pop('Attributes', None)
@@ -219,10 +221,12 @@ class ImportProduct(models.TransientModel):
         product_search_barcode = None
         if 'product_code' in product_vals:
             default_code = product_vals['default_code']
-            product_search_code = self.env['product.template'].sudo().search([('product_code', '=', default_code)])
+            product_search_code = self.env['product.product'].sudo().search([('product_code', '=', default_code)])
         if 'barcode' in product_vals:
             barcode = product_vals['barcode']
-            product_search_barcode = self.env['product.template'].sudo().search([('barcode', '=', barcode)])
+            product_search_barcode = self.env['product.product'].sudo().search([('barcode', '=', barcode)])
+        print(f'\n\n\n PRODUCT REFERENCE => {product_search_code}')
+        print(f'\n\n\n PRODUCT BARCODE => {product_search_barcode}')
         if product_search_code or product_search_barcode: return None
         product_id = self.env['product.template'].sudo().create(
             product_vals
