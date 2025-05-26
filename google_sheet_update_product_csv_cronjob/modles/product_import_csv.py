@@ -492,14 +492,14 @@ class ImportProductConfig(models.Model):
                 if supplier_id:
                     product_id.sudo().supplier_id = supplier_id.lower()
                 product_id.sudo().is_published = True
-                if product_id.sudo().standard_price > convert_comma_decimal_to_float(row.get('NetPrice')):
+                if product_id.sudo().standard_price == 0 or product_id.sudo().standard_price > convert_comma_decimal_to_float(row.get('NetPrice')):
                     product_id.sudo().standard_price = convert_comma_decimal_to_float(row.get('NetPrice'))
             # step unpublished
             elif availableQuantity <= 0 and product_id and product_id.qty_available <= 0:
                 self.createUpdateCsvFile("delete", row)
                 self.updateQtyStockProduct(product_id, availableQuantity)
                 product_id.sudo().is_published = False
-                if product_id.sudo().standard_price > convert_comma_decimal_to_float(row.get('NetPrice')):
+                if product_id.sudo().standard_price == 0 or product_id.sudo().standard_price > convert_comma_decimal_to_float(row.get('NetPrice')):
                     product_id.sudo().standard_price = convert_comma_decimal_to_float(row.get('NetPrice'))
 
             if i >= 1000 or index + 1 == self.max_products:
