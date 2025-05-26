@@ -245,14 +245,12 @@ class ProductTemplate(models.Model):
             if price_type == 'standard_price':
                 priceExtra = 0
                 price_currency = product.cost_currency_id
-                priceExtra += product.price_extra
                 if self._context.get('no_variant_attributes_price_extra'):
                     # # we have a list of price_extra that comes from the attribute values, we need to sum all that
                     # price += sum(self._context.get('no_variant_attributes_price_extra'))
                     priceExtra += sum(self._context.get('no_variant_attributes_price_extra'))
             if price_type == 'list_price':
                 priceExtra = 0
-                priceExtra += product.price_extra
                 if self._context.get('no_variant_attributes_price_extra'):
                     # we have a list of price_extra that comes from the attribute values, we need to sum all that
                     priceExtra += sum(self._context.get('no_variant_attributes_price_extra'))
