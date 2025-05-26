@@ -93,7 +93,7 @@ class ImportProduct(models.TransientModel):
                 if norm_attr_name not in attributes_dict:
                     # Find or create attribute
                     attribute_id = self.env['product.attribute'].sudo().search(
-                        [('name', '=ilike', norm_attr_name)], limit=1)
+                        [('name', 'ilike', norm_attr_name)], limit=1)
 
                     if not attribute_id:
                         attribute_id = self.env['product.attribute'].create({
@@ -121,7 +121,7 @@ class ImportProduct(models.TransientModel):
                     if norm_val_name not in attributes_dict[norm_attr_name]['values']:
                         # Find or create value
                         val_id = self.env['product.attribute.value'].sudo().search([
-                            ('name', '=ilike', norm_val_name),
+                            ('name', 'ilike', norm_val_name),
                             ('attribute_id', '=', attributes_dict[norm_attr_name]['attribute_id'])
                         ], limit=1)
 
