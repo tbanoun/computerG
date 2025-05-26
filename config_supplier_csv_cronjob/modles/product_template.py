@@ -7,7 +7,7 @@ import pandas as pd
 
 
 GOOGLE_ID = 1
-KOSATEC_ID = 6
+KOSATEC_ID = 1
 SEWERT_KU_ID = 1
 
 def extract_value(val):
