@@ -8,6 +8,10 @@ GOOGLE_ID = 1
 KOSATEC_ID = 6
 SEWERT_KU_ID = 1
 
+def extract_value(val):
+    if isinstance(val, pd.Series):
+        return val.iloc[0] if not val.empty else 0
+    return val
 
 def downloadCsvFile(url, ean='EAN'):
     res = requests.get(url, timeout=15, headers={"User-Agent": "Mozilla/5.0"})
@@ -120,8 +124,8 @@ def googleCheckAvalableProductOnData(dataframes, product):
             if not matched_rows.empty:
                 print(f"\n✅ EAN trouvé dans {name} :\n{matched_rows}\n")
                 result['is_published'] = True
-                result['qty'] = matched_rows.get('AvailableQuantity', 0)
-                result['price'] = matched_rows.get('NetPrice', 0)
+                result['qty'] = matched_rows['AvailableQuantity']
+                result['price'] = matched_rows['NetPrice']
                 print(f"\n✅ EAN trouvé dans {name} :\n{matched_rows}\n")
                 return result
             else:
@@ -198,8 +202,12 @@ class ResConfigSettings(models.TransientModel):
 
     def updateQtyStockProduct(self, product_id, availableQuantity):
         """ function to update qty product on supplier wherehouse """
+
+        stock_location_id = self.env['ir.config_parameter'].sudo().get_param(
+            'config_supplier_csv_cronjob.stock_supplier_id')
+        if not stock_location_id: return None
         stock_id = self.env['stock.quant'].sudo().search([
-            ("location_id", "=", self.stock_id.id),
+            ("location_id", "=", int(stock_location_id)),
             ("product_id", "=", product_id.product_variant_id.id),
         ], limit=1)
         if stock_id:
@@ -210,7 +218,7 @@ class ResConfigSettings(models.TransientModel):
             stock_id.sudo().action_apply_inventory()
         else:
             stock_id = self.env['stock.quant'].sudo().create({
-                "location_id": self.stock_id.id,
+                "location_id": int(stock_location_id),
                 "product_id": product_id.product_variant_id.id,
                 "inventory_quantity": availableQuantity,
                 "quantity": availableQuantity
@@ -238,9 +246,12 @@ class ResConfigSettings(models.TransientModel):
             google_vals = googleCheckAvalableProductOnData(dataframes_google_data, product)
             kosatec_vals = kosatecCheckAvalableProductOnData(dataframes_kosatec_data, product)
             siewert_vals = sewertKuCheckAvalableProductOnData(dataframes_siewert_ku_data, product)
-            qty = google_vals.get('qty', 0) + kosatec_vals.get('qty', 0) + siewert_vals.get('qty', 0)
+            # qty = google_vals.get('qty', 0) + kosatec_vals.get('qty', 0) + siewert_vals.get('qty', 0)
+            qty = extract_value(google_vals.get('qty')) + extract_value(kosatec_vals.get('qty')) + extract_value(
+                siewert_vals.get('qty'))
             if qty <= 0:
-                product.sudo().product_id.is_published = False
+                product.sudo().is_published = False
             else:
-                product.sudo().product_id.is_published = True
+                product.sudo().is_published = True
+            product.sudo().standard_price = 0
             self.updateQtyStockProduct(product, 0)
