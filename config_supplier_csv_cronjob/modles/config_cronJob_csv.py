@@ -59,26 +59,29 @@ def kosatecCheckAvalableProductOnData(dataframes, product):
         'qty': 0,
         'price': 0
     }
-    for name, df in dataframes:
-        # Vérifie si la colonne 'ean' ou 'EAN' ou similaire existe dans le DataFrame
-        matching_cols = [col for col in df.columns if col.lower() == 'ean']
+    try:
+        for name, df in dataframes:
+            # Vérifie si la colonne 'ean' ou 'EAN' ou similaire existe dans le DataFrame
+            matching_cols = [col for col in df.columns if col.lower() == 'ean']
 
-        if matching_cols:
-            ean_col = matching_cols[0]
-            matched_rows = df[df[ean_col].astype(str) == product.barcode]
-            if not matched_rows.empty:
-                print(f"\n✅ EAN trouvé dans {name} :\n{matched_rows}\n")
-                result['is_published'] = True
-                result['qty'] = matched_rows.get('menge', 0)
-                result['price'] = matched_rows.get('vkbrutto', 0)
-                print(f"\n✅ EAN trouvé dans {name} :\n{matched_rows}\n")
-                return result
+            if matching_cols:
+                ean_col = matching_cols[0]
+                matched_rows = df[df[ean_col].astype(str) == product.barcode]
+                if not matched_rows.empty:
+                    print(f"\n✅ EAN trouvé dans {name} :\n{matched_rows}\n")
+                    result['is_published'] = True
+                    result['qty'] = matched_rows.get('menge', 0)
+                    result['price'] = matched_rows.get('vkbrutto', 0)
+                    print(f"\n✅ EAN trouvé dans {name} :\n{matched_rows}\n")
+                    return result
+                else:
+                    print(f"\n❌ EAN non trouvé dans {name}.\n")
+                    return result
             else:
-                print(f"\n❌ EAN non trouvé dans {name}.\n")
+                print(f"\n⚠️ Colonne 'ean' non trouvée dans {name}.\n")
                 return result
-        else:
-            print(f"\n⚠️ Colonne 'ean' non trouvée dans {name}.\n")
-            return result
+    except Exception as e:
+        return result
 
 
 def sewertKuCheckAvalableProductOnData(dataframes, product):
@@ -87,26 +90,28 @@ def sewertKuCheckAvalableProductOnData(dataframes, product):
         'qty': 0,
         'price': 0
     }
-    for name, df in dataframes:
-        # Vérifie si la colonne 'ean' ou 'EAN' ou similaire existe dans le DataFrame
-        matching_cols = [col for col in df.columns if col.lower() == 'ean']
+    try:
+        for name, df in dataframes:
+            # Vérifie si la colonne 'ean' ou 'EAN' ou similaire existe dans le DataFrame
+            matching_cols = [col for col in df.columns if col.lower() == 'ean']
 
-        if matching_cols:
-            ean_col = matching_cols[0]
-            matched_rows = df[df[ean_col].astype(str) == product.barcode]
-            if not matched_rows.empty:
-                result['is_published'] = True
-                result['qty'] = matched_rows.get('AvailableQuantity', 0)
-                result['price'] = matched_rows.get('NetPrice', 0)
-                print(f"\n✅ EAN trouvé dans {name} :\n{matched_rows}\n")
-                return result
+            if matching_cols:
+                ean_col = matching_cols[0]
+                matched_rows = df[df[ean_col].astype(str) == product.barcode]
+                if not matched_rows.empty:
+                    result['is_published'] = True
+                    result['qty'] = matched_rows.get('AvailableQuantity', 0)
+                    result['price'] = matched_rows.get('NetPrice', 0)
+                    print(f"\n✅ EAN trouvé dans {name} :\n{matched_rows}\n")
+                    return result
+                else:
+                    print(f"\n❌ EAN non trouvé dans {name}.\n")
+                    return result
             else:
-                print(f"\n❌ EAN non trouvé dans {name}.\n")
+                print(f"\n⚠️ Colonne 'ean' non trouvée dans {name}.\n")
                 return result
-        else:
-            print(f"\n⚠️ Colonne 'ean' non trouvée dans {name}.\n")
-            return result
-
+    except Exception as e:
+        return result
 
 def googleCheckAvalableProductOnData(dataframes, product):
     result = {
@@ -114,26 +119,29 @@ def googleCheckAvalableProductOnData(dataframes, product):
         'qty': 0,
         'price': 0
     }
-    for name, df in dataframes:
-        # Vérifie si la colonne 'ean' ou 'EAN' ou similaire existe dans le DataFrame
-        matching_cols = [col for col in df.columns if col.lower() == 'ean']
+    try:
+        for name, df in dataframes:
+            # Vérifie si la colonne 'ean' ou 'EAN' ou similaire existe dans le DataFrame
+            matching_cols = [col for col in df.columns if col.lower() == 'ean']
 
-        if matching_cols:
-            ean_col = matching_cols[0]
-            matched_rows = df[df[ean_col].astype(str) == product.barcode]
-            if not matched_rows.empty:
-                print(f"\n✅ EAN trouvé dans {name} :\n{matched_rows}\n")
-                result['is_published'] = True
-                result['qty'] = matched_rows['AvailableQuantity']
-                result['price'] = matched_rows['NetPrice']
-                print(f"\n✅ EAN trouvé dans {name} :\n{matched_rows}\n")
-                return result
+            if matching_cols:
+                ean_col = matching_cols[0]
+                matched_rows = df[df[ean_col].astype(str) == product.barcode]
+                if not matched_rows.empty:
+                    print(f"\n✅ EAN trouvé dans {name} :\n{matched_rows}\n")
+                    result['is_published'] = True
+                    result['qty'] = matched_rows['AvailableQuantity']
+                    result['price'] = matched_rows['NetPrice']
+                    print(f"\n✅ EAN trouvé dans {name} :\n{matched_rows}\n")
+                    return result
+                else:
+                    print(f"\n❌ EAN non trouvé dans {name}.\n")
+                    return result
             else:
-                print(f"\n❌ EAN non trouvé dans {name}.\n")
+                print(f"\n⚠️ Colonne 'ean' non trouvée dans {name}.\n")
                 return result
-        else:
-            print(f"\n⚠️ Colonne 'ean' non trouvée dans {name}.\n")
-            return result
+    except Exception as e:
+        return  result
 
 
 class ResConfigCronJobCsv(models.Model):
