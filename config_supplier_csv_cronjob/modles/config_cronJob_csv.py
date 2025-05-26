@@ -193,12 +193,12 @@ class ResConfigSettings(models.TransientModel):
                 selectCategoryName = sewertKu_id.selectCategoryName()
                 sewertKu_data['Category1'] = sewertKu_data['Category1'].str.lower()
                 selectCategoryName = [cat.lower() for cat in selectCategoryName]
-                google_data = sewertKu_data[
+                sewertKu_data = sewertKu_data[
                     sewertKu_data['Category1'].isin(selectCategoryName) & sewertKu_data['EAN'].notna() & (
                             sewertKu_data['EAN'] != "")]
         except Exception as e:
             print(e)
-        return google_data
+        return sewertKu_data
 
     def updateQtyStockProduct(self, product_id, availableQuantity):
         """ function to update qty product on supplier wherehouse """
