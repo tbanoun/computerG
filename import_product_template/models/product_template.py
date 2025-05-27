@@ -163,7 +163,7 @@ class ImportProduct(models.TransientModel):
     def update_product_template(self, product_id, vals):
         product_vals = generateProductVals(self, vals)
         # manufacturer_id
-        manufacturer_id = product_vals.pop('manufacturer_id', None)
+        manufacturer_id = product_vals.pop('manufacturer_id_int', None)
         if manufacturer_id: manufacturer_id = selectOneElementDataBase(self, manufacturer_id)
         manufacturer_id = manufacturer_id if manufacturer_id else 0
         # dr_label_id
@@ -171,7 +171,7 @@ class ImportProduct(models.TransientModel):
         if dr_label_id: dr_label_id = selectOneElementDataBase(self, dr_label_id)
         dr_label_id = dr_label_id.id if dr_label_id else None
         if manufacturer_id:
-            product_vals['manufacturer_id'] = manufacturer_id
+            product_vals['manufacturer_id_int'] = manufacturer_id
         if dr_label_id:
             product_vals['dr_label_id'] = dr_label_id
 
@@ -180,30 +180,6 @@ class ImportProduct(models.TransientModel):
         product_id.sudo().write(
             product_vals
         )
-        # delete qty
-        # stock_ids = self.env['stock.quant'].sudo().search(
-        #     [
-        #         (
-        #             'product_id', '=', product_id.id
-        #         )
-        #     ]
-        # )
-        # if stock_ids: stock_ids.sudo().unlink()
-        # location_id = self.env['stock.location'].sudo().search(
-        #     [
-        #         (
-        #             'usage', '=', 'internal'
-        #         )
-        #     ], limit=1
-        # )
-        # if location_id:
-        #     stock_id = self.env['stock.quant'].sudo().create({
-        #         "location_id": location_id.id,
-        #         "product_id": product_id.product_variant_id.id,
-        #         "product_tmpl_id": product_id.id,
-        #         "inventory_quantity": qty
-        #     })
-        # stock_id.sudo().action_apply_inventory()
 
     def create_product_template(self, vals):
         product_vals = generateProductVals(self, vals)
@@ -267,7 +243,7 @@ class TestProductQty(models.Model):
     manufacturer_id = fields.Integer(string='Manufacturer')
     manufacturer_id_int = fields.Integer(string='Manufacturer')
     out_of_stock_message = fields.Char(string="Out-of-Stock Message")
-    
+
     def updateQtyStockProduct(self):
         """ function to update qty product on supplier wherehouse """
         default_product_id = self.env.context.get('default_product_id',
