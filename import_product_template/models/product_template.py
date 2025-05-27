@@ -33,6 +33,7 @@ class ImportProduct(models.TransientModel):
         for rec in result:
             product_id = rec.get('ID', None)
             if not product_id: continue
+            if "END" == product_id: return True
             created = False
             print(f'\n\n rec ==> {rec} \n\n')
             try:
