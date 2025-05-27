@@ -22,6 +22,7 @@
         # website
         # 'views/webSite/button_add_to_wishlist.xml',
         'views/webSite/product_detail_page.xml',
+        'views/webSite/detail_page_theme_prime.xmll.xml',
         'views/webSite/layout.xml',
         'views/webSite/shop_layout.xml',
         'views/webSite/button_payment.xml',
