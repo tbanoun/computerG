@@ -175,8 +175,6 @@ class ImportProduct(models.TransientModel):
         if dr_label_id:
             product_vals['dr_label_id'] = dr_label_id
 
-        qty = product_vals.pop('quantity', 0)
-
         product_id.sudo().write(
             product_vals
         )
@@ -184,23 +182,6 @@ class ImportProduct(models.TransientModel):
     def create_product_template(self, vals):
         product_vals = generateProductVals(self, vals)
         product_vals['detailed_type'] = 'product'
-
-        qty = product_vals.pop('quantity', 0)
-        # manufacturer_id
-        manufacturer_id = product_vals.pop('manufacturer_id', None)
-        if manufacturer_id: manufacturer_id = selectOneElementDataBase(self, manufacturer_id)
-        manufacturer_id = manufacturer_id if manufacturer_id else 0
-
-        # dr_label_id
-        # dr_label_id
-        dr_label_id = product_vals.pop('dr_label_id', None)
-        if dr_label_id: dr_label_id = selectOneElementDataBase(self, dr_label_id)
-
-        if manufacturer_id:
-            product_vals['manufacturer_id'] = manufacturer_id
-        if dr_label_id:
-            product_vals['dr_label_id'] = dr_label_id
-
         default_code = product_vals.get('default_code', None)
         barcode = product_vals.get('barcode', None)
         product_find = None
