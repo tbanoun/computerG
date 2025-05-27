@@ -19,18 +19,20 @@
                                 <div class="col-12">
                                     <div itemprop="description" t-field="product.website_description"
                                          class="oe_structure"
+                                         style="margin-left: 120px !important;"
                                          id="product_full_description"/>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div groups="base.group_user" class="tab-pane fade show active" id="tp-product-description-tab"
+                    <div groups="base.group_user" class="tab-pane fade show active" style="margin-left: 120px !important;" id="tp-product-description-tab"
                          role="tabpanel">
                         <div class="container-fluid">
                             <div class="row m-0 py-2">
                                 <div class="col-12">
                                     <div itemprop="description" t-field="product.website_description"
                                          class="oe_structure"
+                                         style="margin-left: 120px !important;"
                                          id="product_full_description"/>
                                 </div>
                             </div>
