@@ -261,7 +261,7 @@ class ProductTemplate(models.Model):
                 if self._context.get('no_variant_attributes_price_extra'):
                     # we have a list of price_extra that comes from the attribute values, we need to sum all that
                     priceExtra += sum(self._context.get('no_variant_attributes_price_extra'))
-            if uom:
+            if uom and product.uom_id:
                 price = product.uom_id._compute_price(price, uom)
             # Convert from current user company currency to asked one
             # This is right cause a field cannot be in more than one currency
