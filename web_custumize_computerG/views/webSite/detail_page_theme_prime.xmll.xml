@@ -12,7 +12,7 @@
                 <div class="tab-content">
                     <!-- Description -->
                     <div groups="base.group_public,base.group_portal" t-if="product.website_description"
-                         class="tab-pane fade show active" style="margin-left: 120px !important;"
+                         class="tab-pane fade show active"
                          id="tp-product-description-tab" role="tabpanel">
                         <div class="container-fluid">
                             <div class="row m-0 py-2">
