@@ -230,6 +230,8 @@ class ImportProduct(models.TransientModel):
 
         product_vals['detailed_type'] = 'product'
         product_search_code = None
+        product_product_search_code = None
+        product_product_search_barcode = None
         product_search_barcode = None
         if 'product_code' in product_vals:
             default_code = product_vals['default_code']
