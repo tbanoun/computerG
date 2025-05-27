@@ -15,7 +15,7 @@
         'security/ir.model.access.csv',
 
         #data
-        'data/ir_data_cron_job.xml',
+        # 'data/ir_data_cron_job.xml',
 
         # views
         'views/product_category.xml',
