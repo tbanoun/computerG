@@ -33,26 +33,25 @@ class ImportProduct(models.TransientModel):
         for rec in result:
             product_id = rec.get('ID', None)
             if not product_id: continue
-            created = False
-            product_template = False
-            try:
-                product_template = self.env.ref(product_id)
-                print(f'\n\ product_template {product_template} \n\n')
-            except Exception as e:
-                print(f'error! {e}')
-                # create the product
-                created = True
-                product_template = self.create_product_template(rec)
-                if product_template:
-                    print('TEST ME', product_template.name)
-                    error += 1
-            if not product_template: continue
-            if not created: update_index += 1
-            attributes = rec.pop('Attributes', None)
-            vendors = rec.pop('Vendor', None)
-            if attributes: self.update_attributes(product_template, attributes)
-            if vendors: self.update_list_vendors(product_template, vendors)
-            self.update_product_template(product_template, rec)
+            if "END" != product_id:
+                created = False
+                print(f'\n\n rec ==> {rec} \n\n')
+                try:
+                    product_template = self.env.ref(product_id)
+                except Exception as e:
+                    # create the product
+                    created = True
+                    product_template = self.create_product_template(rec)
+                    if product_template:
+                        print('TEST ME', product_template.name)
+                        error += 1
+                if not product_template: continue
+                if not created: update_index += 1
+                attributes = rec.pop('Attributes', None)
+                vendors = rec.pop('Vendor', None)
+                if attributes: self.update_attributes(product_template, attributes)
+                if vendors: self.update_list_vendors(product_template, vendors)
+                self.update_product_template(product_template, rec)
 
         notification = {
             'type': 'ir.actions.client',
