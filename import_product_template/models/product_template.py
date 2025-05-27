@@ -221,7 +221,6 @@ class ImportProduct(models.TransientModel):
 class TestProductQty(models.Model):
     _inherit = "product.template"
 
-    manufacturer_id = fields.Integer(string='Manufacturer')
     manufacturer_id_int = fields.Integer(string='Manufacturer')
     out_of_stock_message = fields.Char(string="Out-of-Stock Message")
 
