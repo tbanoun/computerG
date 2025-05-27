@@ -1,60 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <data>
-        <template id="theme_price.product_tabs" name="Theme Prime: Product Tabs">
-            <div class="tp-product-details-tab">
-                <ul class="nav nav-tabs justify-content-center" role="tablist">
-                    <li groups="base.group_public,base.group_portal" t-if="product.website_description"
-                        class="nav-item o_not_editable">
-                        <a class="nav-link active" data-bs-toggle="tab" href="#tp-product-description-tab" role="tab"
-                           aria-selected="true">
-                            <span class="fa fa-file-text-o me-1"/>
-                            Description
-                        </a>
-                    </li>
-                    <li groups="base.group_user" class="nav-item o_not_editable">
-                        <a class="nav-link active" data-bs-toggle="tab" href="#tp-product-description-tab" role="tab"
-                           aria-selected="true">
-                            <span class="fa fa-file-text-o me-1"/>
-                            Description
-                        </a>
-                    </li>
-                    <li t-if="is_view_active('website_sale_comparison.product_attributes_body')"
-                        class="nav-item o_not_editable">
-                        <a class="nav-link" data-bs-toggle="tab" href="#tp-product-specification-tab" role="tab"
-                           aria-selected="false">
-                            <span class="fa fa-sliders me-1"/>
-                            Specifications
-                        </a>
-                    </li>
-                    <t t-set="product_documents_ids" t-value="product.sudo().dr_document_ids"/>
-                    <li t-if="product_documents_ids" class="nav-item o_not_editable">
-                        <a class="nav-link" data-bs-toggle="tab" href="#tp-product-documents-tab" role="tab"
-                           aria-selected="false">
-                            <span class="fa fa-file-pdf-o me-1"/>
-                            Documents
-                        </a>
-                    </li>
-                    <li t-if="is_view_active('website_sale.product_comment')" class="nav-item o_not_editable">
-                        <a class="nav-link" data-bs-toggle="tab" href="#tp-product-rating-tab" role="tab"
-                           aria-selected="false">
-                            <span class="fa fa-comments-o me-1"/>
-                            Reviews &amp; Rating
-                        </a>
-                    </li>
-                    <!-- Dynamic Tabs -->
-                    <li t-foreach="product.dr_product_tab_ids" t-as="tab" class="nav-item o_not_editable">
-                        <a class="nav-link" data-bs-toggle="tab" t-attf-href="#tp-product-tab-#{tab.id}" role="tab"
-                           aria-selected="false">
-                            <span t-attf-class="fa fa-#{tab.icon} me-1"/>
-                            <span t-field="tab.name"/>
-                        </a>
-                    </li>
-                </ul>
+
+    <record id="override_product_tabs" model="ir.ui.view">
+        <field name="name">product_item_grid_2_nce</field>
+        <field name="inherit_id" search="[('key', '=', 'theme_prime.product_tabs')]"/>
+        <field name="type">qweb</field>
+        <field name="key">web_custumize_computerG.override_product_tabs</field>
+        <field name="arch" type="xml">
+
+            <xpath expr="//div[@class='tab-content']" position="replace">
                 <div class="tab-content">
                     <!-- Description -->
                     <div groups="base.group_public,base.group_portal" t-if="product.website_description"
-                         class="tab-pane fade show active" style="margin-left: 120px !important;" id="tp-product-description-tab" role="tabpanel">
+                         class="tab-pane fade show active" style="margin-left: 120px !important;"
+                         id="tp-product-description-tab" role="tabpanel">
                         <div class="container-fluid">
                             <div class="row m-0 py-2">
                                 <div class="col-12">
@@ -183,7 +142,10 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </template>
-    </data>
+            </xpath>
+
+        </field>
+    </record>
+
+
 </odoo>
