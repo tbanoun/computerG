@@ -140,9 +140,13 @@ class PricelistItem(models.Model):
                 priceExtra = product.price_computeGostumize(rule_base, uom=uom, date=date)['priceExtra']
 
         else:  # list_price
-            src_currency = product.currency_id
-            price = product.price_computeGostumize(rule_base, uom=uom, date=date)[product.id]
-            priceObject = product.price_computeGostumize(rule_base, uom=uom, date=date)
+            if product._name == 'product.template':
+                src_currency = product.currency_id
+                price = product.price_compute(rule_base, uom=uom, date=date)[product.id]
+            else:
+                src_currency = product.currency_id
+                price = product.price_computeGostumize(rule_base, uom=uom, date=date)[product.id]
+                priceObject = product.price_computeGostumize(rule_base, uom=uom, date=date)
 
             price = product.price_computeGostumize(rule_base, uom=uom, date=date)[product.id]
             priceExtra = 0
