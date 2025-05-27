@@ -3,9 +3,8 @@
 
 {
     'name': 'web custumize computer G',
-    'description': '''
-    This module is designed to manage supplier configurations in a centralized way. It includes all the common variables and settings required for supplier integration, as well as access menus and other essential configurations. It serves as the core setup point for handling supplier-related operations in the system.''',
-    'summary': 'Supplier configuration module with shared settings, variables, and access menus.',
+    'description': '''The web_customize_computerg module consolidates all modified web features implemented on your Odoo website. This includes enhancements like customizable delivery messages and tailored invoice reports, improving communication and documentation processes. It provides a centralized solution to manage various web customizations for a better user and customer experience.''',
+    'summary': 'The module web_customize_computerg includes all customized web functionalities such as delivery messages and invoice reports.',
     'category': 'Theme/eCommerce',
     'version': '16.0.0.0.1',
     'depends': ['web', 'theme_prime', 'sale', 'config_supplier_csv_cronjob', 'website', 'website_sale',

@@ -3,7 +3,7 @@
 {
     'name': 'Login/signup reCAPTCHA',
     'version': '16.0.1.0.1',
-    'summary': """Protect robot login and signup with reCAPTCHA""",
+    'summary': """This module integrates reCAPTCHA to protect your website from bot attacks.""",
     'description': """CAPTCHA helps you detect abusive traffic on your website without any user friction. 
     The user must register their  domain with CAPTCHA site to get site key add same with our code and use the app.
     login page, signup page,login,signup,protection,site protection,fake login,fake signup,website login, 
