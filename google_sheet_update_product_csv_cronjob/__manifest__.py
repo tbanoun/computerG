@@ -5,10 +5,12 @@
     'name': 'Google Sheet Update Product Csv Cronjob',
     'version': '16.0.0.1',
     'category': 'Tools',
-    'summary': '',
-    'description': "",
-    'author': 'digitalai_academy',
-    'website': 'https://www.digitalai.academy',
+    'summary': 'This module simplifies the update of product prices and quantities based on data from suppliers: Multitech, InfoQuest, and LogiCom.',
+    'description': '''This module is developed to facilitate the automatic update of product prices and quantities using data provided by the suppliers Multitech, InfoQuest, and LogiCom. It streamlines the synchronization process between supplier inventories and your Odoo system, ensuring that product information remains accurate and up to date. Ideal for businesses managing multiple supplier feeds and looking to maintain real-time inventory and pricing accuracy.''',
+    'author': 'SoftG',
+    'website': 'softg.dev',
+    'phone': '+357 96 69 96 49',
+    'Email': 'Odoo@softg.dev',
     'depends': ['base', 'stock', 'account'],
     'data': [
         # security

@@ -9,9 +9,10 @@
     login page, signup page,login,signup,protection,site protection,fake login,fake signup,website login, 
     website,captcha,captcha,version 16 protectionwebsite protection,robot attack,security,secure login
     ,secure signup, contact us...""",
-    'author': 'Tahar BANOUN',
-    'company': 'digitalai-academy',
-    'website': 'https://www.digitalai.academy',
+    'author': 'SoftG',
+    'website': 'softg.dev',
+    'phone': '+357 96 69 96 49',
+    'Email': 'Odoo@softg.dev',
     'category': 'Extra Tools',
     'depends': ['base'],
     'images': ['static/description/banner.gif'],

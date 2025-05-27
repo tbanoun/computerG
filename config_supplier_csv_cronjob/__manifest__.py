@@ -7,8 +7,10 @@
     'category': 'Tools',
     'summary': '',
     'description': "",
-    'author': 'digitalai_academy',
-    'website': 'https://www.digitalai.academy',
+    'author': 'SoftG',
+    'website': 'softg.dev',
+    'phone': '+357 96 69 96 49',
+    'Email': 'Odoo@softg.dev',
     'depends': ['base', 'stock', 'account'],
     'data': [
         # security

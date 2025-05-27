@@ -3,16 +3,18 @@
 
 {
     'name': 'web custumize computer G',
-    'description': '',
-    'summary': '',
+    'description': '''
+    This module is designed to manage supplier configurations in a centralized way. It includes all the common variables and settings required for supplier integration, as well as access menus and other essential configurations. It serves as the core setup point for handling supplier-related operations in the system.''',
+    'summary': 'Supplier configuration module with shared settings, variables, and access menus.',
     'category': 'Theme/eCommerce',
     'version': '16.0.0.0.1',
-    'depends': ['web','theme_prime', 'sale', 'config_supplier_csv_cronjob', 'website', 'website_sale',
+    'depends': ['web', 'theme_prime', 'sale', 'config_supplier_csv_cronjob', 'website', 'website_sale',
                 'website_sale_stock'],
     'license': 'OPL-1',
-    'author': 'Tahar BANOUN',
-    'company': 'https://digitalai.academy/',
-    'maintainer': 'Tahar BANOUN',
+    'author': 'SoftG',
+    'website': 'softg.dev',
+    'phone': '+357 96 69 96 49',
+    'Email': 'Odoo@softg.dev',
     'website': 'https://digitalai.academy/',
     'images': [
         'static/description/prime_cover.png',
@@ -36,14 +38,6 @@
         'reports/update_invoice.xml',
         'reports/update_delivery_note.xml',
     ],
-    # 'assets': {
-    #     'web.assets_frontend': [
-    #         'web_custumize_computerG/static/src/js/variant_mixin.js',
-    #     ],
-    #     'web.assets_backend': [
-    #         'web_custumize_computerG/static/src/js/variant_mixin.js',
-    #     ],
-    # },
     'installable': True,
     'application': True,
 }
