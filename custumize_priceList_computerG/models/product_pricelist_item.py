@@ -145,17 +145,11 @@ class PricelistItem(models.Model):
             priceObject = product.price_computeGostumize(rule_base, uom=uom, date=date)
 
             price = product.price_computeGostumize(rule_base, uom=uom, date=date)[product.id]
-            print(f'Price Samsung {price}')
             priceExtra = 0
             if 'priceExtra' in product.price_computeGostumize(rule_base, uom=uom, date=date):
                 priceExtra = product.price_computeGostumize(rule_base, uom=uom, date=date)['priceExtra']
         if src_currency != target_currency:
             price = src_currency._convert(price, target_currency, self.env.company, date, round=False)
-        print('______________________')
-        print('\n Title \n')
-        print(f'Price: {price}')
-        print(f'priceExtra: {priceExtra}')
-        print('______________________')
         return price, priceExtra
 
 
@@ -233,35 +227,4 @@ class ProductProduct(models.Model):
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
-    def price_computeGostumize(self, price_type, uom=None, currency=None, company=None, date=False):
-        pass
-        # company = company or self.env.company
-        # date = date or fields.Date.context_today(self)
-        # self = self.with_company(company)
-        #
-        # prices = dict.fromkeys(self.ids, 0.0)
-        # for product in self:
-        #     price = product[price_type] or 0.0
-        #     price_currency = product.currency_id
-        #     if price_type == 'standard_price':
-        #         priceExtra = 0
-        #         price_currency = product.cost_currency_id
-        #         if self._context.get('no_variant_attributes_price_extra'):
-        #             # # we have a list of price_extra that comes from the attribute values, we need to sum all that
-        #             # price += sum(self._context.get('no_variant_attributes_price_extra'))
-        #             priceExtra += sum(self._context.get('no_variant_attributes_price_extra'))
-        #     if price_type == 'list_price':
-        #         priceExtra = 0
-        #         if self._context.get('no_variant_attributes_price_extra'):
-        #             # we have a list of price_extra that comes from the attribute values, we need to sum all that
-        #             priceExtra += sum(self._context.get('no_variant_attributes_price_extra'))
-        #     if uom:
-        #         price = product.uom_id._compute_price(price, uom)
-        #     if currency:
-        #         price = price_currency._convert(price, currency, company, date)
-        #
-        #     prices[product.id] = price
-        #     if price_type in ['standard_price', 'list_price']:
-        #         prices['priceExtra'] = priceExtra
-        #
-        # return prices
+    pass
