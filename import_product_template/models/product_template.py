@@ -33,25 +33,26 @@ class ImportProduct(models.TransientModel):
         for rec in result:
             product_id = rec.get('ID', None)
             if not product_id: continue
-            if "END" != product_id:
-                created = False
-                print(f'\n\n rec ==> {rec} \n\n')
-                try:
-                    product_template = self.env.ref(product_id)
-                except Exception as e:
-                    # create the product
-                    created = True
-                    product_template = self.create_product_template(rec)
-                    if product_template:
-                        print('TEST ME',product_template.name)
-                        error += 1
-                if not product_template: continue
-                if not created: update_index += 1
-                attributes = rec.pop('Attributes', None)
-                vendors = rec.pop('Vendor', None)
-                if attributes: self.update_attributes(product_template, attributes)
-                if vendors: self.update_list_vendors(product_template, vendors)
-                self.update_product_template(product_template, rec)
+            created = False
+            product_template = False
+            try:
+                product_template = self.env.ref(product_id)
+                print(f'\n\ product_template {product_template} \n\n')
+            except Exception as e:
+                print(f'error! {e}')
+                # create the product
+                created = True
+                product_template = self.create_product_template(rec)
+                if product_template:
+                    print('TEST ME', product_template.name)
+                    error += 1
+            if not product_template: continue
+            if not created: update_index += 1
+            attributes = rec.pop('Attributes', None)
+            vendors = rec.pop('Vendor', None)
+            if attributes: self.update_attributes(product_template, attributes)
+            if vendors: self.update_list_vendors(product_template, vendors)
+            self.update_product_template(product_template, rec)
 
         notification = {
             'type': 'ir.actions.client',
@@ -66,112 +67,57 @@ class ImportProduct(models.TransientModel):
         return notification
 
     def update_attributes(self, product_template, attributes):
-        """
-        Optimized: Update product attributes by grouping values by attribute.
-        Handles case insensitivity, minimizes SQL calls, and improves speed.
-        """
-        try:
-            ProductAttribute = self.env['product.attribute']
-            ProductAttributeValue = self.env['product.attribute.value']
-            TemplateAttributeLine = self.env['product.template.attribute.line']
-
-            # 1. Supprimer les lignes existantes en un seul appel
-            product_template.attribute_line_ids.unlink()
-
-            # 2. Préparation des données normalisées
-            attr_name_map = {}
-            attr_value_map = {}
-
-            for rec in attributes:
-                attr = rec.get("attribute")
-                if not attr:
-                    continue
-
-                attr_name = attr.get("name", "").strip()
-                if not attr_name:
-                    continue
-
-                norm_attr = attr_name.lower()
-                if norm_attr not in attr_name_map:
-                    attr_name_map[norm_attr] = attr_name
-
-                for val in attr.get("value", []):
-                    val_name = val.get("value", "").strip()
-                    if not val_name:
-                        continue
-                    norm_val = val_name.lower()
-                    attr_value_map.setdefault(norm_attr, {})[norm_val] = {
-                        "name": val_name,
-                        "price": float(val.get("price", 0))
+        # delete attributes product
+        product_template.sudo().attribute_line_ids.unlink()
+        for rec in attributes:
+            attribute = rec.get('attribute', None)
+            if not attribute: continue
+            attribute_name = attribute.get('name', None)
+            # search attribute if existe:
+            attribute_databse_id = self.env['product.attribute'].sudo().search([('name', 'ilike', attribute_name)],
+                                                                               limit=1)
+            if not attribute_databse_id:
+                attribute_databse_id = self.env['product.attribute'].create(
+                    {
+                        "name": attribute_name
                     }
-
-            # 3. Recherche en batch des attributs existants
-            attr_objs = ProductAttribute.sudo().search([('name', 'ilike', list(attr_name_map.values()))])
-            attr_dict = {a.name.lower(): a for a in attr_objs}
-
-            # 4. Création des attributs manquants
-            for norm_attr, orig_name in attr_name_map.items():
-                if norm_attr not in attr_dict:
-                    attr_dict[norm_attr] = ProductAttribute.sudo().create({
-                        'name': orig_name,
-                        'create_variant': 'dynamic'
+                )
+            # lop values:
+            values = attribute.get('value', None)
+            value_ids = []
+            for val in values:
+                value = self.env['product.attribute.value'].sudo().search(
+                    [('name', '=', val.get('value', '')), ('attribute_id', '=', attribute_databse_id.id)], limit=1)
+                if not value:
+                    value = self.env['product.attribute.value'].create({
+                        'name': val.get('value', ''),
+                        'attribute_id': attribute_databse_id.id
                     })
-
-            # 5. Recherche en batch des valeurs existantes
-            all_attr_ids = [attr.id for attr in attr_dict.values()]
-            val_objs = ProductAttributeValue.sudo().search([
-                ('attribute_id', 'in', all_attr_ids)
+                value_ids.append(value.id)
+                # # #
+            vals = {
+                "attribute_id": attribute_databse_id.id,
+                "product_tmpl_id": product_template.id,
+                "value_ids": value_ids
+            }
+            attribute_line_ids = self.env['product.template.attribute.line'].sudo().create(
+                vals
+            )
+            config_lines = self.env['product.template.attribute.value'].sudo().search([
+                ('id', 'in', attribute_line_ids.product_template_value_ids.ids)
             ])
-            val_dict = {}  # { (attr_id, norm_val_name): val }
-            for v in val_objs:
-                val_dict[(v.attribute_id.id, v.name.lower())] = v
-
-            # 6. Création et regroupement des valeurs manquantes
-            line_data = []
-            ptav_price_map = {}
-
-            for norm_attr, values in attr_value_map.items():
-                attr = attr_dict[norm_attr]
-                value_ids = []
-
-                for norm_val, val_info in values.items():
-                    key = (attr.id, norm_val)
-                    val_obj = val_dict.get(key)
-
-                    if not val_obj:
-                        val_obj = ProductAttributeValue.sudo().create({
-                            'name': val_info['name'],
-                            'attribute_id': attr.id
-                        })
-                        val_dict[key] = val_obj
-
-                    value_ids.append(val_obj.id)
-                    ptav_price_map[val_obj.id] = val_info['price']
-
-                line_data.append((0, 0, {
-                    'attribute_id': attr.id,
-                    'value_ids': [(6, 0, value_ids)],
-                }))
-
-            # 7. Création des lignes d'attributs groupées
-            if line_data:
-                product_template.write({
-                    'attribute_line_ids': line_data
-                })
-
-            # 8. Mise à jour des prix des variantes
-            for line in product_template.attribute_line_ids:
-                for ptav in line.product_template_value_ids:
-                    val_id = ptav.product_attribute_value_id.id
-                    price = ptav_price_map.get(val_id)
-                    if price is not None:
-                        ptav.price_extra = price
-
-            return True
-
-        except Exception as e:
-            _logger.exception("Error updating attributes")
-            raise
+            # update price
+            for line in config_lines:
+                price = 0
+                for val in values:
+                    if val.get('value') == line.name:
+                        price = val.get('price')
+                        break
+                line.sudo().write(
+                    {
+                        'price_extra': price
+                    }
+                )
 
     def update_list_vendors(self, product_template, vendors):
         # delete seller_ids line on product
@@ -193,8 +139,8 @@ class ImportProduct(models.TransientModel):
             product_code = rec.get('product_code', '')
             vendor_price = convertStrTofloat(rec.get('price', 0.0))
             vendor_qty = convertStrTofloat(rec.get('qty', 0.0))
-            date_start = rec.get('date_start', None)
-            date_end = rec.get('date_end', None)
+            date_start = rec.get('start_date', None)
+            date_end = rec.get('end_date', None)
             time_lead = convertStrTofloat(rec.get('time_lead', 0))
             vals = {
                 'product_id': product_id,
@@ -203,8 +149,8 @@ class ImportProduct(models.TransientModel):
                 'delay': time_lead,
                 'product_name': product_name,
                 'product_code': product_code,
-                'date_start': date_start,
-                'date_end': date_end,
+                'date_start': date_start if isinstance(date_start, datetime) else False,
+                'date_end': date_end if isinstance(date_end, datetime) else False,
                 'min_qty': vendor_qty,
                 'product_tmpl_id': product_template.id,
             }
@@ -217,31 +163,77 @@ class ImportProduct(models.TransientModel):
     def update_product_template(self, product_id, vals):
         product_vals = generateProductVals(self, vals)
         # manufacturer_id
-        manufacturer_id = product_vals.pop('manufacturer_id_int', 0)
+        manufacturer_id = product_vals.pop('manufacturer_id', None)
+        if manufacturer_id: manufacturer_id = selectOneElementDataBase(self, manufacturer_id)
+        manufacturer_id = manufacturer_id if manufacturer_id else 0
         # dr_label_id
-        product_vals['manufacturer_id_int'] = manufacturer_id
+        dr_label_id = product_vals.pop('dr_label_id', None)
+        if dr_label_id: dr_label_id = selectOneElementDataBase(self, dr_label_id)
+        dr_label_id = dr_label_id.id if dr_label_id else None
+        if manufacturer_id:
+            product_vals['manufacturer_id'] = manufacturer_id
+        if dr_label_id:
+            product_vals['dr_label_id'] = dr_label_id
+
+        qty = product_vals.pop('quantity', 0)
 
         product_id.sudo().write(
             product_vals
         )
+        # delete qty
+        # stock_ids = self.env['stock.quant'].sudo().search(
+        #     [
+        #         (
+        #             'product_id', '=', product_id.id
+        #         )
+        #     ]
+        # )
+        # if stock_ids: stock_ids.sudo().unlink()
+        # location_id = self.env['stock.location'].sudo().search(
+        #     [
+        #         (
+        #             'usage', '=', 'internal'
+        #         )
+        #     ], limit=1
+        # )
+        # if location_id:
+        #     stock_id = self.env['stock.quant'].sudo().create({
+        #         "location_id": location_id.id,
+        #         "product_id": product_id.product_variant_id.id,
+        #         "product_tmpl_id": product_id.id,
+        #         "inventory_quantity": qty
+        #     })
+        # stock_id.sudo().action_apply_inventory()
 
     def create_product_template(self, vals):
         product_vals = generateProductVals(self, vals)
-
         product_vals['detailed_type'] = 'product'
-        product_search_code = None
-        product_product_search_code = None
-        product_product_search_barcode = None
-        product_search_barcode = None
-        if 'product_code' in product_vals:
-            default_code = product_vals['default_code']
-            product_search_code = self.env['product.template'].sudo().search([('product_code', '=', default_code), ('product_code', '!=', False)])
-            product_product_search_code = self.env['product.product'].sudo().search([('product_code', '=', default_code), ('product_code', '!=', False)])
-        if 'barcode' in product_vals:
-            barcode = product_vals['barcode']
-            product_search_barcode = self.env['product.template'].sudo().search([('barcode', '=', barcode), ('barcode', '!=', False)])
-            product_product_search_barcode = self.env['product.product'].sudo().search([('barcode', '=', barcode), ('barcode', '!=', False)])
-        if product_search_code or product_search_barcode or product_product_search_barcode or product_product_search_code: return None
+
+        qty = product_vals.pop('quantity', 0)
+        # manufacturer_id
+        manufacturer_id = product_vals.pop('manufacturer_id', None)
+        if manufacturer_id: manufacturer_id = selectOneElementDataBase(self, manufacturer_id)
+        manufacturer_id = manufacturer_id if manufacturer_id else 0
+
+        # dr_label_id
+        # dr_label_id
+        dr_label_id = product_vals.pop('dr_label_id', None)
+        if dr_label_id: dr_label_id = selectOneElementDataBase(self, dr_label_id)
+
+        if manufacturer_id:
+            product_vals['manufacturer_id'] = manufacturer_id
+        if dr_label_id:
+            product_vals['dr_label_id'] = dr_label_id
+
+        default_code = product_vals.get('default_code', None)
+        barcode = product_vals.get('barcode', None)
+        product_find = None
+        if default_code and barcode:
+            product_find = self.env['product.template'].sudo().search([
+                '|',
+                ('barcode', '=', barcode), ('default_code', '=', default_code)
+            ])
+        if product_find: return None
         product_id = self.env['product.template'].sudo().create(
             product_vals
         )
@@ -264,6 +256,7 @@ class ImportProduct(models.TransientModel):
             "inventory_quantity": availableQuantity,
             "quantity": availableQuantity
         })
+        print(f'The stock {stock_id} has ok')
         stock_id.sudo().action_apply_inventory()
         return True
 
@@ -271,8 +264,7 @@ class ImportProduct(models.TransientModel):
 class TestProductQty(models.Model):
     _inherit = "product.template"
 
-    manufacturer_id_int = fields.Integer(string='Manufacturer')
-    out_of_stock_message = fields.Char(string="Out-of-Stock Message")
+    manufacturer_id = fields.Integer(string='Manufacturer')
 
     def updateQtyStockProduct(self):
         """ function to update qty product on supplier wherehouse """
