@@ -14,8 +14,8 @@
                 <field name="messageDelivryTimeRemoteStock"/>
                 <!--                <field name="out_of_stock_message_text"/>-->
             </xpath>
-<!--            <xpath expr="//field[@name='out_of_stock_message_text']" position="replace">-->
-<!--            </xpath>-->
+            <xpath expr="//field[@name='out_of_stock_message_text']" position="replace">
+            </xpath>
 
             <xpath expr="//field[@name='allow_out_of_stock_order']" position="replace">
                 <div attrs="{'invisible': [('type', 'in', ['service', 'consu'])]}">
