@@ -80,7 +80,7 @@
                                               class="ml-2 text-right alert alert-success w-40">
                                             <span class="cls-sahrane">
                                                 <span class="cls-sahrane" t-esc="int(virtual_available)"/>
-                                                Pcs In Stock
+                                                Units In Stock |
                                             </span>
                                             <span class="cls-sahrane" t-esc="line.product_id.messageDelivryTimeStock">
                                             </span>
@@ -104,7 +104,7 @@
                 border: 1px solid #803D19; !important"
                                           class="ml-2 text-right alert alert-success w-40">
                                         <span t-esc="int(qty_available_wt)"/>
-                                        Pcs In Remote Stock
+                                        Units In Remote Stock |
                                         <span class="cls-sahrane"
                                               t-esc="line.product_id.messageDelivryTimeRemoteStock">
                                         </span>
@@ -129,7 +129,7 @@
                                           class="ml-2 text-right alert alert-warning w-40">
                                         <t t-if="line.product_id.continue_seling">
                                             <span t-esc="int(qtyReset)"/>
-                                            Pcs
+                                            Units |
                                         </t>
                                         <span class="cls-sahrane" t-esc="line.product_id.out_of_stock_message">
                                         </span>
