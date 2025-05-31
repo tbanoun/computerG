@@ -1,0 +1,1 @@
+This module geolocates a new customer and set the right pricelist according to its geolocation. IP is cached during a configurable period to avoid asking geolocation for the same IP at each website page.

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ir_cron_website_cache_ip_cleaner" model="ir.cron">
+        <field name="name">Website Cache IP Cleaner</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="nextcall" eval="(DateTime.now().replace(hour=4, minute=18) + timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')" />
+        <field name="doall" eval="False"/>
+        <field name="model_id" ref="model_website_cache_ip"/>
+        <field name="code">model._website_cache_ip_cleaner()</field>
+        <field name="state">code</field>
+    </record>
+</odoo>

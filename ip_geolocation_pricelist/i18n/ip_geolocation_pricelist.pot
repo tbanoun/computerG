@@ -1,0 +1,125 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* ip_geolocation_pricelist
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-07-20 14:45+0000\n"
+"PO-Revision-Date: 2023-07-20 14:45+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: ip_geolocation_pricelist
+#: model:ir.model,name:ip_geolocation_pricelist.model_website_cache_ip
+msgid "Caching IP during a configurable period"
+msgstr ""
+
+#. module: ip_geolocation_pricelist
+#: model:ir.model,name:ip_geolocation_pricelist.model_res_config_settings
+msgid "Config Settings"
+msgstr ""
+
+#. module: ip_geolocation_pricelist
+#: model:ir.model.fields,field_description:ip_geolocation_pricelist.field_product_pricelist__country_ids
+msgid "Countries"
+msgstr ""
+
+#. module: ip_geolocation_pricelist
+#: model:ir.model.fields,field_description:ip_geolocation_pricelist.field_website_cache_ip__country_code
+msgid "Country Code"
+msgstr ""
+
+#. module: ip_geolocation_pricelist
+#: model:ir.model.fields,field_description:ip_geolocation_pricelist.field_website_cache_ip__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: ip_geolocation_pricelist
+#: model:ir.model.fields,field_description:ip_geolocation_pricelist.field_website_cache_ip__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: ip_geolocation_pricelist
+#: model:ir.model.fields,field_description:ip_geolocation_pricelist.field_website_cache_ip__date_cached
+msgid "Date of Cache"
+msgstr ""
+
+#. module: ip_geolocation_pricelist
+#: model:ir.model.fields,field_description:ip_geolocation_pricelist.field_website_cache_ip__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: ip_geolocation_pricelist
+#: model:ir.model.fields,field_description:ip_geolocation_pricelist.field_res_config_settings__ip_cache_duration
+#: model:ir.model.fields,field_description:ip_geolocation_pricelist.field_website__ip_cache_duration
+msgid "Duration of IP caching (in days)"
+msgstr ""
+
+#. module: ip_geolocation_pricelist
+#: model_terms:ir.ui.view,arch_db:ip_geolocation_pricelist.ip_geolocation_pricelist_res_config_settings_view_form_inherit
+msgid "Duration of IP caching (in days)."
+msgstr ""
+
+#. module: ip_geolocation_pricelist
+#: model:ir.model.fields,field_description:ip_geolocation_pricelist.field_website_cache_ip__id
+msgid "ID"
+msgstr ""
+
+#. module: ip_geolocation_pricelist
+#: model:ir.model.fields,field_description:ip_geolocation_pricelist.field_website_cache_ip__ip
+msgid "IP"
+msgstr ""
+
+#. module: ip_geolocation_pricelist
+#: model:ir.model.fields,field_description:ip_geolocation_pricelist.field_website_cache_ip____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: ip_geolocation_pricelist
+#: model:ir.model.fields,field_description:ip_geolocation_pricelist.field_website_cache_ip__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: ip_geolocation_pricelist
+#: model:ir.model.fields,field_description:ip_geolocation_pricelist.field_website_cache_ip__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: ip_geolocation_pricelist
+#: model:ir.model,name:ip_geolocation_pricelist.model_product_pricelist
+msgid "Pricelist"
+msgstr ""
+
+#. module: ip_geolocation_pricelist
+#: model:ir.model.fields,field_description:ip_geolocation_pricelist.field_res_config_settings__enable_geolocation_pricelist
+#: model:ir.model.fields,field_description:ip_geolocation_pricelist.field_website__enable_geolocation_pricelist
+msgid "Set pricelist based on customer's geolocation"
+msgstr ""
+
+#. module: ip_geolocation_pricelist
+#: model_terms:ir.ui.view,arch_db:ip_geolocation_pricelist.ip_geolocation_pricelist_res_config_settings_view_form_inherit
+msgid "Set pricelist based on customer's geolocation."
+msgstr ""
+
+#. module: ip_geolocation_pricelist
+#: model_terms:ir.ui.view,arch_db:ip_geolocation_pricelist.ip_geolocation_pricelist_res_config_settings_view_form_inherit
+msgid "Shop - IP Cache"
+msgstr ""
+
+#. module: ip_geolocation_pricelist
+#: model:ir.model,name:ip_geolocation_pricelist.model_website
+msgid "Website"
+msgstr ""
+
+#. module: ip_geolocation_pricelist
+#: model:ir.actions.server,name:ip_geolocation_pricelist.ir_cron_website_cache_ip_cleaner_ir_actions_server
+#: model:ir.cron,cron_name:ip_geolocation_pricelist.ir_cron_website_cache_ip_cleaner
+#: model:ir.cron,name:ip_geolocation_pricelist.ir_cron_website_cache_ip_cleaner
+msgid "Website Cache IP Cleaner"
+msgstr ""
