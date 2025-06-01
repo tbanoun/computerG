@@ -110,6 +110,10 @@ class PricelistItem(models.Model):
         else:
             price = base_price
         # if  self.compute_price == 'formula':
+        if extraPrice > 0 :
+            extraPrice = (extraPrice - (extraPrice * self.pricelist_id.discount_attribute)/100)
+        print(f'\n\n The price :',price)
+        print(f'\n\n The Extra price :',extraPrice )
         price += extraPrice
         return price
 
