@@ -47,7 +47,7 @@ class Website(models.Model):
                     if get_country:
                         _logger.debug("Country found: %s", get_country.name)
                         get_pricelist = website_available_pricelist.filtered(
-                            lambda p: get_country.id in p.country_group_ids.country_ids.ids).sorted(key=lambda p: p.sequence)
+                            lambda p: get_country.id in p.country_group_ids.country_ids.ids or get_country.id in p.country_ids.ids).sorted(key=lambda p: p.sequence)
                         if get_pricelist:
                             _logger.info("Matching pricelist found: %s", get_pricelist[0].name)
                             return get_pricelist[0]
@@ -89,7 +89,7 @@ class Website(models.Model):
                             if get_country:
                                 _logger.debug("Country found: %s", get_country.name)
                                 get_pricelist = website_available_pricelist.filtered(
-                                    lambda p: get_country.id in p.country_group_ids.country_ids.ids).sorted(key=lambda p: p.sequence)
+                                    lambda p: get_country.id in p.country_group_ids.country_ids.ids or get_country.id in p.country_ids.ids).sorted(key=lambda p: p.sequence)
                                 if get_pricelist:
                                     _logger.info("Matching pricelist found: %s", get_pricelist[0].name)
                                     return get_pricelist[0]
