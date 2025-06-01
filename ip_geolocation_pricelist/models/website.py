@@ -52,8 +52,11 @@ class Website(models.Model):
                     _logger.info("IP not found in cache, calling geolocation API")
                     try:
                         url = 'https://ipapi.co/' + ip + '/json/'
+                        url =  f'http://ip-api.com/json/{ip}'
+
                         _logger.debug("Calling URL: %s", url)
                         response = requests.get(url, timeout=5).text
+                        # if response.status_code == 200:
                         response_json = json.loads(response)
                         _logger.debug("API response: %s", response_json)
 
