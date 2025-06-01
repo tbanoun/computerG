@@ -64,7 +64,7 @@ class Website(models.Model):
                         url =  f'http://ip-api.com/json/{ip}'
                         response = requests.get(url, timeout=5)
                         if response.status_code == 200:
-                            response_json = response = response
+                            response_json = response.json()
                         else:
                             url = f'https://ipapi.co/{ip}/json/'
                             response = requests.get(url, timeout=5)
