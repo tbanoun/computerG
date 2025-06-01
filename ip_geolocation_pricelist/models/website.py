@@ -60,20 +60,18 @@ class Website(models.Model):
                 else:
                     _logger.info("IP not found in cache, calling geolocation API")
                     try:
+                        response_json = {}
                         url =  f'http://ip-api.com/json/{ip}'
-                        response = requests.get(url, timeout=2).json()
-                        country_code = response.get('countryCode')
-                        if not country_code:
-                            # Si échec, essayer ipapi.co
+                        response = requests.get(url, timeout=5).json()
+                        if response.status_code == 200:
+                            response_json = response = response.json()
+                        else:
                             url = f'https://ipapi.co/{ip}/json/'
-                            response = requests.get(url, timeout=2).json()
-                            country_code = response.get('country_code')
+                            response = requests.get(url, timeout=5)
+                            if response.status_code == 200:
+                                response_json = response.json()
                         _logger.debug("Calling URL: %s", url)
-                        # response = requests.get(url, timeout=5).text
-                        # if response.status_code == 200:
                         _logger.info("API Response: %s", response)
-                        # response_json = json.loads(response)
-                        response_json = response
                         _logger.info("API response: %s", response_json)
 
                         if response_json.get(DEFAULT_COUNTRY_CODE_API_NAME):
