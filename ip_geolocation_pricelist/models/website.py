@@ -62,7 +62,7 @@ class Website(models.Model):
                         return pricelist
                 else:  # Appel à l'API de géolocalisation
                     _logger.info("Appel à l'API de géolocalisation")
-                    ip = '129.45.120.244'
+                    # ip = '129.45.120.244'
                     try:
                         url = 'https://ipapi.co/' + ip + '/json/'
                         _logger.info(f"URL API: {url}")
