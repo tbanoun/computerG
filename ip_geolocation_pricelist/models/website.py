@@ -20,6 +20,15 @@ class Website(models.Model):
         _logger.debug("Calling overridden get_current_pricelist()")
         pricelist = super(Website, self).get_current_pricelist()
         _logger.debug("Default pricelist: %s", pricelist.name if pricelist else "None")
+        ip = request.httprequest.remote_addr
+        _logger.debug("Request Client IP: %s", ip)
+        print(f"\n\n\n\n Request Client IP: {ip} \n\n\n")
+        if request and request.session.get('geo_pricelist_id'):
+            cached_pl = self.env['product.pricelist'].browse(request.session['geo_pricelist_id']).exists()
+            if cached_pl:
+                _logger.debug("Returning cached geo pricelist from session: %s", cached_pl.name)
+                return cached_pl
+
 
         if request.website.enable_geolocation_pricelist:
             _logger.info("Geolocation-based pricelist is enabled")
@@ -51,9 +60,14 @@ class Website(models.Model):
                 else:
                     _logger.info("IP not found in cache, calling geolocation API")
                     try:
-                        url = 'https://ipapi.co/' + ip + '/json/'
                         url =  f'http://ip-api.com/json/{ip}'
-
+                        response = requests.get(url, timeout=2).json()
+                        country_code = response.get('countryCode')
+                        if not country_code:
+                            # Si échec, essayer ipapi.co
+                            url = f'https://ipapi.co/{ip}/json/'
+                            response = requests.get(url, timeout=2).json()
+                            country_code = response.get('country_code')
                         _logger.debug("Calling URL: %s", url)
                         response = requests.get(url, timeout=5).text
                         # if response.status_code == 200:
