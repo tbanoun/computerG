@@ -73,9 +73,9 @@ class Website(models.Model):
                         _logger.debug("Calling URL: %s", url)
                         _logger.info("API Response: %s", response)
                         _logger.info("API response: %s", response_json)
-
-                        if response_json.get(DEFAULT_COUNTRY_CODE_API_NAME):
-                            country_code = response_json.get(DEFAULT_COUNTRY_CODE_API_NAME)
+                        country_code = response_json.get('countryCode') or response_json.get('country_code')
+                        if country_code:
+                            # country_code = response_json.get(DEFAULT_COUNTRY_CODE_API_NAME)
                             _logger.info("Geolocation API returned country code: %s", country_code)
 
                             self.env[DEFAULT_IP_CACHING_MODEL].sudo().create({
