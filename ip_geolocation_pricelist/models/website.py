@@ -71,7 +71,9 @@ class Website(models.Model):
                         _logger.debug("Calling URL: %s", url)
                         # response = requests.get(url, timeout=5).text
                         # if response.status_code == 200:
-                        response_json = json.loads(response)
+                        _logger.info("API Response: %s", response)
+                        # response_json = json.loads(response)
+                        response_json = response
                         _logger.info("API response: %s", response_json)
 
                         if response_json.get(DEFAULT_COUNTRY_CODE_API_NAME):
