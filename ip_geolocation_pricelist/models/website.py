@@ -69,10 +69,10 @@ class Website(models.Model):
                             response = requests.get(url, timeout=2).json()
                             country_code = response.get('country_code')
                         _logger.debug("Calling URL: %s", url)
-                        response = requests.get(url, timeout=5).text
+                        # response = requests.get(url, timeout=5).text
                         # if response.status_code == 200:
                         response_json = json.loads(response)
-                        _logger.debug("API response: %s", response_json)
+                        _logger.info("API response: %s", response_json)
 
                         if response_json.get(DEFAULT_COUNTRY_CODE_API_NAME):
                             country_code = response_json.get(DEFAULT_COUNTRY_CODE_API_NAME)
