@@ -63,6 +63,7 @@ class Website(models.Model):
                 else:  # Appel à l'API de géolocalisation
                     _logger.info("Appel à l'API de géolocalisation")
                     # ip = '129.45.120.244'
+                    ip = request.httprequest.remote_addr
                     try:
                         url = 'https://ipapi.co/' + ip + '/json/'
                         _logger.info(f"URL API: {url}")
