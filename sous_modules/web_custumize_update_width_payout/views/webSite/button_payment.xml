@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="updqte_button_submit_payment" model="ir.ui.view">
+        <field name="name">submit order</field>
+        <field name="inherit_id" search="[('key', '=', 'website_sale.payment_footer')]"/>
+        <field name="type">qweb</field>
+        <field name="key">web_custumize_computerG.updqte_button_submit_payment</field>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='o_payment_submit_button']" position="replace">
+                <button name="o_payment_submit_button"
+                        type="submit"
+                        class="btn btn-primary"
+                        disabled="true"
+                        data-icon-class="fa-chevron-right">
+                    Submit order
+                    <i class="fa fa-chevron-right"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+</odoo>
