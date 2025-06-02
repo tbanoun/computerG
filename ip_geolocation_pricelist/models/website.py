@@ -34,7 +34,10 @@ class Website(models.Model):
             _logger.info("Geolocation-based pricelist is enabled")
 
             if request and not request.session.get('website_sale_current_pl'):
-                website_available_pricelist = request.website.get_pricelist_available(show_visible=True)
+                website_available_pricelist = request.website.get_pricelist_available()
+
+                print(f'\n\n\n HELLO {website_available_pricelist} \n\n\n\n')
+
                 _logger.debug("Available website pricelists count: %d", len(website_available_pricelist))
 
                 ip = request.httprequest.remote_addr
