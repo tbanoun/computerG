@@ -21,11 +21,6 @@
                     </style>
                     <div>
                         <strong t-field="line.name_short"/>
-                        <br/>
-                        <span>
-                            <strong>SKU:</strong>
-                            <strong t-field="line.product_id.default_code"/>
-                        </span>
                     </div>
                     <t t-if="line.state in ('draft', 'sent')">
                         <ul class="list-inline mb-1">
