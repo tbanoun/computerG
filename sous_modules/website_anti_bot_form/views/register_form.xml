@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="website_anti_bot_form.signup_layout" model="ir.ui.view">
+        <field name="name">website_anti_bot_form.signup_layout</field>
+        <field name="inherit_id" search="[('key', '=', 'auth_signup.signup')]"/>
+        <field name="key">website_anti_bot_form.signup_layout</field>
+        <field name="arch" type="xml">
+
+            <!-- Ajouter le champ honeypot après le champ token -->
+            <div class="text-center oe_login_buttons d-grid pt-3" position="before">
+                <input type="text" name="honeypot_field" id="honeypot_field"
+                       style="display: none;"
+                       autocomplete="off"/>
+            </div>
+
+            <xpath expr="//form[@class='oe_signup_form']" position="inside">
+                <script type="text/javascript">
+                    (function () {
+                    document.addEventListener('DOMContentLoaded', function () {
+                    const form = document.querySelector('.oe_signup_form');
+                    const honeypot = document.getElementById('honeypot_field');
+                    const submitBtn = form.querySelector("button[type='submit']");
+
+                    if (honeypot) {
+                    if (submitBtn){
+                    form.addEventListener('submit', function (e) {
+                    if (honeypot.value) {
+                    e.preventDefault();
+                    submitBtn.disabled = true;
+                    }
+                    });
+                    }
+
+                    }
+                    });
+                    })();
+                </script>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="login_layout" model="ir.ui.view">
+        <field name="name">product_item_grid_2_nce</field>
+        <field name="inherit_id" search="[('key', '=', 'web.login')]"/>
+        <field name="type">qweb</field>
+        <field name="key">website_anti_bot_form.login_layout</field>
+        <field name="arch" type="xml">
+
+            <xpath expr="//input[@name='password']" position="after">
+                <input type="text" name="honeypot_field" id="honeypot_field"
+                       style="display:none;"
+                       autocomplete="off"/>
+            </xpath>
+
+            <xpath expr="//form" position="inside">
+                <script type="text/javascript">
+                    document.addEventListener('DOMContentLoaded', function () {
+                    const form = document.querySelector('.oe_login_form');
+                    const honeypot = document.getElementById('honeypot_field');
+                    const submitBtn = form.querySelector("button[type='submit']");
+
+                    if (honeypot) {
+                    if (submitBtn){
+                    form.addEventListener('submit', function (e) {
+                    if (honeypot.value) {
+                    e.preventDefault();
+                    submitBtn.disabled = true;
+                    }
+                    });
+                    }
+                    }
+                    });
+                </script>
+            </xpath>
+
+        </field>
+    </record>
+
+
+</odoo>
