@@ -7,7 +7,7 @@
     'summary': 'Improve the payment section layout to clearly display the delivery message.',
     'category': 'Theme/eCommerce',
     'version': '16.0.0.0.1',
-    'depends': ['web', 'theme_prime', 'sale', 'config_supplier_csv_cronjob', 'website', 'website_sale',
+    'depends': ['web', 'theme_prime', 'sale', 'website', 'website_sale',
                 'website_sale_stock'],
     'license': 'OPL-1',
     'author': 'SoftG',
@@ -20,7 +20,7 @@
     ],
     'data': [
         # website
-        'views/webSite/update_layout_website.xml'
+        'views/update_layout_website.xml'
     ],
     'installable': True,
     'application': True,

@@ -83,6 +83,7 @@ class ProductTemplate(models.Model):
     _inherit = "product.template"
 
     barcode2 = fields.Char(related="barcode")
+    out_of_stock_message = fields.Char(string="Out-of-Stock Message")
 
     @api.depends('barcode')
     def _computeBarcode(self):

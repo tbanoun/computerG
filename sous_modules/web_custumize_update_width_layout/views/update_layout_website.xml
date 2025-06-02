@@ -7,4 +7,25 @@
             </div>
         </div>
     </template>
+
+
+    <record id="address_custom" model="ir.ui.view">
+        <field name="name">address_custom</field>
+        <field name="inherit_id" search="[('key', '=', 'website_sale.cart_summary')]"/>
+        <field name="type">qweb</field>
+        <field name="key">web_custumize_update_width_layout.address_custom</field>
+        <field name="arch" type="xml">
+            <xpath expr="//table[@id='cart_products']" position="inside">
+                <style>
+                    @media (min-width: 1200px) {
+                    .oe_website_sale .toggle_summary_div {
+                    max-width: 900px !important;
+                    }
+                    }
+                </style>
+            </xpath>
+        </field>
+    </record>
 </odoo>
+
+

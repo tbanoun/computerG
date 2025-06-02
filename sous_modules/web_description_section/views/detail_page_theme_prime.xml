@@ -5,7 +5,7 @@
         <field name="name">product_item_grid_2_nce</field>
         <field name="inherit_id" search="[('key', '=', 'theme_prime.product_tabs')]"/>
         <field name="type">qweb</field>
-        <field name="key">web_custumize_computerG.override_product_tabs</field>
+        <field name="key">web_description_section.override_product_tabs</field>
         <field name="arch" type="xml">
 
             <xpath expr="//div[@class='tab-content']" position="replace">
