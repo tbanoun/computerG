@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="cart_sidebar" model="ir.ui.view">
+        <field name="name">product_item_list_1</field>
+        <field name="inherit_id" search="[('key', '=', 'theme_prime.cart_sidebar')]"/>
+        <field name="type">qweb</field>
+        <field name="key">web_custumize_computerG.cart_sidebar</field>
+        <field name="arch" type="xml">
+            <xpath expr="//h6" position="after">
+                <span>
+                    <strong>SKU:</strong>
+                    <strong t-field="line.product_id.default_code"/>
+                </span>
+            </xpath>
+        </field>
+    </record>
+
+
+</odoo>
