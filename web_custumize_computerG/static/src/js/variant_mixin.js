@@ -53,13 +53,14 @@ odoo.define('web_custumize_computerG.VariantMixin', function (require) {
         }
     };
 
-//    if (productInfo.show_qty) {
-//                $('#messageQty3').html(`<span>${qty} Units |</span>`);
-//                }
-//            }
     VariantMixin._insertOutOfStockMessageDetailPage = function(productInfo, qty, continue_seling) {
         if (productInfo.out_of_stock_message) {
             if (continue_seling) {
+            if (productInfo.show_qty) {
+                  console.log('qty', qty)
+//                $('#messageQty3').html(`<span>${qty} Units |</span>`);
+                }
+            }
             $('#messageDelevryTime3').html(`<span class='cls-sahrane'>${productInfo.out_of_stock_message}</span>`);
 
             //update style delivery message
