@@ -236,6 +236,48 @@ class ResConfigSettings(models.TransientModel):
 
     def resetProductInformation(self):
         products = self.env['product.template'].sudo().search([
+            ('supplier_id', '!=', 'other')
+        ])
+        kosatec_data = self.openKosatecFile()
+        google_data = self.openGoogleFile()
+        siewert_ku_data = self.opensiewertKuFile()
+        dataframes_google_data = [
+            ('google_data', google_data),
+        ]
+        dataframes_kosatec_data = [
+            ('kosatec_data', kosatec_data),
+        ]
+        dataframes_siewert_ku_data = [
+            ('siewert_ku_data', siewert_ku_data)
+        ]
+        for product in products:
+            google_vals = googleCheckAvalableProductOnData(dataframes_google_data, product)
+            kosatec_vals = kosatecCheckAvalableProductOnData(dataframes_kosatec_data, product)
+            siewert_vals = sewertKuCheckAvalableProductOnData(dataframes_siewert_ku_data, product)
+            # qty = google_vals.get('qty', 0) + kosatec_vals.get('qty', 0) + siewert_vals.get('qty', 0)
+            qty = extract_value(google_vals.get('qty')) + extract_value(kosatec_vals.get('qty')) + extract_value(
+                siewert_vals.get('qty'))
+            if qty <= 0:
+                product.sudo().is_published = False
+            else:
+                product.sudo().is_published = True
+            product.sudo().standard_price = 0
+            self.updateQtyStockProduct(product, 0)
+        notification = {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': _('Succès'),
+                'type': 'info',
+                'message': f"The operation was successful!",
+                'sticky': False,
+            }
+        }
+        return notification
+
+
+    def updateMessageDelivery(self):
+        products = self.env['product.template'].sudo().search([
 
         ])
         for product in products:
@@ -263,4 +305,3 @@ class ResConfigSettings(models.TransientModel):
             }
         }
         return notification
-
