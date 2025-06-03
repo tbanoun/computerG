@@ -72,6 +72,38 @@ class ImportProductConfig(models.Model):
     active = fields.Boolean(default=True)
     start_update = fields.Boolean(default=False)
 
+
+    def updateMessageDelivery(self):
+        products = self.env['product.template'].sudo().search([
+
+        ])
+        for product in products:
+            try:
+                product.write(
+                    {
+                        'out_of_stock_message': '3 Weeks Delivery',
+                        'show_availability': True,
+                        'showDelivryMessage': True,
+                        'messageDelivryTimeRemoteStock': 'Ship 4-8 Days',
+                        'messageDelivryTimeStock': 'Ship 1-2 Days',
+
+                    }
+                )
+            except Exception as e:
+                continue
+        notification = {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': _('Succès'),
+                'type': 'info',
+                'message': f"The operation was successful!",
+                'sticky': False,
+            }
+        }
+        return notification
+
+
     def _camputeStockLocation(self):
         stock_location_id = self.env['ir.config_parameter'].sudo().get_param(
             'config_supplier_csv_cronjob.stock_supplier_id')

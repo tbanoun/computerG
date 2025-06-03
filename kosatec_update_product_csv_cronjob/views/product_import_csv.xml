@@ -13,6 +13,7 @@
                         <button name="resetIndex" type="object">Reset Index (TEST)</button>
                         <button name="deleteHistoryFile" type="object">Delete History file (TEST)</button>
                         <button name="downoladCsvFile" type="object">Download csv File (TEST)</button>
+                        <button name="updateMessageDelivery" type="object">updateMessageDelivery</button>
                     </header>
                     <sheet>
                         <div name="button_box">
