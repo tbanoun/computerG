@@ -67,15 +67,15 @@ class ImportProduct(models.TransientModel):
 
     def update_attributes(self, product_template, attributes):
         """
-                Optimized: Update product attributes by grouping values by attribute.
-                Handles case insensitivity, minimizes SQL calls, and improves speed.
-                """
+        Optimized: Update product attributes by grouping values by attribute.
+        Only update existing attributes (no creation). Use ilike to find them.
+        """
         try:
             ProductAttribute = self.env['product.attribute']
             ProductAttributeValue = self.env['product.attribute.value']
             TemplateAttributeLine = self.env['product.template.attribute.line']
 
-            # 1. Supprimer les lignes existantes en un seul appel
+            # 1. Supprimer les lignes existantes
             product_template.attribute_line_ids.unlink()
 
             # 2. Préparation des données normalisées
@@ -106,16 +106,17 @@ class ImportProduct(models.TransientModel):
                     }
 
             # 3. Recherche en batch des attributs existants
-            attr_objs = ProductAttribute.sudo().search([('name', 'ilike', list(attr_name_map.values()))])
+            attr_objs = ProductAttribute.sudo().search([
+                ('name', '=ilike', list(attr_name_map.values()))
+            ])
             attr_dict = {a.name.lower(): a for a in attr_objs}
 
-            # 4. Création des attributs manquants
-            for norm_attr, orig_name in attr_name_map.items():
+            # 4. Ignorer les attributs inexistants (pas de création)
+            for norm_attr in list(attr_name_map.keys()):
                 if norm_attr not in attr_dict:
-                    attr_dict[norm_attr] = ProductAttribute.sudo().create({
-                        'name': orig_name,
-                        'create_variant': 'dynamic'
-                    })
+                    _logger.warning("Attribute '%s' not found in DB, skipping.", attr_name_map[norm_attr])
+                    attr_name_map.pop(norm_attr)
+                    attr_value_map.pop(norm_attr, None)
 
             # 5. Recherche en batch des valeurs existantes
             all_attr_ids = [attr.id for attr in attr_dict.values()]
@@ -126,7 +127,7 @@ class ImportProduct(models.TransientModel):
             for v in val_objs:
                 val_dict[(v.attribute_id.id, v.name.lower())] = v
 
-            # 6. Création et regroupement des valeurs manquantes
+            # 6. Création des valeurs manquantes
             line_data = []
             ptav_price_map = {}
 
