@@ -1,6 +1,6 @@
 odoo.define('web_custumize_computerG.VariantMixin', function (require) {
     'use strict';
-     console.log("Custom VariantMixin loading...");
+    console.log("Custom VariantMixin loading...");
     var VariantMixin = require('sale.VariantMixin');
     var ajax = require('web.ajax');
     var session = require('web.session');
@@ -56,9 +56,8 @@ odoo.define('web_custumize_computerG.VariantMixin', function (require) {
     VariantMixin._insertOutOfStockMessageDetailPage = function(productInfo, qty, continue_seling) {
         if (productInfo.out_of_stock_message) {
             if (continue_seling) {
-            if (productInfo.show_qty) {
-                  console.log('qty', qty)
-//                $('#messageQty3').html(`<span>${qty} Units |</span>`);
+                if (productInfo.show_qty) {
+                    console.log('qty', qty)
                 }
             }
             $('#messageDelevryTime3').html(`<span class='cls-sahrane'>${productInfo.out_of_stock_message}</span>`);
@@ -105,96 +104,80 @@ odoo.define('web_custumize_computerG.VariantMixin', function (require) {
 
             return ajax.jsonRpc('/api/get_product_info', 'call', {
                 product_id: productId,
-            }).then((productInfo) => {
-            const $infoMessage1 = $('#informationQtyMessageDelivery1');
-            const $infoMessage2 = $('#informationQtyMessageDelivery2');
-            const $infoMessage3 = $('#informationQtyMessageDelivery3');
-            const infoMessageEl1 = $infoMessage1[0];
-            const infoMessageEl2 = $infoMessage2[0];
-            const infoMessageEl3 = $infoMessage3[0];
+            }).then(function(productInfo) {
+                const $infoMessage1 = $('#informationQtyMessageDelivery1');
+                const $infoMessage2 = $('#informationQtyMessageDelivery2');
+                const $infoMessage3 = $('#informationQtyMessageDelivery3');
+                const infoMessageEl1 = $infoMessage1[0];
+                const infoMessageEl2 = $infoMessage2[0];
+                const infoMessageEl3 = $infoMessage3[0];
 
-            const showDelivryMessage = productInfo.showDelivryMessage;
-            const continue_seling = productInfo.continue_seling;
-            const virtual_available_product_tmpl_id = productInfo.virtual_available_product_tmpl_id;
-            if (virtual_available_product_tmpl_id > 0){
-                var virtual_available = productInfo.virtual_available > 0 ? productInfo.virtual_available : 0;
-            }
-            else{
-                var virtual_available = 0;
-            }
+                const showDelivryMessage = productInfo.showDelivryMessage;
+                const continue_seling = productInfo.continue_seling;
+                const virtual_available_product_tmpl_id = productInfo.virtual_available_product_tmpl_id;
 
-            var qty_available_wt = 0;
-            if (showDelivryMessage){
-            var qty_available_wt = productInfo.qty_available_wt > 0 ? productInfo.qty_available_wt : 0;
-           }
-            const allQuantity = qty_available_wt + virtual_available
+                var virtual_available;
+                if (virtual_available_product_tmpl_id > 0) {
+                    virtual_available = productInfo.virtual_available > 0 ? productInfo.virtual_available : 0;
+                } else {
+                    virtual_available = 0;
+                }
 
-            if (addQty  >= allQuantity && !productInfo.continue_seling){
-               const addToCartLink = document.querySelector('a.btn.btn-link.float_left.js_add_cart_json');
-                    // Applique les styles pour le désactiver
+                var qty_available_wt = 0;
+                if (showDelivryMessage) {
+                    qty_available_wt = productInfo.qty_available_wt > 0 ? productInfo.qty_available_wt : 0;
+                }
+                const allQuantity = qty_available_wt + virtual_available;
+
+                if (addQty >= allQuantity && !productInfo.continue_seling) {
+                    const addToCartLink = document.querySelector('a.btn.btn-link.float_left.js_add_cart_json');
                     if (addToCartLink) {
                         addToCartLink.style.pointerEvents = 'none';
                         addToCartLink.style.cursor = 'not-allowed';
-                        // Optionnel : Ajouter un style visuel (grisé)
                         addToCartLink.style.opacity = '0.5';
                     }
                     if (addQty > allQuantity) {
                         $parent.find('input[name="add_qty"]').val(allQuantity);
-                        addQty = allQuantity
+                        addQty = allQuantity;
                     }
-            }
-            else{
+                } else {
                     const addToCartLink = document.querySelector('a.btn.btn-link.float_left.js_add_cart_json');
-                    // Applique les styles pour le désactiver
                     if (addToCartLink) {
                         addToCartLink.style.pointerEvents = 'auto';
                         addToCartLink.style.cursor = 'pointer';
                         addToCartLink.style.opacity = '1';
                     }
-            }
-            if (!productInfo) {
-                $infoMessage.html(`<span/>`);
-                return;
-            }
-            const $outOfStockMsg = $('#out_of_stock_message');
-            const $threshold_message = $('#threshold_message');
+                }
 
-            if ($outOfStockMsg.length) {
-                $outOfStockMsg.hide();
-            }
-            if ($threshold_message.length) {
-                $threshold_message.hide();
-            }
-            console.log('$outOfStockMsg', $outOfStockMsg)
-            console.log('addQty Jinja', addQty)
-            const qtyReset = addQty - (virtual_available + qty_available_wt);
-            console.log('virtual_available', virtual_available)
-            console.log('qty_available_wt', qty_available_wt)
-            console.log('qtyReset', qtyReset)
-            infoMessageEl1.style.setProperty('display', 'none', 'important');
-            infoMessageEl2.style.setProperty('display', 'none', 'important');
-            infoMessageEl3.style.setProperty('display', 'none', 'important');
-            var checkShowDeliveryMessage = false
-            if (virtual_available > 0) {
-                this._insertDelevryMessageDetailPage(productInfo);
-//                if (qty_available_wt > 0) {
-//                    this._insertDelevryRemoteMessageDetailPage(productInfo);
-//                    if (qtyReset > 0) {
-//                        this._insertOutOfStockMessageDetailPage(productInfo, qtyReset, continue_seling);
-//                    }
-//                }else if(addQty > virtual_available){
-//                    this._insertOutOfStockMessageDetailPage(productInfo, qtyReset, continue_seling);
-//                }
-            }else if (qty_available_wt > 0 && virtual_available <= 0) {
-                this._insertDelevryRemoteMessageDetailPage(productInfo);
-//                if (addQty > (virtual_available + qty_available_wt)) {
-//                    this._insertOutOfStockMessageDetailPage(productInfo, qtyReset, continue_seling);
-//                }
-            }
-            else {
-                this._insertOutOfStockMessageDetailPage(productInfo, qtyReset, continue_seling);
-            }
-            });
+                if (!productInfo) {
+                    $infoMessage1.html(`<span/>`);
+                    return;
+                }
+
+                const $outOfStockMsg = $('#out_of_stock_message');
+                const $threshold_message = $('#threshold_message');
+
+                if ($outOfStockMsg.length) {
+                    $outOfStockMsg.hide();
+                }
+                if ($threshold_message.length) {
+                    $threshold_message.hide();
+                }
+
+                const qtyReset = addQty - (virtual_available + qty_available_wt);
+
+                infoMessageEl1.style.setProperty('display', 'none', 'important');
+                infoMessageEl2.style.setProperty('display', 'none', 'important');
+                infoMessageEl3.style.setProperty('display', 'none', 'important');
+
+                if (virtual_available > 0) {
+                    this._insertDelevryMessageDetailPage(productInfo);
+                } else if (qty_available_wt > 0 && virtual_available <= 0) {
+                    this._insertDelevryRemoteMessageDetailPage(productInfo);
+                } else {
+                    this._insertOutOfStockMessageDetailPage(productInfo, qtyReset, continue_seling);
+                }
+            }.bind(this));
         }.bind(this));
     };
 
