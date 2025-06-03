@@ -8,8 +8,8 @@
         <field name="arch" type="xml">
             <xpath expr="//h6" position="after">
                 <span>
-                    <strong>SKU:</strong>
-                    <strong t-field="line.product_id.default_code"/>
+                    <span>SKU:</span>
+                    <span t-field="line.product_id.default_code"/>
                 </span>
             </xpath>
         </field>

@@ -9,8 +9,8 @@
             <xpath expr="//table[@id='cart_products']//tbody//td[@class='td-product_name']//div" position="inside">
                 <br/>
                 <span>
-                    <strong>SKU:</strong>
-                    <strong t-field="line.product_id.default_code"/>
+                    <span>SKU:</span>
+                    <span t-field="line.product_id.default_code"/>
                 </span>
             </xpath>
         </field>
