@@ -33,8 +33,9 @@ class ImportProduct(models.TransientModel):
         for rec in result:
             product_id = rec.get('ID', None)
             if not product_id: continue
-            if "END" != product_id:
+            if "end" != product_id.lower():
                 created = False
+                print(f'\n\n product_id ==> {product_id} \n\n')
                 print(f'\n\n rec ==> {rec} \n\n')
                 try:
                     product_template = self.env.ref(product_id)
@@ -67,14 +68,12 @@ class ImportProduct(models.TransientModel):
 
     def update_attributes(self, product_template, attributes):
         """
-                Optimized: Update product attributes by grouping values by attribute.
-                Handles case insensitivity, minimizes SQL calls, and improves speed.
-                """
+        Optimized: Update product attributes using only existing attributes in database.
+        Handles case insensitivity, minimizes SQL calls, and improves speed.
+        """
         try:
             ProductAttribute = self.env['product.attribute']
             ProductAttributeValue = self.env['product.attribute.value']
-            TemplateAttributeLine = self.env['product.template.attribute.line']
-
             # 1. Supprimer les lignes existantes en un seul appel
             product_template.attribute_line_ids.unlink()
 
@@ -105,19 +104,25 @@ class ImportProduct(models.TransientModel):
                         "price": float(val.get("price", 0))
                     }
 
-            # 3. Recherche en batch des attributs existants
-            attr_objs = ProductAttribute.sudo().search([('name', 'ilike', list(attr_name_map.values()))])
+            # 3. Recherche en batch des attributs existants seulement
+            attr_objs = ProductAttribute.sudo().search([('name', 'in', list(attr_name_map.values()))])
             attr_dict = {a.name.lower(): a for a in attr_objs}
 
-            # 4. Création des attributs manquants
-            for norm_attr, orig_name in attr_name_map.items():
-                if norm_attr not in attr_dict:
-                    attr_dict[norm_attr] = ProductAttribute.sudo().create({
-                        'name': orig_name,
-                        'create_variant': 'dynamic'
-                    })
+            print('________________________________________________')
+            print('attr_name_map', attr_name_map.values())
+            print('\n')
+            print('attr_dict', attr_dict)
+            print('\n')
+            print('attr_objs', attr_objs)
+            print('________________________________________________')
 
-            # 5. Recherche en batch des valeurs existantes
+
+            # Ne pas créer de nouveaux attributs - utiliser seulement ceux qui existent
+            # Supprimer les attributs non trouvés de nos maps
+            attr_name_map = {k: v for k, v in attr_name_map.items() if k in attr_dict}
+            attr_value_map = {k: v for k, v in attr_value_map.items() if k in attr_dict}
+
+            # 4. Recherche en batch des valeurs existantes
             all_attr_ids = [attr.id for attr in attr_dict.values()]
             val_objs = ProductAttributeValue.sudo().search([
                 ('attribute_id', 'in', all_attr_ids)
@@ -126,7 +131,7 @@ class ImportProduct(models.TransientModel):
             for v in val_objs:
                 val_dict[(v.attribute_id.id, v.name.lower())] = v
 
-            # 6. Création et regroupement des valeurs manquantes
+            # 5. Création et regroupement des valeurs (seulement pour les attributs existants)
             line_data = []
             ptav_price_map = {}
 
@@ -138,28 +143,23 @@ class ImportProduct(models.TransientModel):
                     key = (attr.id, norm_val)
                     val_obj = val_dict.get(key)
 
-                    if not val_obj:
-                        val_obj = ProductAttributeValue.sudo().create({
-                            'name': val_info['name'],
-                            'attribute_id': attr.id
-                        })
-                        val_dict[key] = val_obj
+                    if val_obj:  # Utiliser seulement les valeurs existantes
+                        value_ids.append(val_obj.id)
+                        ptav_price_map[val_obj.id] = val_info['price']
 
-                    value_ids.append(val_obj.id)
-                    ptav_price_map[val_obj.id] = val_info['price']
+                if value_ids:  # Ne créer des lignes que si on a des valeurs
+                    line_data.append((0, 0, {
+                        'attribute_id': attr.id,
+                        'value_ids': [(6, 0, value_ids)],
+                    }))
 
-                line_data.append((0, 0, {
-                    'attribute_id': attr.id,
-                    'value_ids': [(6, 0, value_ids)],
-                }))
-
-            # 7. Création des lignes d'attributs groupées
+            # 6. Création des lignes d'attributs groupées
             if line_data:
                 product_template.write({
                     'attribute_line_ids': line_data
                 })
 
-            # 8. Mise à jour des prix des variantes
+            # 7. Mise à jour des prix des variantes
             for line in product_template.attribute_line_ids:
                 for ptav in line.product_template_value_ids:
                     val_id = ptav.product_attribute_value_id.id
@@ -172,6 +172,7 @@ class ImportProduct(models.TransientModel):
         except Exception as e:
             _logger.exception("Error updating attributes")
             raise
+
 
     def update_list_vendors(self, product_template, vendors):
         # delete seller_ids line on product
