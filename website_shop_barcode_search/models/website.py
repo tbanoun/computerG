@@ -84,7 +84,8 @@ class ProductTemplate(models.Model):
 
     barcode2 = fields.Char(related="barcode")
     out_of_stock_message = fields.Char(string="Out-of-Stock Message")
-
+    qty_available_wt = fields.Float(string="Qty Available WT")
+    
     @api.depends('barcode')
     def _computeBarcode(self):
         for rec in self:
