@@ -43,7 +43,8 @@ class ProductTemplate(models.Model):
             print(f'continue_seling : {rec.allow_out_of_stock_order}')
             print('\n\n')
 
-    out_of_stock_message = fields.Char(string="Out-of-Stock Message")
+    out_of_stock_message = fields.Char(string="Out-of-Stock Message", default='3 Weeks Delivery')
+    show_availability = fields.Boolean(string='Show availability Qty', default=True)
     showDelivryMessage = fields.Boolean(default=True)
     messageDelivryTimeRemoteStock = fields.Char('Delivery Time – Remote Stock Message', default='Ship 4-8 Days')
     messageDelivryTimeStock = fields.Char('Delivery Time – Stock Message', default='Ship 1-2 Days')
