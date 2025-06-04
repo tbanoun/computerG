@@ -7,10 +7,6 @@
                 <script type="module" src="/web_custumize_computerG/static/src/js/variant_mixin.js"></script>
             </xpath>
             <xpath expr="//div[@id='o_wsale_cta_wrapper']" position="after">
-                <br/>
-                <p t-field="o.user_id.name" class="m-0"/>
-                <p t-field="o.user_id.country_id.name" class="m-0"/>
-                <br/>
                 <t t-set="notShowbtn" t-value="True"/>
                 <div class="d-flex align-items-start">
                     <style>
