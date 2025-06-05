@@ -100,7 +100,7 @@
                                             width: fit-content !important;
                                             border-radius: 4px !important; /* Nouvelle valeur */
                                             color: #6F1152 !important; /* Correction de F6F1152 en #6F1152 */
-                                            font-size: 10pt !important; /* Nouvelle taille */
+                                            font-size: 9pt !important; /* Nouvelle taille */
                                             border: 0.5px solid #6F1152 !important; /* Nouvelle couleur + taille de bordure */
 "
                                           class="ml-2 text-right alert alert-success w-40">
@@ -125,7 +125,7 @@
     width: fit-content !important;
     border-radius: 4px !important;
     color: #5E5216 !important;
-    font-size: 10pt !important;
+    font-size: 9pt !important;
     border: 0.5px solid #5E5216 !important;
                                                     "
                                           class="ml-2 text-right alert alert-warning w-40">
