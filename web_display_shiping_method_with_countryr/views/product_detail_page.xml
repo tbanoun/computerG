@@ -3,8 +3,9 @@
     <data>
 
         <template id="product" inherit_id="website_sale.product">
-            <xpath expr="//div[@class='tp-product-info-hook']" position="before">
+            <xpath expr="//div[@id='product_option_block']" position="after">
                 <!--display shiping method and country-->
+                <br/>
                 <div class="d-flex flex-column" style="gap: 5px;">
                     <span style="
                            font-family: 'Poppins', sans-serif !important;
