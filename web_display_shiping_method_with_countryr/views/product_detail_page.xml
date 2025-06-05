@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <template id="product" inherit_id="website_sale.product">
+            <xpath expr="//div[@id='o_wsale_cta_wrapper']" position="after">
+                <!--display shiping method and country-->
+                <div class="d-flex flex-column" style="gap: 5px;">
+                    <span style="
+                           font-family: 'Poppins', sans-serif !important;
+                            font-weight: 500 !important; /* Poppins Medium */
+                            background: rgba(255, 252, 238, 0.5) !important; /* BG Color: #FFFCEE, opacity 50% */
+                            padding: 0.4rem 0.6rem !important;
+                            width: fit-content !important;
+                            border-radius: 4px !important;
+                            color: #5E5216 !important; /* Font color */
+                            font-size: 12px !important; /* Font size 12 */
+                            border: 0.5px solid #5E5216 !important; /* Border color and size */
+                            ">
+                        <span>
+                            <t t-if="country_code not in ('CY', 'GR')">
+                                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                                Shipping to
+                                <b t-out="country"/>
+                                via <b>FEDEX</b> = €10
+                                <br/>
+                                <span style="margin-left: 13px !important;">
+                                    Delivered to your Door in less than <b>48hrs</b>.
+                                </span>
+                            </t>
+                            <t t-elif="country_code in ('CY')">
+                                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                                <b>Free</b>
+                                Shipping via
+                                <b>Akis Express.</b>
+                            </t>
+                            <t t-elif="country_code in ('GR')">
+                                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                                <b>Free</b>
+                                Shipping via to <b t-out="country"/> via <b>FEDEX</b>
+                                <br/>
+                                <span style="margin-left: 13px !important;">
+                                    Delivered to your Door in less than <b>48hrs</b>.
+                                </span>
+                            </t>
+                        </span>
+
+                    </span>
+                </div>
+            </xpath>
+        </template>
+
+
+        <!--update title reference internal-->
+        <!--        <record id="product_extra_fields" model="ir.ui.view">-->
+        <!--            <field name="name">address_custom</field>-->
+        <!--            <field name="inherit_id" search="[('key', '=', 'theme_prime.product_extra_fields')]"/>-->
+        <!--            <field name="type">qweb</field>-->
+        <!--            <field name="key">web_custumize_computerG.product_extra_fields</field>-->
+        <!--            <field name="arch" type="xml">-->
+        <!--                <xpath expr="//h6[@class='me-1 d-inline-block mb-0']" position="replace">-->
+        <!--                    <h6 class="me-1 d-inline-block mb-0">-->
+        <!--                        <t t-set="field_name" t-value="field.dr_label or field.label"/>-->
+        <!--                        <t t-set="field_name"-->
+        <!--                           t-value="field_name.replace('Référence interne :', 'SKU').replace('Référence interne', 'SKU').replace('internal Reference', 'SKU').replace('Internal Reference', 'SKU')"/>-->
+        <!--                        <t t-out="field_name"/>-->
+        <!--                        :-->
+        <!--                    </h6>-->
+        <!--                </xpath>-->
+        <!--            </field>-->
+        <!--        </record>-->
+
+    </data>
+</odoo>
