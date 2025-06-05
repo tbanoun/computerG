@@ -76,13 +76,13 @@ odoo.define('web_custumize_computerG.VariantMixin', function (require) {
                 infoMessageEl.removeAttribute('style');
                 infoMessageEl.style.setProperty('font-family', "'Poppins', sans-serif", 'important');
                 infoMessageEl.style.setProperty('font-weight', '600', 'important'); // Poppins Semi Bold
-                infoMessageEl.style.setProperty('background', 'rgba(255, 252, 238, 0.5)', 'important'); // #FFFCEE avec 50% opacité
+                infoMessageEl.style.setProperty('background', 'rgba(255, 232, 238, 0.5)', 'important'); // #FFFCEE avec 50% opacité
                 infoMessageEl.style.setProperty('padding', '0.4rem 0.6rem', 'important');
                 infoMessageEl.style.setProperty('width', 'fit-content', 'important');
                 infoMessageEl.style.setProperty('border-radius', '4px', 'important');
-                infoMessageEl.style.setProperty('color', '#5E5216', 'important');
+                infoMessageEl.style.setProperty('color', '#F45454', 'important');
                 infoMessageEl.style.setProperty('font-size', '10pt', 'important');
-                infoMessageEl.style.setProperty('border', '0.5px solid #5E5216', 'important');
+                infoMessageEl.style.setProperty('border', '0.5px solid #F45454', 'important');
                 infoMessageEl.style.setProperty('display', 'block', 'important');
             }
         }
