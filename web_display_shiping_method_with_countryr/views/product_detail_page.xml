@@ -3,7 +3,8 @@
     <data>
 
         <template id="product" inherit_id="website_sale.product">
-            <xpath expr="//div[@id='product_option_block']" position="after">
+<!--            <xpath expr="//div[@id='product_option_block']" position="after">-->
+            <xpath expr="//div[@id='delevery_message']" position="after">
                 <!--display shiping method and country-->
                 <br/>
                 <div class="d-flex flex-column" style="gap: 5px;">
