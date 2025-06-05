@@ -7,7 +7,7 @@
     'summary': "This module allows you to display available shipping methods based on the customer's selected delivery country, enhancing transparency and improving user experience during the checkout process.",
     'category': 'Theme/eCommerce',
     'version': '16.0.0.0.1',
-    'depends': ['website_sale'],
+    'depends': ['website_sale', 'web_custumize_computerG'],
     'license': 'OPL-1',
     'author': 'SoftG',
     'website': 'softg.dev',
