@@ -32,17 +32,17 @@ class ProductInfoController(http.Controller):
         duration = None
         company_shiping = None
         amount_shiping = None
-        if country_code:
-            shiping_method_id = request.env['delivery.carrier'].sudo().search(
-                [
-                    ('country_ids.code', '=', country_code)
-                ]
-            ,limit=1
-            )
-            if shiping_method_id:
-                duration = shiping_method_id.shiping_duration
-                company_shiping = shiping_method_id.company_shiping.name
-                amount_shiping = shiping_method_id.amount_shiping
+        # if country_code:
+        #     shiping_method_id = request.env['delivery.carrier'].sudo().search(
+        #         [
+        #             ('country_ids.code', '=', country_code)
+        #         ]
+        #     ,limit=1
+        #     )
+        #     if shiping_method_id:
+        #         duration = shiping_method_id.shiping_duration
+        #         company_shiping = shiping_method_id.company_shiping.name
+        #         amount_shiping = shiping_method_id.amount_shiping
 
 
 

@@ -18,7 +18,7 @@ odoo.define('web_custumize_computerG.VariantMixin', function (require) {
             const infoMessageEl = $infoMessage[0];
             if (infoMessageEl) {
                 $infoMessage.removeClass('alert-success').addClass('alert-warning');
-//                infoMessageEl.style.setProperty('font-family', "'Poppins', sans-serif", 'important');
+                infoMessageEl.style.setProperty('font-family', "'Poppins', sans-serif", 'important');
                 infoMessageEl.style.setProperty('font-weight', '500', 'important');
                 infoMessageEl.style.setProperty('background', 'rgba(246, 242, 250, 0.5)', 'important');
                 infoMessageEl.style.setProperty('padding', '0.4rem 0.6rem', 'important');
@@ -42,7 +42,7 @@ odoo.define('web_custumize_computerG.VariantMixin', function (require) {
             const $infoMessage = $('#informationQtyMessageDelivery1');
             const infoMessageEl = $infoMessage[0];if (infoMessageEl) {
                 $infoMessage.removeClass('alert-warning').addClass('alert-success');
-//                infoMessageEl.style.setProperty('font-family', "'Poppins', sans-serif", 'important');
+                infoMessageEl.style.setProperty('font-family', "'Poppins', sans-serif", 'important');
                 infoMessageEl.style.setProperty('font-weight', '500', 'important');
                 infoMessageEl.style.setProperty('background', 'rgba(242, 250, 246, 0.5)', 'important'); // F2FAF6 avec 50% d'opacité
                 infoMessageEl.style.setProperty('padding', '0.4rem 0.6rem', 'important');
@@ -74,7 +74,7 @@ odoo.define('web_custumize_computerG.VariantMixin', function (require) {
                     .addClass('alert-warning');
 
                 infoMessageEl.removeAttribute('style');
-//                infoMessageEl.style.setProperty('font-family', "'Poppins', sans-serif", 'important');
+                infoMessageEl.style.setProperty('font-family', "'Poppins', sans-serif", 'important');
                 infoMessageEl.style.setProperty('font-weight', '600', 'important'); // Poppins Semi Bold
                 infoMessageEl.style.setProperty('background', 'rgba(255, 252, 238, 0.5)', 'important'); // #FFFCEE avec 50% opacité
                 infoMessageEl.style.setProperty('padding', '0.4rem 0.6rem', 'important');
