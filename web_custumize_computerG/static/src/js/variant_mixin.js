@@ -9,7 +9,7 @@ odoo.define('web_custumize_computerG.VariantMixin', function (require) {
     VariantMixin._insertDelevryRemoteMessageDetailPage = function(productInfo) {
         if (productInfo.messageDelivryTimeRemoteStock) {
             if (productInfo.show_qty) {
-                $('#messageQty2').html(`<span>${productInfo.qty_available_wt} Units In Remote Stock |</span>`);
+                $('#messageQty2').html(`<span>${productInfo.qty_available_wt} Units in Remote Stock |</span>`);
             }
 
             $('#messageDelevryTime2').html(`<span>${productInfo.messageDelivryTimeRemoteStock}</span>`);
@@ -35,7 +35,7 @@ odoo.define('web_custumize_computerG.VariantMixin', function (require) {
     VariantMixin._insertDelevryMessageDetailPage = function(productInfo) {
         if (productInfo.messageDelivryTimeStock) {
             if (productInfo.show_qty) {
-                $('#messageQty1').html(`<span>${productInfo.virtual_available} Units In Stock |</span>`);
+                $('#messageQty1').html(`<span>${productInfo.virtual_available} Units in Stock |</span>`);
             }
             $('#messageDelevryTime1').html(`<span>${productInfo.messageDelivryTimeStock}</span>`);
 
