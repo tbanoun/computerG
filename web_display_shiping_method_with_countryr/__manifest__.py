@@ -3,12 +3,11 @@
 
 {
     'name': 'Display shiping method with countryr',
-    'description': '''The web_customize_computerg module consolidates all modified web features implemented on your Odoo website. This includes enhancements like customizable delivery messages and tailored invoice reports, improving communication and documentation processes. It provides a centralized solution to manage various web customizations for a better user and customer experience.''',
-    'summary': 'The module web_customize_computerg includes all customized web functionalities such as delivery messages and invoice reports.',
+    'description': '''This module extends Odoo's delivery/shipping functionality by dynamically showing the appropriate shipping methods according to the country selected by the customer.''',
+    'summary': "This module allows you to display available shipping methods based on the customer's selected delivery country, enhancing transparency and improving user experience during the checkout process.",
     'category': 'Theme/eCommerce',
     'version': '16.0.0.0.1',
-    'depends': ['web', 'theme_prime', 'sale', 'config_supplier_csv_cronjob', 'website', 'website_sale',
-                'website_sale_stock'],
+    'depends': ['website_sale'],
     'license': 'OPL-1',
     'author': 'SoftG',
     'website': 'softg.dev',
@@ -16,7 +15,7 @@
     'Email': 'Odoo@softg.dev',
     'website': 'https://digitalai.academy/',
     'images': [
-        'static/description/prime_cover.png',
+        'static/description/icon.png',
     ],
     'data': [
         # website
