@@ -3,7 +3,7 @@
     <data>
 
         <template id="product" inherit_id="website_sale.product">
-<!--            <xpath expr="//div[@id='product_option_block']" position="after">-->
+            <!--            <xpath expr="//div[@id='product_option_block']" position="after">-->
             <xpath expr="//div[@id='delevery_message']" position="after">
                 <!--display shiping method and country-->
                 <div style="gap: 5px; margin-top: 12px !important;" class="d-flex flex-wrap w-100">
@@ -38,7 +38,10 @@
                             <t t-elif="country_code in ('GR')">
                                 <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
                                 <b>Free</b>
-                                Shipping via to <b t-out="country"/> via <b>FEDEX</b>
+                                Shipping via to
+                                <b t-out="country"/>
+                                via
+                                <b>FEDEX</b>
                                 <br/>
                                 <span style="margin-left: 13px !important;">
                                     Delivered to your Door in less than <b>48hrs</b>.
@@ -47,6 +50,23 @@
                         </span>
 
                     </span>
+                </div>
+            </xpath>
+
+            <!--show icons-->
+            <xpath expr="//div[@id='delevery_message']" position="before">
+                <style>
+                    .clsIcon{
+                        margin-left: 10px;"
+                    }
+                </style>
+                <div style="gap: 5px; margin-top: 0px !important;" class="d-flex flex-wrap w-100">
+                    <img src="/web_display_shiping_method_with_countryr/static/description/icons/google.jpeg" height="29px" width="35px"/>
+                    <img class="clsIcon" src="/web_display_shiping_method_with_countryr/static/description/icons/ipad.jpeg" height="29px" width="25px"/>
+                    <img class="clsIcon" src="/web_display_shiping_method_with_countryr/static/description/icons/paypal.jpeg" height="29px" width="25px"/>
+                    <img class="clsIcon" src="/web_display_shiping_method_with_countryr/static/description/icons/visa.jpeg" height="29px" width="25px"/>
+                    <img class="clsIcon" src="/web_display_shiping_method_with_countryr/static/description/icons/mastercard.jpeg" height="29px" width="25px"/>
+                    <img class="clsIcon" src="/web_display_shiping_method_with_countryr/static/description/icons/american.jpeg" height="29px" width="25px"/>
                 </div>
             </xpath>
         </template>
