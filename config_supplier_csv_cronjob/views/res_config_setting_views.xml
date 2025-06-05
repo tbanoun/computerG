@@ -15,14 +15,9 @@
                         </group>
                         <div class="row">
                             <div class="col-6">
-                                <button class="btn-primary" name="updateMessageDelivery" type="object"
+                                <button class="btn-primary" name="resetProductInformation" type="object"
                                         string="Reset Product Information"
                                         help="Reinitialize quantity and price to zero"/>
-                            </div>
-                            <div class="col-6">
-                                <button class="btn-primary" name="updateMessageDelivery" type="object"
-                                        string="updateMessageDelivery"
-                                        help="updateMessageDelivery"/>
                             </div>
                         </div>
 
