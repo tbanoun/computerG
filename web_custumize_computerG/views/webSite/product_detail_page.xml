@@ -4,7 +4,7 @@
 
         <template id="product" inherit_id="website_sale.product">
             <xpath expr="." position="inside">
-                <script type="module" src="/web_custumize_computerG/static/src/js/variant_mixin_duplicate.js"></script>
+                <script type="module" src="/web_custumize_computerG/static/src/js/variant_mixin.js"></script>
             </xpath>
             <xpath expr="//div[@id='o_wsale_cta_wrapper']" position="after">
                 <t t-set="notShowbtn" t-value="True"/>
