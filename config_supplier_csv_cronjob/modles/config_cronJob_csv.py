@@ -260,7 +260,7 @@ class ResConfigSettings(models.TransientModel):
             if qty <= 0:
                 product.sudo().is_published = False
             else:
-                product.sudo().is_published = True
+                product.sudo().is_published = False
             product.sudo().standard_price = 0
             self.updateQtyStockProduct(product, 0)
         notification = {
