@@ -8,7 +8,7 @@
     'category': 'Theme/eCommerce',
     'version': '16.0.0.0.1',
     'depends': ['web', 'theme_prime', 'sale', 'config_supplier_csv_cronjob', 'website', 'website_sale',
-                'website_sale_stock'],
+                'website_sale_stock', 'website_sale_wishlist'],
     'license': 'OPL-1',
     'author': 'SoftG',
     'website': 'softg.dev',

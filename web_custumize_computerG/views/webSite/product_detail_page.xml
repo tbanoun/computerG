@@ -2,10 +2,54 @@
 <odoo>
     <data>
 
+
+        <template id="my_custom_product_wishlist" inherit_id="website_sale.product" name="Custom Wishlist Button"
+                  priority="100">
+            <xpath expr="//button[@data-action='o_wishlist']" position="replace">
+            </xpath>
+
+            <xpath expr="//div[@id='add_to_cart_wrap']" position="replace">
+                <div id="add_to_cart_wrap"
+                     t-attf-class="{{'d-none' if combination_info['prevent_zero_price_sale'] else 'd-inline-flex'}} align-items-center mb-2 me-auto">
+                    <a data-animation-selector=".o_wsale_product_images" role="button" id="add_to_cart"
+                       t-attf-class="btn btn-primary js_check_product a-submit flex-grow-1 #{'btn-lg' if ctaSizeBig else ''}"
+                       href="#">
+                        <i class="fa fa-shopping-cart me-2"/>
+                        <span style="font-weight: bold">ADD TO CART</span>
+                    </a>
+
+                    <div style="margin-left: 10px !important;">
+
+                    </div>
+                    <t t-nocache="The wishlist depends on the user and must not be shared with other users. The product come from the controller.">
+                        <t t-set="product_variant"
+                           t-value="product_variant or product._create_first_product_variant()"/>
+                        <t t-set="in_wish" t-value="product_variant and product_variant._is_in_wishlist()"/>
+                        <button t-if="product_variant" type="button" role="button"
+                                class="btn btn-link o_add_wishlist_dyn"
+                                t-att-disabled='in_wish or None'
+                                t-att-data-product-template-id="product.id"
+                                t-att-data-product-product-id="product_variant.id"
+                                data-action="o_wishlist"
+                                title="Add to wishlist"
+                                style="border: 1px solid #5bbcd4; height: 44px; width: 53px; display: inline-flex; align-items: center; justify-content: center; padding: 0; text-decoration: none;">
+                            <i class="fa fa-heart-o" role="img" aria-label="Add to wishlist"
+                               style="color: #2D3544; text-decoration: none;"/>
+                        </button>
+
+
+                    </t>
+                </div>
+            </xpath>
+
+        </template>
+
+
         <template id="product" inherit_id="website_sale.product">
             <xpath expr="." position="inside">
                 <script type="module" src="/web_custumize_computerG/static/src/js/variant_mixin.js"></script>
             </xpath>
+
             <xpath expr="//div[@id='product_option_block']" position="after">
                 <t t-set="notShowbtn" t-value="True"/>
                 <div class="d-flex flex-wrap w-100" id="delevery_message" style="margin-top: 5px ! important;">
@@ -21,7 +65,8 @@
                               class="alert alert-success py-1 px-2 mb-0">
                             <t t-if="request.env.user.property_product_pricelist.showQtyOnStock">
                                 <span id="messageGroup">
-                                    <img class="clsIcon" src="/web_custumize_computerG/static/description/in_stock.png" height="20" width="20"/>
+                                    <img class="clsIcon" src="/web_custumize_computerG/static/description/in_stock.png"
+                                         height="20" width="20"/>
                                     <span id="messageQty1"/>
                                 </span>
                             </t>
@@ -33,7 +78,8 @@
                               class="alert alert-success py-1 px-2 mb-0">
                             <t t-if="request.env.user.property_product_pricelist.showQtyOnStock">
                                 <span id="messageGroup">
-                                    <img src="/web_custumize_computerG/static/description/in_remote.png" height="20" width="20"/>
+                                    <img src="/web_custumize_computerG/static/description/in_remote.png" height="20"
+                                         width="20"/>
                                     <span id="messageQty2"/>
                                 </span>
                             </t>
@@ -45,7 +91,8 @@
                               class="alert alert-success py-1 px-2 mb-0">
                             <t t-if="request.env.user.property_product_pricelist.showQtyOnStock">
                                 <span id="messageGroup">
-                                    <img src="/web_custumize_computerG/static/description/out_of_stock.png" height="20" width="20"/>
+                                    <img src="/web_custumize_computerG/static/description/out_of_stock.png" height="20"
+                                         width="20"/>
                                     <span id="messageQty3"/>
                                 </span>
                             </t>
