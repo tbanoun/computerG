@@ -6,7 +6,7 @@
 <!--            <xpath expr="//div[@id='product_option_block']" position="after">-->
             <xpath expr="//div[@id='delevery_message']" position="after">
                 <!--display shiping method and country-->
-                <div style="gap: 5px; display: block !important; margin-top: 12px !important;" class="d-flex flex-wrap w-100">
+                <div style="gap: 5px; margin-top: 12px !important;" class="d-flex flex-wrap w-100">
                     <span style="
                            font-family: 'Poppins', sans-serif !important;
                             font-weight: 500 !important; /* Poppins Medium */
