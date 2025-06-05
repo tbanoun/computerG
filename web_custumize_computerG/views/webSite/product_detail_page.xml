@@ -6,7 +6,7 @@
             <xpath expr="." position="inside">
                 <script type="module" src="/web_custumize_computerG/static/src/js/variant_mixin.js"></script>
             </xpath>
-            <xpath expr="//div[@id='product_option_block']" position="before">
+            <xpath expr="//div[@id='product_option_block']" position="after">
                 <t t-set="notShowbtn" t-value="True"/>
                 <div class="d-flex flex-wrap w-100" id="delevery_message">
                     <style>
