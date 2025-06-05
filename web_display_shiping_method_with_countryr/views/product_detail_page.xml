@@ -7,7 +7,7 @@
             <xpath expr="//div[@id='delevery_message']" position="after">
                 <!--display shiping method and country-->
                 <br/>
-                <div class="d-flex flex-column" style="gap: 5px;">
+                <div style="gap: 5px; display: block !important; margin-top: 12px !important;">
                     <span style="
                            font-family: 'Poppins', sans-serif !important;
                             font-weight: 500 !important; /* Poppins Medium */
