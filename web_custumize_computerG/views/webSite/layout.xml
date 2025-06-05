@@ -70,13 +70,17 @@
                             <div class="row mt-3 mb-3">
                                 <div class="col-12">
                                     <b>
-                                        <span style="font-weight: 500 !important;
-                background: #e5ffe978 !important;
-                padding: 0.4rem 0.6rem !important;
-                width: fit-content !important;
-                border-radius: 0.2rem !important;
-                color: #067d24 !important;
-                border: 1px solid #19a22f; !important"
+                                        <span style="
+                                                font-family: 'Poppins', sans-serif !important;
+                                                font-weight: 500 !important;
+                                                background: rgba(242, 250, 246, 0.5) !important; /* F2FAF6 avec 50% d'opacité */
+                                                padding: 0.4rem 0.6rem !important;
+                                                width: fit-content !important;
+                                                border-radius: 4px !important;
+                                                color: #116F41 !important; /* Nouvelle couleur de texte */
+                                                font-size: 10pt !important; /* Nouvelle taille de police */
+                                                border: 0.5px solid #116F41 !important; /* Nouvelle couleur + taille de bordure */
+"
                                               class="ml-2 text-right alert alert-success w-40">
                                             <span class="cls-sahrane">
                                                 <span class="cls-sahrane" t-esc="int(virtual_available)"/>
@@ -95,13 +99,16 @@
                             <div class="col-12 mt-3 mb-3">
                                 <b>
                                     <span style="
-                font-weight: 500 !important;
-                background: #FFF0E8 !important;
-                padding: 0.4rem 0.6rem !important;
-                width: fit-content !important;
-                border-radius: 0.2rem !important;
-                color: #803D19 !important;
-                border: 1px solid #803D19; !important"
+font-family: 'Poppins', sans-serif !important;
+    font-weight: 500 !important;
+    background: rgba(246, 242, 250, 0.5) !important; /* F6F2FA avec 50% d'opacité */
+    padding: 0.4rem 0.6rem !important;
+    width: fit-content !important;
+    border-radius: 4px !important; /* Nouvelle valeur */
+    color: #6F1152 !important; /* Correction de F6F1152 en #6F1152 */
+    font-size: 10pt !important; /* Nouvelle taille */
+    border: 0.5px solid #6F1152 !important; /* Nouvelle couleur + taille de bordure */
+"
                                           class="ml-2 text-right alert alert-success w-40">
                                         <span t-esc="int(qty_available_wt)"/>
                                         Units In Remote Stock |
@@ -117,13 +124,15 @@
                             <div class="col-12 mt-3 mb-3">
                                 <b>
                                     <span style="
-                                                    font-weight: 500 !important;
-                                                    background: #fcf2f2 !important;
-                                                    padding: 0.4rem 0.6rem !important;
-                                                    width: fit-content !important;
-                                                    border-radius: 0.2rem !important;
-                                                    color: #DA020E !important;
-                                                    border: 1px solid #DA020E; !important
+                                                    font-family: 'Poppins', sans-serif !important;
+    font-weight: 600 !important; /* Poppins Semi Bold */
+    background: rgba(255, 252, 238, 0.5) !important;
+    padding: 0.4rem 0.6rem !important;
+    width: fit-content !important;
+    border-radius: 4px !important;
+    color: #5E5216 !important;
+    font-size: 10pt !important;
+    border: 0.5px solid #5E5216 !important;
                                                     "
                                           class="ml-2 text-right alert alert-warning w-40">
                                         <t t-if="line.product_id.continue_seling">

@@ -18,14 +18,16 @@ odoo.define('web_custumize_computerG.VariantMixin', function (require) {
             const infoMessageEl = $infoMessage[0];
             if (infoMessageEl) {
                 $infoMessage.removeClass('alert-success').addClass('alert-warning');
-                infoMessageEl.style.setProperty('background', '#FFF0E8', 'important');
-                infoMessageEl.style.setProperty('display', 'block', 'important');
-                infoMessageEl.style.setProperty('color', '#803D19', 'important');
-                infoMessageEl.style.setProperty('border', '1px solid #803D19', 'important');
+                infoMessageEl.style.setProperty('font-family', "'Poppins', sans-serif", 'important');
                 infoMessageEl.style.setProperty('font-weight', '500', 'important');
-                infoMessageEl.style.setProperty('padding', '0.4rem', 'important');
+                infoMessageEl.style.setProperty('background', 'rgba(246, 242, 250, 0.5)', 'important');
+                infoMessageEl.style.setProperty('padding', '0.4rem 0.6rem', 'important');
                 infoMessageEl.style.setProperty('width', 'fit-content', 'important');
-                infoMessageEl.style.setProperty('border-radius', '0.2rem', 'important');
+                infoMessageEl.style.setProperty('border-radius', '4px', 'important');
+                infoMessageEl.style.setProperty('color', '#6F1152', 'important');
+                infoMessageEl.style.setProperty('font-size', '10pt', 'important');
+                infoMessageEl.style.setProperty('border', '0.5px solid #6F1152', 'important');
+                infoMessageEl.style.setProperty('display', 'block', 'important');
             }
         }
     };
@@ -38,17 +40,18 @@ odoo.define('web_custumize_computerG.VariantMixin', function (require) {
             $('#messageDelevryTime1').html(`<span>${productInfo.messageDelivryTimeStock}</span>`);
 
             const $infoMessage = $('#informationQtyMessageDelivery1');
-            const infoMessageEl = $infoMessage[0];
-            if (infoMessageEl) {
+            const infoMessageEl = $infoMessage[0];if (infoMessageEl) {
                 $infoMessage.removeClass('alert-warning').addClass('alert-success');
-                infoMessageEl.style.setProperty('background', '#e5ffe978', 'important');
-                infoMessageEl.style.setProperty('display', 'block', 'important');
-                infoMessageEl.style.setProperty('color', '#067d24', 'important');
-                infoMessageEl.style.setProperty('border', '1px solid #19a22f', 'important');
+                infoMessageEl.style.setProperty('font-family', "'Poppins', sans-serif", 'important');
                 infoMessageEl.style.setProperty('font-weight', '500', 'important');
-                infoMessageEl.style.setProperty('padding', '0.4rem', 'important');
+                infoMessageEl.style.setProperty('background', 'rgba(242, 250, 246, 0.5)', 'important'); // F2FAF6 avec 50% d'opacité
+                infoMessageEl.style.setProperty('padding', '0.4rem 0.6rem', 'important');
                 infoMessageEl.style.setProperty('width', 'fit-content', 'important');
-                infoMessageEl.style.setProperty('border-radius', '0.2rem', 'important');
+                infoMessageEl.style.setProperty('border-radius', '4px', 'important');
+                infoMessageEl.style.setProperty('color', '#116F41', 'important');
+                infoMessageEl.style.setProperty('font-size', '10pt', 'important');
+                infoMessageEl.style.setProperty('border', '0.5px solid #116F41', 'important');
+                infoMessageEl.style.setProperty('display', 'block', 'important');
             }
         }
     };
@@ -69,15 +72,18 @@ odoo.define('web_custumize_computerG.VariantMixin', function (require) {
                 $infoMessage
                     .removeClass('alert-success')
                     .addClass('alert-warning');
+
                 infoMessageEl.removeAttribute('style');
-                infoMessageEl.style.setProperty('background', '#fcf2f2', 'important');
-                infoMessageEl.style.setProperty('display', 'block', 'important');
-                infoMessageEl.style.setProperty('color', '#DA020E', 'important');
-                infoMessageEl.style.setProperty('border', '1px solid #DA020E', 'important');
-                infoMessageEl.style.setProperty('font-weight', '500', 'important');
-                infoMessageEl.style.setProperty('padding', '0.4rem', 'important');
+                infoMessageEl.style.setProperty('font-family', "'Poppins', sans-serif", 'important');
+                infoMessageEl.style.setProperty('font-weight', '600', 'important'); // Poppins Semi Bold
+                infoMessageEl.style.setProperty('background', 'rgba(255, 252, 238, 0.5)', 'important'); // #FFFCEE avec 50% opacité
+                infoMessageEl.style.setProperty('padding', '0.4rem 0.6rem', 'important');
                 infoMessageEl.style.setProperty('width', 'fit-content', 'important');
-                infoMessageEl.style.setProperty('border-radius', '0.2rem', 'important');
+                infoMessageEl.style.setProperty('border-radius', '4px', 'important');
+                infoMessageEl.style.setProperty('color', '#5E5216', 'important');
+                infoMessageEl.style.setProperty('font-size', '10pt', 'important');
+                infoMessageEl.style.setProperty('border', '0.5px solid #5E5216', 'important');
+                infoMessageEl.style.setProperty('display', 'block', 'important');
             }
         }
     };
