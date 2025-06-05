@@ -13,8 +13,6 @@ class ProductInfoController(http.Controller):
         product = request.env['product.product'].sudo().browse(int(product_id))
 
         # Détection du pays
-        country_name = ''
-        country_code = ''
         country_name = request.env.user.partner_id.country_id.name
         country_code = request.env.user.partner_id.country_id.code
         if not country_name:
@@ -30,6 +28,24 @@ class ProductInfoController(http.Controller):
                     result = response.json()
                     country_code = result.get('country_code')
                     country_name = result.get('country_name')
+        # get the shiping method
+        duration = None
+        company_shiping = None
+        amount_shiping = None
+        if country_code:
+            shiping_method_id = request.env['delivery.carrier'].sudo().search(
+                [
+                    ('country_ids.code', '=', country_code)
+                ]
+            ,limit=1
+            )
+            if shiping_method_id:
+                duration = shiping_method_id.shiping_duration
+                company_shiping = shiping_method_id.company_shiping.name
+                amount_shiping = shiping_method_id.amount_shiping
+
+
+
 
 
         result =  {
@@ -46,6 +62,9 @@ class ProductInfoController(http.Controller):
             'show_qty': product.product_tmpl_id.show_availability if product.product_tmpl_id.show_availability else False,
             'country': country_name,
             'country_code': country_code,
+            'duration': duration,
+            'company_shiping': company_shiping,
+            'amount_shiping': amount_shiping,
         }
 
         print(f'\n\n country ==> {country_name} \n\n')

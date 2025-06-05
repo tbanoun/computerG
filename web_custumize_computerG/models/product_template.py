@@ -29,20 +29,6 @@ class ProductTemplate(models.Model):
             else:
                 rec.allow_out_of_stock_order = True
 
-
-            _logger.warning(f'Name : {rec.name}')
-            _logger.warning(f'virtual_available : {virtual_available}')
-            _logger.warning(f'qty_available_wt : {qty_available_wt}')
-            _logger.warning(f'continue_seling : {rec.continue_seling}')
-            _logger.warning(f'allow_out_of_stock_order : {rec.allow_out_of_stock_order}')
-            print('\n\n')
-            print(f'Name : {rec.name}')
-            print(f'virtual_available : {virtual_available}')
-            print(f'qty_available_wt : {qty_available_wt}')
-            print(f'continue_seling : {rec.continue_seling}')
-            print(f'continue_seling : {rec.allow_out_of_stock_order}')
-            print('\n\n')
-
     out_of_stock_message = fields.Char(string="Out-of-Stock Message", default='3 Weeks Delivery')
     show_availability = fields.Boolean(string='Show availability Qty', default=True)
     showDelivryMessage = fields.Boolean(default=True)
