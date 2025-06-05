@@ -21,6 +21,7 @@
                               class="alert alert-success py-1 px-2 mb-0">
                             <t t-if="request.env.user.property_product_pricelist.showQtyOnStock">
                                 <span id="messageGroup">
+                                    <img class="clsIcon" src="/web_custumize_computerG/static/description/image.png" height="29px" width="25px"/>
                                     <span id="messageQty1"/>
                                 </span>
                             </t>
@@ -32,6 +33,7 @@
                               class="alert alert-success py-1 px-2 mb-0">
                             <t t-if="request.env.user.property_product_pricelist.showQtyOnStock">
                                 <span id="messageGroup">
+                                    <img class="clsIcon" src="/web_custumize_computerG/static/description/image.png" height="29px" width="25px"/>
                                     <span id="messageQty2"/>
                                 </span>
                             </t>
@@ -43,6 +45,7 @@
                               class="alert alert-success py-1 px-2 mb-0">
                             <t t-if="request.env.user.property_product_pricelist.showQtyOnStock">
                                 <span id="messageGroup">
+                                    <img class="clsIcon" src="/web_custumize_computerG/static/description/image.png" height="29px" width="25px"/>
                                     <span id="messageQty3"/>
                                 </span>
                             </t>
