@@ -88,7 +88,7 @@
                                                   class="ml-2 text-right alert alert-success w-40">
                                                 <span class="cls-sahrane">
                                                     <span class="cls-sahrane" t-esc="int(virtual_available)"/>
-                                                    Units In Stock |
+                                                    Units in Stock |
                                                 </span>
                                                 <span class="cls-sahrane"
                                                       t-esc="line.product_id.messageDelivryTimeStock">
@@ -115,7 +115,7 @@
 "
                                               class="ml-2 text-right alert alert-success w-40">
                                             <span t-esc="int(qty_available_wt)"/>
-                                            Units In Remote Stock |
+                                            Units in Remote Stock |
                                             <span class="cls-sahrane"
                                                   t-esc="line.product_id.messageDelivryTimeRemoteStock">
                                             </span>

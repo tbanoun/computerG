@@ -73,13 +73,13 @@
                                                 width: fit-content !important;
                                                 border-radius: 4px !important;
                                                 color: #116F41 !important; /* Nouvelle couleur de texte */
-                                                font-size: 10pt !important; /* Nouvelle taille de police */
+                                                font-size: 9pt !important; /* Nouvelle taille de police */
                                                 border: 0.5px solid #116F41 !important; /* Nouvelle couleur + taille de bordure */
                                             "
                                               class="ml-2 text-right alert alert-success w-40">
                                             <span class="cls-sahrane">
                                                 <span class="cls-sahrane" t-esc="int(virtual_available)"/>
-                                                Units In Stock |
+                                                Units in Stock |
                                             </span>
                                             <span class="cls-sahrane" t-esc="line.product_id.messageDelivryTimeStock">
                                             </span>
@@ -105,7 +105,7 @@
 "
                                           class="ml-2 text-right alert alert-success w-40">
                                         <span t-esc="int(qty_available_wt)"/>
-                                        Units In Remote Stock |
+                                        Units in Remote Stock |
                                         <span class="cls-sahrane"
                                               t-esc="line.product_id.messageDelivryTimeRemoteStock">
                                         </span>
