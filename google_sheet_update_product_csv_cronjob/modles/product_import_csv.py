@@ -349,6 +349,7 @@ class ImportProductConfig(models.Model):
                 self.index = index
                 break
             manufacturerID = f"{row.get('EAN')}"
+            print(f'\n\n manufacturerID : {manufacturerID}\n\n')
             manufacturerID = manufacturerID.replace(".0", "")
             if not manufacturerID: continue
             category = row.get('Category1')
@@ -450,7 +451,7 @@ class ImportProductConfig(models.Model):
         selectCategory = self.selectCategoryName()
         print('selectCategory', selectCategory)
         for index, row in df_filtered.iterrows():
-            # print(f"Index: {index}, ProductID: {row['ProductID']}, ManufacturerID: {row['ManufacturerID']}")
+            print(f"Index: {index}, ProductID: {row['ProductID']}, ManufacturerID: {row['EAN']}")
             i += 1
             manufacturerID = row.get('EAN')
             manufacturerID = str(manufacturerID).replace(".0", "").replace(".00", "")
@@ -461,8 +462,9 @@ class ImportProductConfig(models.Model):
             if category.lower() not in selectCategory: continue
             availableQuantity = row.get('AvailableQuantity')
             AvailableNextQuantity = 0
-            if not isinstance(availableQuantity, float): continue
-            availableQuantity += AvailableNextQuantity
+            print(f'\n\n availableQuantity : {availableQuantity}, type :{type(availableQuantity)} \n\n')
+            # if not isinstance(availableQuantity, float) or  not isinstance(availableQuantity, int): continue
+            print('OK')
             # select product on odoo database
             product_id = self.env['product.template'].sudo().search([
                 ('barcode', 'ilike', manufacturerID)
