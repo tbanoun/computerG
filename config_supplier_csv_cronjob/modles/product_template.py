@@ -4,7 +4,8 @@ from io import StringIO, BytesIO
 import csv
 import pandas as pd
 
-
+from datetime import datetime
+from datetime import date
 
 GOOGLE_ID = 1
 KOSATEC_ID = 1
@@ -254,7 +255,7 @@ class ProductTemplate(models.Model):
             print(e)
         return google_data
 
-    def updateQtyStockProduct(self, product_id, availableQuantity):
+    def resetQtyStockProduct(self, product_id, availableQuantity):
         """ function to update qty product on supplier wherehouse """
 
         stock_location_id = self.env['ir.config_parameter'].sudo().get_param(
@@ -281,13 +282,21 @@ class ProductTemplate(models.Model):
         return True
 
     def resetProductInformation(self):
+        datetime_now = datetime.now()
+        if not (3 <= datetime_now.hour < 4): return False
+        reset_quantity_supplier = self.env['ir.config_parameter'].sudo().get_param(
+            'config_supplier_csv_cronjob.reset_quantity_supplier')
+        if reset_quantity_supplier != False: return False
         products = self.env['product.template'].sudo().search([
             ('supplier_id', '!=', 'other')
         ])
         for product in products:
             product.sudo().is_published = False
             product.sudo().standard_price = 0
-            self.updateQtyStockProduct(product, 0)
+            self.resetQtyStockProduct(product, 0)
+        self.env['ir.config_parameter'].sudo().set_param(
+            'config_supplier_csv_cronjob.reset_quantity_supplier', '1'
+        )
 
     def updateMessageDelivery(self):
         products = self.env['product.template'].sudo().search([

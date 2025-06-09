@@ -157,6 +157,8 @@ class ResConfigSettings(models.TransientModel):
     stock_supplier_id = fields.Many2one("stock.location",
                                         config_parameter='config_supplier_csv_cronjob.stock_supplier_id')
 
+    reset_quantity_supplier = fields.Boolean(config_parameter='config_supplier_csv_cronjob.reset_quantity_supplier', default=False)
+
     def openKosatecFile(self):
         # open file kosatec
         kosatec_data = None
@@ -235,6 +237,9 @@ class ResConfigSettings(models.TransientModel):
         return True
 
     def resetProductInformation(self):
+        self.env['ir.config_parameter'].sudo().set_param(
+            'config_supplier_csv_cronjob.reset_quantity_supplier', '1'
+        )
         products = self.env['product.template'].sudo().search([
             ('supplier_id', '!=', 'other')
         ])

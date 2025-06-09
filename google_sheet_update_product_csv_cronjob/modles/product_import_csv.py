@@ -318,6 +318,9 @@ class ImportProductConfig(models.Model):
         return True
 
     def startCronJob(self):
+        self.env['ir.config_parameter'].sudo().set_param(
+            'config_supplier_csv_cronjob.reset_quantity_supplier', '0'
+        )
         datetime_now = datetime.now()
         if not (5 <= datetime_now.hour < 7): return False
         cron_id = self.env['google.product.import.csv'].sudo().browse(1)
@@ -427,6 +430,9 @@ class ImportProductConfig(models.Model):
         return True
 
     def startScriptUsingButtonTest(self):
+        self.env['ir.config_parameter'].sudo().set_param(
+            'config_supplier_csv_cronjob.reset_quantity_supplier', '0'
+        )
         if not self.file_csv: return
         if not self.file_csv:
             _logger.warning("Aucun fichier CSV n'est disponible pour le traitement.")
@@ -494,14 +500,16 @@ class ImportProductConfig(models.Model):
                 if supplier_id:
                     product_id.sudo().supplier_id = supplier_id.lower()
                 product_id.sudo().is_published = True
-                if product_id.sudo().standard_price == 0 or product_id.sudo().standard_price > convert_comma_decimal_to_float(row.get('NetPrice')):
+                if product_id.sudo().standard_price == 0 or product_id.sudo().standard_price > convert_comma_decimal_to_float(
+                        row.get('NetPrice')):
                     product_id.sudo().standard_price = convert_comma_decimal_to_float(row.get('NetPrice'))
             # step unpublished
             elif availableQuantity <= 0 and product_id and product_id.qty_available <= 0:
                 self.createUpdateCsvFile("delete", row)
                 self.updateQtyStockProduct(product_id, availableQuantity)
                 product_id.sudo().is_published = False
-                if product_id.sudo().standard_price == 0 or product_id.sudo().standard_price > convert_comma_decimal_to_float(row.get('NetPrice')):
+                if product_id.sudo().standard_price == 0 or product_id.sudo().standard_price > convert_comma_decimal_to_float(
+                        row.get('NetPrice')):
                     product_id.sudo().standard_price = convert_comma_decimal_to_float(row.get('NetPrice'))
 
             if i >= 1000 or index + 1 == self.max_products:
