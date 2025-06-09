@@ -23,7 +23,7 @@ odoo.define('web_custumize_computerG.VariantMixin', function (require) {
                 infoMessageEl.style.setProperty('background', 'rgba(246, 242, 250, 0.5)', 'important');
                 infoMessageEl.style.setProperty('padding', '0.4rem 0.6rem', 'important');
 //                infoMessageEl.style.setProperty('width', 'fit-content', 'important');
-                infoMessageEl.style.setProperty('width', '503px', 'important');
+                infoMessageEl.style.setProperty('width', '515px', 'important');
                 infoMessageEl.style.setProperty('border-radius', '4px', 'important');
                 infoMessageEl.style.setProperty('color', '#6F1152', 'important');
                 infoMessageEl.style.setProperty('font-size', '10pt', 'important');
@@ -48,7 +48,7 @@ odoo.define('web_custumize_computerG.VariantMixin', function (require) {
                 infoMessageEl.style.setProperty('background', 'rgba(242, 250, 246, 0.5)', 'important'); // F2FAF6 avec 50% d'opacité
                 infoMessageEl.style.setProperty('padding', '0.4rem 0.6rem', 'important');
 //                infoMessageEl.style.setProperty('width', 'fit-content', 'important');
-infoMessageEl.style.setProperty('width', '503px', 'important');
+infoMessageEl.style.setProperty('width', '515px', 'important');
                 infoMessageEl.style.setProperty('border-radius', '4px', 'important');
                 infoMessageEl.style.setProperty('color', '#116F41', 'important');
                 infoMessageEl.style.setProperty('font-size', '10pt', 'important');
@@ -81,7 +81,7 @@ infoMessageEl.style.setProperty('width', '503px', 'important');
                 infoMessageEl.style.setProperty('background', 'rgba(255, 232, 238, 0.5)', 'important'); // #FFFCEE avec 50% opacité
                 infoMessageEl.style.setProperty('padding', '0.4rem 0.6rem', 'important');
 //                infoMessageEl.style.setProperty('width', 'fit-content', 'important');
-infoMessageEl.style.setProperty('width', '503px', 'important');
+                infoMessageEl.style.setProperty('width', '515px', 'important');
                 infoMessageEl.style.setProperty('border-radius', '4px', 'important');
                 infoMessageEl.style.setProperty('color', '#F45454', 'important');
                 infoMessageEl.style.setProperty('font-size', '10pt', 'important');

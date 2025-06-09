@@ -292,8 +292,8 @@ class ResConfigSettings(models.TransientModel):
                         'out_of_stock_message': '3 Weeks Delivery',
                         # 'show_availability': True,
                         # 'showDelivryMessage': True,
-                        'messageDelivryTimeRemoteStock': 'Ship 4-8 Days',
-                        'messageDelivryTimeStock': 'Ship 1-2 Days',
+                        'messageDelivryTimeRemoteStock': 'Ship in 2-3 Days',
+                        'messageDelivryTimeStock': 'Ship in 1-2 Days',
 
                     }
                 )
