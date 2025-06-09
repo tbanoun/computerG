@@ -34,7 +34,7 @@
                                 t-att-data-product-product-id="product_variant.id"
                                 data-action="o_wishlist"
                                 title="Add to wishlist"
-                                style="border: 1px solid #5bbcd4; height: 44px; width: 53px; display: inline-flex; align-items: center; justify-content: center; padding: 0; text-decoration: none;">
+                                style="border: 1px solid #BFCAD9; height: 44px; width: 53px; display: inline-flex; align-items: center; justify-content: center; padding: 0; text-decoration: none;">
                             <i class="fa fa-heart-o" role="img" aria-label="Add to wishlist"
                                style="color: #2D3544; text-decoration: none;"/>
                         </button>
