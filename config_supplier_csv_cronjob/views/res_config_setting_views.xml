@@ -19,6 +19,11 @@
                                         string="Reset Product Information"
                                         help="Reinitialize quantity and price to zero"/>
                             </div>
+                            <div class="col-6">
+                                <button class="btn-primary" name="updateMessageDelivery" type="object"
+                                        string="Update Delivery Message"
+                                        help="Reinitialize quantity and price to zero"/>
+                            </div>
                         </div>
 
 

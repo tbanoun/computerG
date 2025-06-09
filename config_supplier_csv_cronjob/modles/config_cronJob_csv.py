@@ -290,8 +290,8 @@ class ResConfigSettings(models.TransientModel):
                 product.write(
                     {
                         'out_of_stock_message': '3 Weeks Delivery',
-                        'show_availability': True,
-                        'showDelivryMessage': True,
+                        # 'show_availability': True,
+                        # 'showDelivryMessage': True,
                         'messageDelivryTimeRemoteStock': 'Ship 4-8 Days',
                         'messageDelivryTimeStock': 'Ship 1-2 Days',
 
