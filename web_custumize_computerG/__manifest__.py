@@ -35,8 +35,8 @@
         'views/product_pricelist.xml',
 
         # reports
-        # 'reports/update_invoice.xml',
-        # 'reports/update_delivery_note.xml',
+        'reports/update_invoice.xml',
+        'reports/update_delivery_note.xml',
     ],
     'installable': True,
     'application': True,
