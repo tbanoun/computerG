@@ -82,7 +82,7 @@
                         <span style="
                                     font-weight: 500 !important;
                                     width: fit-content !important;
-                                    color: #803D19 !important;
+                                    color: #6F1152 !important;
                                     ">
 
                             <b>
@@ -112,8 +112,8 @@
                             <b>
                                 <t t-if="line.continue_seling">
                                     <span class="cls-sahrane" t-esc="int(qtyReset)"/>
+                                    Units |
                                 </t>
-                                Units |
                                 <span class="cls-sahrane"
                                       t-esc="line.product_id.product_tmpl_id.out_of_stock_message">
                                 </span>
