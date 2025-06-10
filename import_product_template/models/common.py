@@ -1,4 +1,6 @@
 import base64
+import logging
+
 import pandas as pd
 import io
 from datetime import datetime, date
@@ -76,6 +78,12 @@ def convertXlsOrCsvToDicts(file):
         if vendor_name:
             dite_start = parse_date(row.get('Vendors/Start Date', ''))
             dite_end = parse_date(row.get('Vendors/End Date', ''))
+            print(f'-----------------------------------------------------------------')
+            print(f'--------------\n dite_start : {dite_start} \n------------')
+            logging.warning(f'--------------\n dite_start : {dite_start} \n------------')
+            print(f'--------------\n dite_start type : {type(dite_start)} \n------------')
+            logging.warning(f'--------------\n dite_start type : {type(dite_start)} \n------------')
+            print(f'-----------------------------------------------------------------')
             vendor_info = {
                 'vendor_id': vendor_name,
                 'product_id': cleanSentence(row.get('Product Variant', '')).strip(),
