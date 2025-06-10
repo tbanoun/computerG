@@ -27,6 +27,7 @@ class SaleOrderLine(models.Model):
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
+    display_message = fields.Boolean(default=False)
     qtyWT = fields.Float()
     qtySu = fields.Float()
     showDelivryMessage = fields.Boolean()
@@ -61,6 +62,7 @@ class SaleOrderLine(models.Model):
             if product_id:
                 product_product_id = self.env['product.product'].sudo().browse(int(product_id))
                 if product_product_id:
+                    vals['display_message'] = True
                     vals['qtyWT'] = product_product_id.product_tmpl_id.virtual_available
                     vals['qtySu'] = product_product_id.product_tmpl_id.qty_available_wt
                     vals['showDelivryMessage'] = product_product_id.product_tmpl_id.showDelivryMessage
@@ -90,6 +92,7 @@ class SaleOrderLine(models.Model):
             'sale_line_ids': [Command.link(self.id)],
             'is_downpayment': self.is_downpayment,
             'qtyWT': self.qtyWT,
+            'display_message':True,
             'qtySu': self.qtySu,
             'showDelivryMessage': self.showDelivryMessage,
             'continue_seling': self.continue_seling,

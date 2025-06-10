@@ -132,7 +132,7 @@
                                 <t t-if="not line.display_type">
                                     <td name="td_name" style="border: none !important;">
                                         <span t-field="line.name"/>
-                                        <t t-if="line.product_id.detailed_type != 'service'">
+                                        <t t-if="line.product_id.detailed_type != 'service' and line.display_message">
                                             <br/>
                                             <!--1-->
                                             <!--init value-->

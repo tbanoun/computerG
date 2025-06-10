@@ -11,7 +11,7 @@
                 <span t-field="line.name"
                       t-options="{'widget': 'text'}"/>
                 <br/>
-                <t t-if="line.product_id.detailed_type != 'service'">
+                <t t-if="line.product_id.detailed_type != 'service' and line.display_message">
                     <!--1-->
                     <!--init value-->
                     <!--set showDelivryMessage-->
