@@ -38,7 +38,7 @@
                             <t t-elif="country_code in ('GR')">
                                 <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
                                 <b>Free</b>
-                                Shipping via to
+                                Shipping to
                                 <b t-out="country"/>
                                 via
                                 <b>FEDEX</b>
