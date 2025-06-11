@@ -54,21 +54,21 @@
             </xpath>
 
             <!--show icons-->
-            <xpath expr="//div[@id='delevery_message']" position="before">
-                <style>
-                    .clsIcon{
-                        margin-left: 10px;"
-                    }
-                </style>
-                <div style="gap: 5px; margin-top: 0px !important;" class="d-flex flex-wrap w-100">
-                    <img src="/web_display_shiping_method_with_countryr/static/description/icons/google.png" height="28" width="36"/>
-                    <img class="clsIcon" src="/web_display_shiping_method_with_countryr/static/description/icons/ipad.png" height="28" width="36"/>
-                    <img class="clsIcon" src="/web_display_shiping_method_with_countryr/static/description/icons/paypal.png" height="28" width="36"/>
-                    <img class="clsIcon" src="/web_display_shiping_method_with_countryr/static/description/icons/visa.png" height="28" width="36"/>
-                    <img class="clsIcon" src="/web_display_shiping_method_with_countryr/static/description/icons/mastercard.png" height="28" width="36"/>
-                    <img class="clsIcon" src="/web_display_shiping_method_with_countryr/static/description/icons/american.png" height="28" width="36"/>
-                </div>
-            </xpath>
+<!--            <xpath expr="//div[@id='delevery_message']" position="before">-->
+<!--                <style>-->
+<!--                    .clsIcon{-->
+<!--                        margin-left: 10px;"-->
+<!--                    }-->
+<!--                </style>-->
+<!--                <div style="gap: 5px; margin-top: 0px !important;" class="d-flex flex-wrap w-100">-->
+<!--                    <img src="/web_display_shiping_method_with_countryr/static/description/icons/google.png" height="28" width="36"/>-->
+<!--                    <img class="clsIcon" src="/web_display_shiping_method_with_countryr/static/description/icons/ipad.png" height="28" width="36"/>-->
+<!--                    <img class="clsIcon" src="/web_display_shiping_method_with_countryr/static/description/icons/paypal.png" height="28" width="36"/>-->
+<!--                    <img class="clsIcon" src="/web_display_shiping_method_with_countryr/static/description/icons/visa.png" height="28" width="36"/>-->
+<!--                    <img class="clsIcon" src="/web_display_shiping_method_with_countryr/static/description/icons/mastercard.png" height="28" width="36"/>-->
+<!--                    <img class="clsIcon" src="/web_display_shiping_method_with_countryr/static/description/icons/american.png" height="28" width="36"/>-->
+<!--                </div>-->
+<!--            </xpath>-->
         </template>
 
 
