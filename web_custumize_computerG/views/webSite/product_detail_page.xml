@@ -9,15 +9,35 @@
             </xpath>
 
             <xpath expr="//div[@id='add_to_cart_wrap']" position="replace">
+                <style>
+                    .cls-Custumize-btn{
+                    border: 2px solid #c9c9c9; height: 40px; width: 40px;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center; padding: 0;
+                    text-decoration: none;
+                    border-radius: 0.2rem;
+                    }
+                    ..cls-Custumize-btn-add-card{
+
+                    }
+                </style>
                 <div id="add_to_cart_wrap"
                      t-attf-class="{{'d-none' if combination_info['prevent_zero_price_sale'] else 'd-inline-flex'}} align-items-center mb-2 me-auto">
                     <a data-animation-selector=".o_wsale_product_images" role="button" id="add_to_cart"
                        t-attf-class="btn btn-primary js_check_product a-submit flex-grow-1 #{'btn-lg' if ctaSizeBig else ''}"
                        style="width: 308px !important;"
                        href="#">
-<!--                        <i class="fa fa-shopping-cart me-2"/>-->
-                        <span style="font-weight: bold">ADD TO CART</span>
-                        <img class="clsIcon" src="/web_custumize_computerG/static/icon/img.png" height="20" width="20"/>
+                        <!--                        <i class="fa fa-shopping-cart me-2"/>-->
+                        <span style="font-family: 'Poppins', sans-serif; font-weight: bold;">ADD TO CART</span>
+                        <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.49072 17.5C10.1811 17.5 10.7407 16.9404 10.7407 16.25C10.7407 15.5596 10.1811 15 9.49072 15C8.80037 15 8.24072 15.5596 8.24072 16.25C8.24072 16.9404 8.80037 17.5 9.49072 17.5Z"
+                                  fill="#F3F8FC"/>
+                            <path d="M15.3242 17.5C16.0146 17.5 16.5742 16.9404 16.5742 16.25C16.5742 15.5596 16.0146 15 15.3242 15C14.6339 15 14.0742 15.5596 14.0742 16.25C14.0742 16.9404 14.6339 17.5 15.3242 17.5Z"
+                                  fill="#F3F8FC"/>
+                            <path d="M18.2406 5.83334H6.85223L5.89056 3.525C5.76432 3.22096 5.55065 2.96123 5.27664 2.77876C5.00263 2.59628 4.68061 2.49926 4.35139 2.5H2.40723V4.16667H4.35223L8.30473 13.6542C8.43389 13.9642 8.73806 14.1667 9.07389 14.1667H15.7406C16.0881 14.1667 16.3989 13.9508 16.5214 13.6267L19.0214 6.96C19.0682 6.83383 19.0839 6.69822 19.0671 6.56469C19.0502 6.43116 19.0014 6.30367 18.9248 6.19306C18.8481 6.08244 18.7459 5.99198 18.6267 5.92935C18.5076 5.86672 18.3751 5.83378 18.2406 5.83334ZM12.4072 12.5L9.90723 10H11.5739V7.5H13.2406V10H14.9072L12.4072 12.5Z"
+                                  fill="#F3F8FC"/>
+                        </svg>
                     </a>
 
                     <div style="margin-left: 10px !important;">
@@ -28,15 +48,19 @@
                            t-value="product_variant or product._create_first_product_variant()"/>
                         <t t-set="in_wish" t-value="product_variant and product_variant._is_in_wishlist()"/>
                         <button t-if="product_variant" type="button" role="button"
-                                class="btn btn-link o_add_wishlist_dyn"
+                                class="btn btn-link o_add_wishlist_dyn cls-Custumize-btn"
                                 t-att-disabled='in_wish or None'
                                 t-att-data-product-template-id="product.id"
                                 t-att-data-product-product-id="product_variant.id"
                                 data-action="o_wishlist"
                                 title="Add to wishlist"
-                                style="border: 1px solid #BFCAD9; height: 44px; width: 53px; display: inline-flex; align-items: center; justify-content: center; padding: 0; text-decoration: none;">
-                            <i class="fa fa-heart-o" role="img" aria-label="Add to wishlist"
-                               style="color: #2D3544; text-decoration: none;"/>
+                        >
+                            <svg width="21" height="20" viewBox="0 0 21 20" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                      d="M15.6523 3.16753C17.3981 4.18503 18.6264 6.25086 18.5723 8.66086C18.5048 11.6692 16.1639 14.3225 12.1731 16.6925C11.5814 17.0442 10.9581 17.5 10.2406 17.5C9.53645 17.5 8.88645 17.0359 8.30728 16.6917C4.31812 14.3225 1.97645 11.6684 1.90895 8.66086C1.85478 6.25086 3.08312 4.18586 4.82895 3.16753C6.46228 2.21669 8.51395 2.21086 10.2406 3.61503C11.9673 2.21086 14.0189 2.21586 15.6523 3.16753ZM14.8131 4.60836C13.6514 3.9317 12.1998 3.95586 10.9431 5.22753C10.8511 5.3202 10.7417 5.39375 10.6211 5.44394C10.5005 5.49413 10.3712 5.51997 10.2406 5.51997C10.11 5.51997 9.98071 5.49413 9.86015 5.44394C9.73958 5.39375 9.63014 5.3202 9.53812 5.22753C8.28145 3.95586 6.82978 3.9317 5.66812 4.60836C4.46478 5.31003 3.53478 6.79836 3.57562 8.62503C3.62228 10.7175 5.27562 12.9534 9.15895 15.26C9.49895 15.4625 9.85395 15.7217 10.2406 15.8292C10.6273 15.7217 10.9823 15.4625 11.3223 15.26C15.2056 12.9534 16.8589 10.7184 16.9056 8.62419C16.9473 6.79919 16.0164 5.31003 14.8131 4.60836Z"
+                                      fill="#2D3544"/>
+                            </svg>
                         </button>
 
 
