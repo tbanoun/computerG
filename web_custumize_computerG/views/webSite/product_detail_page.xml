@@ -29,7 +29,7 @@
                        style="width: 308px !important;"
                        href="#">
                         <!--                        <i class="fa fa-shopping-cart me-2"/>-->
-                        <span style="font-family: 'Poppins', sans-serif !important; font-weight: bold;">Add to Cart
+                        <span style="font-family: 'Poppins', sans-serif !important; font-weight: 400;">Add to Cart
                         </span>
                         <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M9.49072 17.5C10.1811 17.5 10.7407 16.9404 10.7407 16.25C10.7407 15.5596 10.1811 15 9.49072 15C8.80037 15 8.24072 15.5596 8.24072 16.25C8.24072 16.9404 8.80037 17.5 9.49072 17.5Z"
