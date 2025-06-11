@@ -74,7 +74,8 @@
 
         <template id="product" inherit_id="website_sale.product">
             <xpath expr="." position="inside">
-                <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+                <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&amp;display=swap"
+                      rel="stylesheet"/>
                 <script type="module" src="/web_custumize_computerG/static/src/js/variant_mixin.js"></script>
             </xpath>
 
