@@ -17,16 +17,16 @@ class Website(models.Model):
     enable_geolocation_pricelist = fields.Boolean(string='Set pricelist based on customer\'s geolocation')
 
     def get_current_pricelist(self):
-        _logger.debug("Calling overridden get_current_pricelist()")
+        _logger.info("Calling overridden get_current_pricelist()")
         pricelist = super(Website, self).get_current_pricelist()
-        _logger.debug("Default pricelist: %s", pricelist.name if pricelist else "None")
+        _logger.info("Default pricelist: %s", pricelist.name if pricelist else "None")
         ip = request.httprequest.remote_addr
-        _logger.debug("Request Client IP: %s", ip)
+        _logger.info("Request Client IP: %s", ip)
         print(f"\n\n\n\n Request Client IP: {ip} \n\n\n")
         if request and request.session.get('geo_pricelist_id'):
             cached_pl = self.env['product.pricelist'].browse(request.session['geo_pricelist_id']).exists()
             if cached_pl:
-                _logger.debug("Returning cached geo pricelist from session: %s", cached_pl.name)
+                _logger.info("Returning cached geo pricelist from session: %s", cached_pl.name)
                 return cached_pl
 
 
@@ -38,17 +38,17 @@ class Website(models.Model):
 
                 print(f'\n\n\n HELLO {website_available_pricelist} \n\n\n\n')
 
-                _logger.debug("Available website pricelists count: %d", len(website_available_pricelist))
+                _logger.info("Available website pricelists count: %d", len(website_available_pricelist))
 
                 ip = request.httprequest.remote_addr
-                _logger.debug("Request IP: %s", ip)
+                _logger.info("Request IP: %s", ip)
 
                 ip_caching = self.env[DEFAULT_IP_CACHING_MODEL].sudo().search([('ip', '=', ip)], order='id desc', limit=1)
                 if ip_caching and ip_caching[0] and ip_caching[0].country_code:
                     _logger.info("IP cache hit: %s => %s", ip, ip_caching[0].country_code)
                     get_country = self.env['res.country'].sudo().search([('code', '=', ip_caching[0].country_code)])
                     if get_country:
-                        _logger.debug("Country found: %s", get_country.name)
+                        _logger.info("Country found: %s", get_country.name)
                         get_pricelist = website_available_pricelist.filtered(
                             lambda p: get_country.id in p.country_group_ids.country_ids.ids or get_country.id in p.country_ids.ids).sorted(key=lambda p: p.sequence)
                         if get_pricelist:
@@ -73,7 +73,7 @@ class Website(models.Model):
                             response = requests.get(url, timeout=5)
                             if response.status_code == 200:
                                 response_json = response.json()
-                        _logger.debug("Calling URL: %s", url)
+                        _logger.info("Calling URL: %s", url)
                         _logger.info("API Response: %s", response)
                         _logger.info("API response: %s", response_json)
                         country_code = response_json.get('countryCode') or response_json.get('country_code')
@@ -86,11 +86,11 @@ class Website(models.Model):
                                 'country_code': country_code,
                                 'date_cached': fields.Datetime.now(),
                             })
-                            _logger.debug("Cached IP and country code")
+                            _logger.info("Cached IP and country code")
 
                             get_country = self.env['res.country'].sudo().search([('code', '=', country_code)])
                             if get_country:
-                                _logger.debug("Country found: %s", get_country.name)
+                                _logger.info("Country found: %s", get_country.name)
                                 get_pricelist = website_available_pricelist.filtered(
                                     lambda p: get_country.id in p.country_group_ids.country_ids.ids or get_country.id in p.country_ids.ids).sorted(key=lambda p: p.sequence)
                                 if get_pricelist:
