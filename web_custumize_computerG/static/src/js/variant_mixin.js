@@ -77,7 +77,7 @@ infoMessageEl.style.setProperty('width', '500px', 'important');
 
                 infoMessageEl.removeAttribute('style');
                 infoMessageEl.style.setProperty('font-family', "'Poppins', sans-serif", 'important');
-                infoMessageEl.style.setProperty('font-weight', '600', 'important'); // Poppins Semi Bold
+                infoMessageEl.style.setProperty('font-weight', '500', 'important'); // Poppins Semi Bold
                 infoMessageEl.style.setProperty('background', 'rgba(255, 232, 238, 0.5)', 'important'); // #FFFCEE avec 50% opacité
                 infoMessageEl.style.setProperty('padding', '0.4rem 0.6rem', 'important');
 //                infoMessageEl.style.setProperty('width', 'fit-content', 'important');
