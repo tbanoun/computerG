@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+    <t t-name="product_export.ListView.Buttons" t-inherit="web.ListView.Buttons">
+        <xpath expr="//*[@class='btn btn-primary o_list_button_add']" position="after">
+            <button type="button" 
+                    class="btn btn-secondary" 
+                    style="margin-left: 10px;" 
+                    t-on-click="OnExportClick"
+                    title="Export Products to Excel"
+                    attrs="{'invisible': [('context.from_inventory_menu','!=',True)]}">
+                <i class="fa fa-download"/> Export Excel
+            </button>
+        </xpath>
+    </t>
+</templates>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_product_export_wizard_form" model="ir.ui.view">
+        <field name="name">product.export.wizard.form</field>
+        <field name="model">product.export.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Export Products to Excel">
+                <sheet>
+                   
+                    <group col="2">
+                        <group string="Category Filter Options">
+                            <field name="category_ids"
+                                   widget="many2many_tags"
+                                   placeholder="Select categories to export..."
+                                   help="Choose specific categories to export. Leave empty to export all categories."/>
+                            <field name="export_all_categories" 
+                                   help="Check this to export products from all categories"/>
+                        </group>
+                        <group string="Pricing Configuration">
+                            <field name="pricelist_id"
+                                   placeholder="Select a pricelist for pricing..."
+                                   help="Choose the pricelist to use for product pricing in the export"/>
+                        </group>
+                    </group>
+                    <div class="oe_clear"/>
+                   
+                </sheet>
+                <footer>
+                    <button name="action_export_excel"
+                            string="Export to Excel"
+                            type="object"
+                            class="btn-primary"
+                            help="Generate and download Excel file with product data"/>
+                    <button string="Cancel"
+                            class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Product Template Form View -->
+        <record id="view_product_template_form_inherit" model="ir.ui.view">
+            <field name="name">product.template.form.inherit</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+<!--                <xpath expr="//field[@name='categ_id']" position="after">-->
+<!--                    <field name="x_google_categorie" string="Shelf-Box"/>-->
+<!--                </xpath>-->
+               <xpath expr="//field[@name='x_google_categorie']" position="attributes">
+                    <attribute name="string">Shelf-Box</attribute>
+                </xpath>
+               
+            </field>
+        </record>
+
+        <!-- Product Template List View with Export Button - INVENTORY MODULE ONLY -->
+        <!-- <record id="view_product_template_tree_inherit_inventory" model="ir.ui.view">
+            <field name="name">product.template.tree.inherit.inventory</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="stock.view_stock_product_template_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="js_class">product_export_button_tree</attribute>
+                </xpath>
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="x_google_categorie" string="Shelf-Box"/>
+                </xpath>
+            </field>
+        </record> -->
+
+        <!-- Alternative: If stock module tree view doesn't exist, use product tree view with domain -->
+        <!-- <record id="view_product_template_tree_inherit_general" model="ir.ui.view">
+            <field name="name">product.template.tree.inherit.general</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_tree_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="js_class">product_export_button_tree</attribute>
+                </xpath>
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="x_google_categorie" string="Shelf-Box"/>
+                </xpath>
+            </field>
+        </record> -->
+
+        <!-- Product Template Kanban View with Export Button - INVENTORY MODULE ONLY -->
+        <record id="view_product_template_kanban_inherit_inventory" model="ir.ui.view">
+            <field name="name">product.template.kanban.inherit.inventory</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_kanban_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//kanban" position="attributes">
+                    <attribute name="js_class">product_export_button_kanban</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Alternative: If stock module kanban view doesn't exist, use product kanban view -->
+        <record id="view_product_template_kanban_inherit_general" model="ir.ui.view">
+            <field name="name">product.template.kanban.inherit.general</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_kanban_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//kanban" position="attributes">
+                    <attribute name="js_class">product_export_button_kanban</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Create specific action for inventory products with export button -->
+        <!-- <record id="product_template_action_inventory_export" model="ir.actions.act_window">
+            <field name="name">Products</field>
+            <field name="res_model">product.template</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field> 
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_product_template_tree_inherit_general')}),
+                (0, 0, {'view_mode': 'kanban', 'view_id': ref('view_product_template_kanban_inherit_general')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('product.product_template_form_view')})]"/>
+        </record> -->
+
+        <!-- Replace the inventory menu item to use our custom action -->
+        <!-- <record id="stock.menu_product_template_action" model="ir.ui.menu">
+            <field name="action" ref="product_template_action_inventory_export"/>
+        </record> -->
+
+    </data>
+</odoo>

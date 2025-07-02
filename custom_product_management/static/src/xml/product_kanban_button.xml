@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+    <t t-name="product_export.KanbanView.Buttons" t-inherit="web.KanbanView.Buttons">
+        <xpath expr="//*[@class='btn btn-primary o-kanban-button-new']" position="after">
+            <button type="button" 
+                    class="btn btn-secondary" 
+                    style="margin-left: 10px;" 
+                    t-on-click="OnExportClick"
+                    title="Export Products to Excel"
+                    attrs="{'invisible': [('context.from_inventory_menu','!=',True)]}">
+                <i class="fa fa-download"/> Export Excel
+            </button>
+        </xpath>
+    </t>
+</templates>;
