@@ -10,7 +10,7 @@
 <!--                <xpath expr="//field[@name='categ_id']" position="after">-->
 <!--                    <field name="x_google_categorie" string="Shelf-Box"/>-->
 <!--                </xpath>-->
-               <xpath expr="//field[@name='x_google_categorie']" position="attributes">
+               <xpath expr="//field[@name='x_google_category']" position="attributes">
                     <attribute name="string">Shelf-Box</attribute>
                 </xpath>
                
