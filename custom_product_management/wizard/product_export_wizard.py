@@ -154,7 +154,8 @@ class ProductExportWizard(models.TransientModel):
                 # Get products for this category
                 domain = [
                     ('categ_id', '=', category.id),
-                    ('active', '=', True)
+                    ('active', '=', True),
+                    ('is_published', '=', True)
                 ]
                 
                 products = self.env['product.template'].search(domain)
