@@ -154,8 +154,7 @@ class ProductExportWizard(models.TransientModel):
                 # Get products for this category
                 domain = [
                     ('categ_id', '=', category.id),
-                    ('active', '=', True),
-                    ('is_published', '=', True)
+                    ('active', '=', True)
                 ]
                 
                 products = self.env['product.template'].search(domain)
@@ -175,6 +174,7 @@ class ProductExportWizard(models.TransientModel):
                 # Write product data
                 row = 1
                 for product in products:
+                    if not product.is_published: continue
                     # Get price from sales price (list_price) - selon vos spécifications
                     price_ex_vat = product.list_price or 0.0
                     
