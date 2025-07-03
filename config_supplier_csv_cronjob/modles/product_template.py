@@ -283,7 +283,7 @@ class ProductTemplate(models.Model):
 
     def resetProductInformation(self):
         datetime_now = datetime.now()
-        # if not (3 <= datetime_now.hour < 4): return False
+        if not (3 <= datetime_now.hour < 4): return False
         reset_quantity_supplier = self.env['ir.config_parameter'].sudo().get_param(
             'config_supplier_csv_cronjob.reset_quantity_supplier')
         if reset_quantity_supplier == True: return False

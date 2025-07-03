@@ -322,7 +322,7 @@ class ImportProductConfig(models.Model):
             'config_supplier_csv_cronjob.reset_quantity_supplier', '0'
         )
         datetime_now = datetime.now()
-        if not (5 <= datetime_now.hour < 7): return False
+        if not (4 <= datetime_now.hour < 6): return False
         cron_id = self.env['google.product.import.csv'].sudo().browse(1)
         if not cron_id.active: return False
         cron_id.startScriptUsingButtonTest()
