@@ -22,6 +22,7 @@ class ProductTemplateExport(models.Model):
         headers = [
             "Is Published", "ID", "Name", "Product Type", "Customer Taxes", "Cost", "Sales Price",
             "Inventory Categ", "SKU", "Barcode", "Website URL Bz", "CPU Bz",
+            "Bazaraki Image Link", "Shelf-Box",
             "Sreen Size Bz", "Hard Drive Type Bz", "RAM Bz", "GPU Bz", "Manufacturer Bz", "Kind Bz",
             "Condition Bz", "Rubric Bz", "Image URL", "Website Categ", "Available in POS T/F",
             "POS Categ", "Out of Stock T/F", "Show Avil Qty T/F", "Out of Stock Message", "Dis/Hide Dliv Mes T/F",
@@ -83,6 +84,8 @@ class ProductTemplateExport(models.Model):
                 product.barcode or "",  # barcode
                 product.x_product_website_url or "",  # x_product_website_url (empty in example)
                 product.x_CPU or "",  # x_CPU (empty in example)
+                product.x_baz_image or "",  # x_CPU (empty in example)
+                product.x_google_category or "",  # x_CPU (empty in example)
                 product.x_sreen_size or "",  # x_sreen_size (empty in example)
                 product.x_hddtype or "",  # x_hddtype (empty in example)
                 product.x_ram or "",  # x_ram (empty in example)
