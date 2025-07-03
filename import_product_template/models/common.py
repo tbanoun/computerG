@@ -288,6 +288,8 @@ def generateProductVals(self, vals):
         'x_product_website_url': cleanSentence(vals.get('Website URL Bz', '')),
         'x_condition': cleanSentence(vals.get('Condition Bz', '')),
         'x_CPU': cleanSentence(vals.get('CPU Bz', '')),
+        'x_google_category': cleanSentence(vals.get('Shelf-Box', '')),
+        'x_baz_image': cleanSentence(vals.get('Bazaraki Image Link', '')),
         'x_': cleanSentence(vals.get('Rubric Bz', '')),
         'x_GPU': cleanSentence(vals.get('GPU Bz', '')),
         'x_sreen_size': cleanSentence(vals.get('Sreen Size Bz', '')),
