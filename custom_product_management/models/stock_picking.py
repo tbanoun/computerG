@@ -11,3 +11,13 @@ class StockMove(models.Model):
         string='Shelf-Box',
         readonly=True
     )
+
+
+class StockMoveLine(models.Model):
+    _inherit = 'stock.move.line'
+
+    shelf_box = fields.Char(
+        related='product_id.x_google_categorie',
+        string='Shelf-Box',
+        readonly=True
+    )
