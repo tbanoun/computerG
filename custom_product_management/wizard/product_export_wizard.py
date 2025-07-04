@@ -474,7 +474,7 @@ class ProductExportWizard(models.TransientModel):
         
                 row = 1
                 for product in products:
-                    # if not product.is_published: continue
+                    if not product.is_published: continue
                     # Get price from sales price (list_price) - selon vos spécifications
                     price_ex_vat = product.list_price or 0.0
                     
