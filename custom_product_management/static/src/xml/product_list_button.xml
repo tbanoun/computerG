@@ -8,7 +8,7 @@
                     t-on-click="OnExportClick"
                     title="Export Products to Excel"
                     attrs="{'invisible': [('context.from_inventory_menu','!=',True)]}">
-                <i class="fa fa-download"/> Export Excel
+                <i class="fa fa-download"/> Price Lists
             </button>
         </xpath>
     </t>
